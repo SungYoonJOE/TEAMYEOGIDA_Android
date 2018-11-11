@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".yeogida.RegisterItemActivity">
+        <ImageView
+            android:id="@+id/mPhoto"
+            android:layout_width="200dp"
+            android:layout_height="160dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/background_dark"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/person_add"
+            />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mPhoto">
+
+            <EditText
+                android:id="@+id/inputName"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:ems="10"
+                android:hint="상품 이름을 입력"
+                android:inputType="text"
+                android:textSize="15dp" />
+
+            <!--
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_address"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/inputName">
+
+                <EditText
+                    android:id="@+id/inputAddr"
+                    android:layout_width="250dp"
+                    android:layout_height="40dp"
+                    android:hint="상품의 주소 입력"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textSize="15dp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_address_detail"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/input_layout_address">
+
+                <EditText
+                    android:id="@+id/inputAddr_detail"
+                    android:layout_width="250dp"
+                    android:layout_height="40dp"
+                    android:hint="상품의 상세주소 입력"
+                    android:inputType="text"
+                    android:minLines="2"
+                    android:textSize="15dp" />
+            </android.support.design.widget.TextInputLayout>
+-->
+
+
+            <RelativeLayout
+                android:id="@+id/relAddr"
+                android:layout_width="match_parent"
+                android:layout_height="107dp"
+                android:layout_below="@+id/inputName">
+
+                <TextView
+                    android:id="@+id/txtAddr"
+                    android:layout_width="300dp"
+                    android:layout_height="52dp"
+                    android:layout_alignBaseline="@+id/btn_searchAddr"
+                    android:layout_alignParentStart="true"
+                    android:ems="10"
+                    android:hint="상품의 주소 입력"
+                    android:inputType="textPersonName"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/btn_searchAddr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="right"
+                    android:text="주소찾기"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:id="@+id/inputAddr_detail"
+                    android:layout_width="300dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignStart="@+id/relAddr"
+                    android:layout_marginBottom="16dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:hint="상세 주소 입력" />
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/inputURL"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="149dp"
+                android:ems="10"
+                android:hint="상품 URL을 입력"
+                android:inputType="text"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:id="@+id/linearDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="198dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtFirstDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="17dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:text="예약 시작 "
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/selectFirst"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="날짜 선택"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/txtLastDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="17dp"
+                    android:layout_weight="1"
+                    android:text="예약 마지막"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/selectLast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="날짜 선택"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="17dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="1"
+                    android:hint="원가 "
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:id="@+id/inputPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="입력"
+                    android:inputType="number"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/txtNewPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="17dp"
+                    android:layout_weight="1"
+                    android:hint="판매가"
+                    android:textSize="15dp" />
+
+                <EditText
+                    android:id="@+id/inputNewPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="입력"
+                    android:inputType="number"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/relPhoneNum"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="175dp">
+
+                <TextView
+                    android:id="@+id/pn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="29dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="펜션주인번호 : "
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/pn010"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/pn1"
+                    android:text="010 - "
+                    android:textSize="14dp" />
+
+                <EditText
+                    android:id="@+id/inputPhoneNum"
+                    android:layout_width="209dp"
+                    android:layout_height="38dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/pn010"
+                    android:hint="입력"
+                    android:inputType="number"
+                    android:maxLength="8"
+                    android:textSize="13dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relAboutItem"
+                android:layout_width="310dp"
+                android:layout_height="168dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/aboutItem1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="상품 설명"
+                    android:textSize="15dp"/>
+
+                <EditText
+                    android:id="@+id/inputAboutItem"
+                    android:layout_width="300dp"
+                    android:layout_height="150dp"
+                    android:layout_below="@+id/aboutItem1"
+                    android:hint="상품에 대해 설명해주세요."
+                    android:textSize="13dp"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_reg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="8dp"
+            android:text="등록하기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
