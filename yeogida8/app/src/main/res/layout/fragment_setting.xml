@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dddddd"
+    tools:context=".SettingMainActivity">
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 텍스트를 추가할 부분-->
+            <include
+                android:id="@+id/sample1"
+                layout="@layout/text_item" />
+
+            <include
+                android:id="@+id/sample2"
+                layout="@layout/text_item" />
+
+            <include
+                android:id="@+id/sample3"
+                layout="@layout/text_item" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
