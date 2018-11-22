@@ -90,9 +90,8 @@ public class BuyItemActivity extends AppCompatActivity {
         TMapPoint tPoint = new TMapPoint(lat, lng);
         TMapMarkerItem marker = new TMapMarkerItem();
         marker.setTMapPoint(tPoint);
-        Log.d("문제확인4", "여기 아니다!!!!!!!!");
         tmap.addMarkerItem("marker", marker);
-        Log.d("문제확인5", "여기 아니다!!!!!!!!");
+
     }
 
 
