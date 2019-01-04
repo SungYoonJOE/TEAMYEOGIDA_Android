@@ -31,16 +31,15 @@ public class FragmentDeadLineOrder extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listView);
 
         final HotelAdapter adapter=new HotelAdapter();
-        adapter.addItem(new HotelItem("사슴호텔","고진권",R.drawable.ic_hotel2));
-        adapter.addItem(new HotelItem("자하펜션","박지수",R.drawable.ic_hotel));
-        adapter.addItem(new HotelItem("자하호텔","박세훈",R.drawable.ic_hotel));
-        adapter.addItem(new HotelItem("상명펜션","박성준",R.drawable.ic_hotel));
-        adapter.addItem(new HotelItem("상명호텔","박민수",R.drawable.ic_hotel2));
-        adapter.addItem(new HotelItem("사슴펜션","박지상",R.drawable.ic_hotel));
-        adapter.addItem(new HotelItem("미백호텔","조대영",R.drawable.ic_hotel2));
-        adapter.addItem(new HotelItem("미백펜션","박수빈",R.drawable.ic_hotel));
-        adapter.addItem(new HotelItem("멋사호텔","정보경",R.drawable.ic_hotel));
-        adapter.addItem(new HotelItem("멋사펜션","류수연",R.drawable.ic_hotel));
+        adapter.addItem(new HotelItem("박성준","상명호텔","경기 고양","2000","3000","20181201","20181231",R.drawable.ic_hotel));
+        adapter.addItem(new HotelItem("박민수","상명호텔","경기 고양","2000","3000","20181201","20181231",R.drawable.ic_hotel2));
+        adapter.addItem(new HotelItem("박성준","상명호텔","경기 고양","2000","3000","20181201","20181231",R.drawable.ic_hotel));
+        adapter.addItem(new HotelItem("박민수","상명호텔","경기 고양","2000","3000","20181201","20181231",R.drawable.ic_hotel2));
+        adapter.addItem(new HotelItem("박성준","상명호텔","경기 고양","2000","3000","20181201","20181231",R.drawable.ic_hotel));
+        adapter.addItem(new HotelItem("박민수","상명호텔","경기 고양","2000","3000","20181201","20181231",R.drawable.ic_hotel2));
+        adapter.addItem(new HotelItem("박성준","상명호텔","경기 고양","2000","3000","20181201","20181231",R.drawable.ic_hotel));
+        adapter.addItem(new HotelItem("박민수","상명호텔","경기 고양","2000","3000","20181201","20181231",R.drawable.ic_hotel2));
+
 
         listView.setAdapter(adapter);
 
@@ -49,7 +48,7 @@ public class FragmentDeadLineOrder extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) //position은 몇번째 아이템인지 인덱스값
             {
                 HotelItem item = (HotelItem) adapter.getItem(position);
-                Toast.makeText(getContext(),"선택 : "+item.getHotel_name(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"선택 : "+item.getProductname(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -93,9 +92,14 @@ public class FragmentDeadLineOrder extends Fragment {
                 view= (HotelItemView) convertView;
             }
             HotelItem item= items.get(position);
-            view.setHotel_name(item.getHotel_name());
-            view.setUser_name(item.getUser_name());
-            view.setImage(item.getResId());
+            view.setProductname(item.getProductname());
+            view.setProductpid(item.getProductpid());
+            view.setProductAddress(item.getProductaddress());
+            view.setProductimage(item.getProductimage());
+            view.setFormerPrice(item.getFormerprice());
+            view.setProductDate_s(item.getProductdate_e());
+            view.setProductPrice(item.getProductprice());
+            view.setProductDate_e(item.getProductdate_e());
             return view;
         }
     }

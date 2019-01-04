@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -33,9 +34,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton btn_kakao_login;
     Button kakaologinbtn;
     int personpid;
-    private SharedPreferences appData;
     String strpid;
     String nickname;
     String email;
@@ -131,15 +135,10 @@ public class LoginActivity extends AppCompatActivity {
                     strpid = (new Long(pid)).toString();
                     nickname = result.getNickname();
                     email = result.getKakaoAccount().getEmail();
-                    Log.e("Profile pid : ", pid + "");
-                    Log.e("Profile nickname : ", nickname + "");
-                    Log.e("Profile email : ", email + "");
-                    //new JSONTASK().execute("http://192.168.219.106:3000/json"); //AsyncTsk시작
 
-                    new JSONTask().execute("http://10.10.101.90:3000/login");
+                    new JSONTask().execute("http://172.16.120.74:3000/login");
 
-                    Log.d("여기까지?", ""+personpid);
-                    redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
+                    //redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
                 }
             });
         }
@@ -150,14 +149,24 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... urls) {
             try {
+                Log.d("doInBackground 확인", "doIn");
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
+
+                nickname=URLEncoder.encode(nickname, "UTF-8");
+                String decnick = URLDecoder.decode(nickname, "UTF-8");
+
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("kakaonickname", nickname);
+
+                jsonObject.put("kakaonickname", decnick);
                 jsonObject.put("kakaopid", strpid);
                 jsonObject.put("email", email);
+                Log.d("들어갔는지 확인", "jsonOk??");
+                Log.d("nickname 인코딩 변환", ""+nickname);
+                Log.d("nickname 디코딩 변환", ""+decnick);
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
+
 
                 try{
                     //URL url = new URL("http://192.168.25.16:3000/users");
@@ -173,6 +182,8 @@ public class LoginActivity extends AppCompatActivity {
                     con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
                     con.connect();
 
+                    Log.d("con 연결1", "");
+
                     //서버로 보내기위해서 스트림 만듬
                     OutputStream outStream = con.getOutputStream();
                     //버퍼를 생성하고 넣음
@@ -181,8 +192,12 @@ public class LoginActivity extends AppCompatActivity {
                     writer.flush();
                     writer.close();//버퍼를 받아줌
 
+                    Log.d("con 연결2", "");
+
                     //서버로 부터 데이터를 받음
                     InputStream stream = con.getInputStream();
+
+                    Log.d("con연결3 데이터받음", "");
 
                     reader = new BufferedReader(new InputStreamReader(stream));
 
@@ -215,14 +230,13 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return null;
+            return "";
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
-            //파싱
 
             try {
 
@@ -238,15 +252,11 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putInt("personpid", personpid);
                 editor.commit();//작업완료
-                //editor.apply();//작업완료..
-
-                //PreferenceClass pre = new PreferenceClass(getApplicationContext());
-                //pre.setCount(personpid);
 
                 int i = pref.getInt("personpid", 0);//값이 없으면 0
                 ///int i = pre.getCount();
                 Log.d("personpid 잘 저장됐을까요", ""+i);
-/*
+
                 if(email==null) {
                     redirectInputEmailActivity(strpid, nickname);
                 }else {
@@ -256,7 +266,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("personpid default임", "0");
                     }
                 }
-*/
+
 
             }catch (ParseException e){ ;}
 
@@ -267,8 +277,8 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, InputEmailActivity.class);
         intent.putExtra("pid", strpid);
         intent.putExtra("nickname", nickname);
-        //Log.d("카카오 pid : ", ""+intent.getLongExtra("pid", 0));
-        //Log.d("카카오 nickname : ", ""+intent.getStringExtra("nickname"));
+        Log.d("카카오 pid : ", ""+intent.getLongExtra("pid", 0));
+        Log.d("카카오 nickname : ", ""+intent.getStringExtra("nickname"));
         startActivityForResult(intent, BasicInfo.LOGINTOEMAIL);
         finish();
     }
@@ -278,8 +288,8 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("personpid", personpid);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        //Log.d("카카오 pid : ", ""+intent.getLongExtra("pid", 0));
-        //Log.d("카카오 nickname : ", ""+intent.getStringExtra("nickname"));
+        Log.d("카카오 pid : ", ""+intent.getLongExtra("pid", 0));
+        Log.d("카카오 nickname : ", ""+intent.getStringExtra("nickname"));
         startActivityForResult(intent, BasicInfo.LOGINTOMAIN);
         finish();
     }

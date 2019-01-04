@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BuyItemActivity">
+
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,8 +19,7 @@
             <ImageView
                 android:id="@+id/image1"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:src="@drawable/ic_hotel"
+                android:layout_height="200dp"
                 android:adjustViewBounds="true" />
 
             <RelativeLayout
@@ -134,25 +135,40 @@
             <TextView
                 android:id="@+id/aboutItem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="신라스테이 광화문입니다. 엄청 깨끗해요!!
-                    qwertyu회사는 제1항에 따라 판매회원 가입을 신청 한 자 중에서 아래 각호에 해당되는 경우에는 승인을 거부할 수 있으며,
-                    등록이 된 이후에도 아래 각호의 사유가 확인된 경우에는 승낙을 취소할 수 있습니다.
-                    가입을 신청한 자가 이 약관 및 회사의 다른 서비스와 관련하여 이전에 회원 자격을 상실한 적이 있는 경우
-                    실명이 아니거나 타인의 정보 등(예)주민등록번호, 사업자번호, I-PIN 등)를 이용한 경우
-                    허위의 정보를 기재하거나, 회사가 제시하는 내용을 기재하지 않은 경우
-                    회사로부터 회원자격 정지 조치 등을 받은 회원이 그 조치기간 중에 이용계약을 임의 해지하고 재이용신청을 하는 경우
-                    기술적 지장 등으로 이용신청에 대한 승낙이 어려운 경우
-                    가입을 신청한 자의 귀책사유로 인하여 승인이 불가능하거나 필수 서류 또는 회사가 요청하는 서류를 제출하지 않는 등 기타 제반 사항을 위반하여 신청하는 경우
-                    기타 이 약관에 위배되거나 위법 또는 부당한 이용신청 등 회사가 합리적인 판단에 의하여 필요하다고 인정하는 경우"/>
+                android:layout_height="50dp"
+                android:text="신라스테이 광화문입니다. 엄청 깨끗해요!!^^"/>
+            <!--
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/mapview"
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="wrap_content">
             </android.support.constraint.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btn_buy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@android:color/holo_blue_light"
+                android:text="구매하기"
+                android:textColor="@android:color/background_light"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+                -->
         </LinearLayout>
     </ScrollView>
 
+    <android.support.constraint.ConstraintLayout
+        app:layout_constraintBottom_toBottomOf="@+id/scroll_view"
+        android:id="@+id/mapview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+    </android.support.constraint.ConstraintLayout>
     <Button
         android:id="@+id/btn_buy"
         android:layout_width="match_parent"
@@ -170,3 +186,4 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
+

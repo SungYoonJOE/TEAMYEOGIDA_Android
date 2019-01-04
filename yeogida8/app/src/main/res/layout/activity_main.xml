@@ -23,19 +23,19 @@
             android:orientation="horizontal"
             android:layout_marginTop="300dp">
 
-            <ImageButton
-                android:layout_marginLeft="20dp"
-                android:id="@+id/img1"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@drawable/ic_hotel2"/>
+            <!--<ImageButton-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:id="@+id/img1"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:background="@drawable/ic_hotel2"/>-->
 
-            <ImageButton
-                android:id="@+id/img2"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="30dp"
-                android:background="@drawable/ic_hotel"/>
+            <!--<ImageButton-->
+                <!--android:id="@+id/img2"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:background="@drawable/ic_hotel"/>-->
         </LinearLayout>
     </android.support.design.widget.NavigationView>
 
@@ -74,7 +74,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:inputType="textPersonName"
-                        android:layout_gravity="right|center" />
+                        android:layout_gravity="right|center"
+                        android:background="@drawable/search"/>
 
                     <View
                         android:layout_width="0dp"
@@ -98,7 +99,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="right|center"
-                        android:background="@drawable/ic_action_name" />
+                        android:background="@drawable/profileblue" />
 
                     <View
                         android:layout_width="0dp"
@@ -154,7 +155,7 @@
             android:layout_gravity="bottom|end"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/ic_action_plus" />
+            app:srcCompat="@drawable/floatingbutton" />
 
     </android.support.design.widget.CoordinatorLayout>
 
