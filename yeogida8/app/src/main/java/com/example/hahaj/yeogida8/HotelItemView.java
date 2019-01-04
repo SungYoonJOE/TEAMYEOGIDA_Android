@@ -10,39 +10,51 @@ import android.widget.TextView;
 
 public class HotelItemView extends LinearLayout {
 
-    TextView textView;
-    TextView textView2;
+    TextView productName;
+    TextView productPid;
+    TextView productAddress;
+    TextView formerPrice;
+    TextView productPrice;
+    TextView productDate_e;
+    TextView productDate_s;
     ImageView imageView;
+
 
     public HotelItemView(Context context) {
         super(context);
         init(context);
     }
-
     public HotelItemView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    private void init(Context context){
+    private void init (Context context){
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.hotel_item,this,true);
 
-        textView= (TextView) findViewById(R.id.textView);
-        textView2= (TextView) findViewById(R.id.textView2);
-        imageView=(ImageView) findViewById(R.id.imageView);
+        productName = (TextView) findViewById(R.id.productname);
+        productPid = (TextView) findViewById(R.id.productPid);
+        productAddress = (TextView) findViewById(R.id.productaddress);
+        productDate_e = (TextView) findViewById(R.id.productdate_e);
+        productDate_s = (TextView) findViewById(R.id.productdate_s);
+        formerPrice = (TextView) findViewById(R.id.formerprice);
+        productPrice = (TextView) findViewById(R.id.productprice);
+        imageView = (ImageView) findViewById(R.id.imageView);
     }
 
 
-    public void setHotel_name(String Hotel_name) {
-        textView.setText(Hotel_name);
+    public void setFormerPrice(String formerPrice) { productPid.setText(formerPrice); }
+    public void setProductAddress(String productaddress) { productAddress.setText(productaddress);}
+    public void setProductname(String productname){ productName.setText(productname); }
+    public void setProductpid(String productpid){
+        productPid.setText(productpid);
     }
-
-    public void setUser_name(String User_name){ textView2.setText(User_name); }
-
-    public void setImage(int resId) {
-        imageView.setImageResource(resId);
+    public void setProductDate_s(String productdate_s) { productDate_s.setText(productdate_s);}
+    public void setProductDate_e(String productdate_e) { productDate_e.setText(productdate_e);}
+    public void setProductPrice(String productprice) { productPrice.setText(productprice); }
+    public void setProductimage(int productimage){
+        imageView.setImageResource(productimage);
     }
-
 }
 

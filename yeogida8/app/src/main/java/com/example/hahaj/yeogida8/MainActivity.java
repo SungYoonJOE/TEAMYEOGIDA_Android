@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +30,23 @@ import android.widget.Toast;
 
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -70,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         personpid = pref.getInt("personpid", 0);
+
         Log.d("드로어가 선택되었을 때 personpid", ""+personpid);
 
         int id = item.getItemId();
@@ -80,15 +99,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(id == R.id.myItem) { //내상품(판매중상품목록) 화면으로 이동
             personpid = pref.getInt("personpid", 0);
             Log.d("내상품드로어 선택할 때 personpid", ""+personpid);
+
             //서버에 personpid 요청
             Toast.makeText(this,"내 상품 화면이동", Toast.LENGTH_LONG).show();
             Intent intent_my = new Intent(getApplicationContext(), Mylist_MainActivity.class);
             intent_my.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             mDrawerLayout.closeDrawer(navigationView);
             startActivity(intent_my);
-            /*
-            내상품 화면으로 이동.
-             */
         }
 
         else if(id == R.id.sell_buy) {//구매&판매내역 화면으로 이동
@@ -100,9 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent_sellbuy.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             mDrawerLayout.closeDrawer(navigationView);
             startActivity(intent_sellbuy);
-            /*
-            구매/판매 내역 화면으로 이동
-             */
         }
 
         else if(id == R.id.myReservation) { //찜한 상품 화면으로 이동
@@ -114,9 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent_liked.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             mDrawerLayout.closeDrawer(navigationView);
             startActivity(intent_liked);
-            /*
-            찜한 상품 목록화면으로 이동
-             */
+
         }
 
         else if(id == R.id.recentView) { //최근 본 목록 화면으로 이동
@@ -127,9 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent_Recent= new Intent(getApplicationContext(), Recentlist_MainActivity.class);
             intent_Recent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             mDrawerLayout.closeDrawer(navigationView);
-            startActivity(intent_Recent);/*
-            최근 본 상품목록으로 이동.
-             */
+            startActivity(intent_Recent);
         }
 
         return false;
@@ -144,7 +154,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
-        int personpid = pref.getInt("personpid", 0);
+        final int personpid = pref.getInt("personpid", 0);
+
         Log.d("메인에 personpid 잘 있니", ""+personpid);
         //passPersonpid1(personpid);
         Log.d("Fragment1에 personpid 보냄", ""+personpid);
@@ -262,11 +273,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 Fragment selected = null;
                 if (position == 0) {
-                    selected = fragment1;
+                    selected = fragment1; //최신순 탭(기본)
                 } else if (position == 1) {
-                    selected = fragment2;
+                    selected = fragment2; //인기순 탭으로 이동
                 } else if (position == 2) {
-                    selected = fragment3;
+                    selected = fragment3; //마감임박순 탭으로 이동
                 } else if(position == 3) {
 
                 }
@@ -404,4 +415,128 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pintent.putExtra("area", area);
         startActivity(pintent);
     }
+/*
+    //통신코드
+    public class JSONTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                Log.d("doInBackground 확인", "doIn");
+                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
+
+                nickname= URLEncoder.encode(nickname, "UTF-8");
+                String decnick = URLDecoder.decode(nickname, "UTF-8");
+
+                JSONObject jsonObject = new JSONObject();
+
+                jsonObject.put("kakaonickname", decnick);
+                jsonObject.put("kakaopid", strpid);
+                jsonObject.put("email", email);
+                Log.d("들어갔는지 확인", "jsonOk??");
+                Log.d("nickname이 변환", ""+nickname);
+
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+
+
+                try{
+                    //URL url = new URL("http://192.168.25.16:3000/users");
+                    URL url = new URL(urls[0]);
+                    //연결을 함
+                    con = (HttpURLConnection) url.openConnection();
+
+                    con.setRequestMethod("POST");//POST방식으로 보냄
+                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
+                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
+                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
+                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
+                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
+                    con.connect();
+
+                    //서버로 보내기위해서 스트림 만듬
+                    OutputStream outStream = con.getOutputStream();
+                    //버퍼를 생성하고 넣음
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+                    writer.write(jsonObject.toString());
+                    writer.flush();
+                    writer.close();//버퍼를 받아줌
+
+                    //서버로 부터 데이터를 받음
+                    InputStream stream = con.getInputStream();
+
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer buffer = new StringBuffer();
+
+                    String line = "";
+                    while((line = reader.readLine()) != null){
+                        buffer.append(line);
+                    }
+
+                    return buffer.toString();//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
+
+                } catch (MalformedURLException e){
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if(con != null){
+                        con.disconnect();
+                    }
+                    try {
+                        if(reader != null){
+                            reader.close();//버퍼를 닫아줌
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
+
+            try {
+
+                JSONParser jsonParser = new JSONParser();
+                JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+
+                personpid = Integer.parseInt(jsonObject.get("personpid").toString());
+
+                Log.d("파싱한 personpid", personpid+"");
+
+                //서버에서 받은 personpid를 pref_PERSONPID라는 파일 안 personpid라는 변수에 저장
+                SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);//pref_PERSONPID라는 파일생성
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putInt("personpid", personpid);
+                editor.commit();//작업완료
+
+                int i = pref.getInt("personpid", 0);//값이 없으면 0
+                ///int i = pre.getCount();
+                Log.d("personpid 잘 저장됐을까요", ""+i);
+
+                if(email==null) {
+                    redirectInputEmailActivity(strpid, nickname);
+                }else {
+                    if(personpid!=0) {
+                        redirectMainActivity(personpid);  //서버와 통신후 personpid를 받아 메인으로 이동
+                    }else{
+                        Log.d("personpid default임", "0");
+                    }
+                }
+
+
+            }catch (ParseException e){ ;}
+
+        }
+    }
+    */
 }
