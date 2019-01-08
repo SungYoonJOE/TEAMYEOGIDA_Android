@@ -120,8 +120,6 @@ public class Fragment1 extends Fragment {
     }
 
 
-
-
     //메인에서 상품 구매하는 화면으로 이동하는 메소드
     public void redirectMainToBuyActivity(int personpid){
         Intent intent = new Intent(getContext(), BuyItemActivity.class);

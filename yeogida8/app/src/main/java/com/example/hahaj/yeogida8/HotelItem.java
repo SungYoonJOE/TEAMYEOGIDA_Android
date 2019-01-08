@@ -34,15 +34,13 @@ public class HotelItem {
         return pname;
     }
 
-    public void setPname(String pname) {
+    public void setProductname(String pname) {
         this.pname = pname;
     }
 
-    public String getPimg() {
-        return pimg;
-    }
+    public String getPimg() { return pimg; }
 
-    public void setPimg(String pimg) {
+    public void setProductimage(String pimg) {
         this.pimg = pimg;
     }
 
@@ -50,7 +48,7 @@ public class HotelItem {
         return paddr;
     }
 
-    public void setPaddr(String paddr) {
+    public void setProductAddress(String paddr) {
         this.paddr = paddr;
     }
 
@@ -58,7 +56,7 @@ public class HotelItem {
         return pdate_e;
     }
 
-    public void setPdate_e(String pdate_e) {
+    public void setProductdate_e(String pdate_e) {
         this.pdate_e = pdate_e;
     }
 
@@ -66,7 +64,7 @@ public class HotelItem {
         return pdate_s;
     }
 
-    public void setPdate_s(String pdate_s) {
+    public void setProductdate_s(String pdate_s) {
         this.pdate_s = pdate_s;
     }
 
@@ -74,7 +72,7 @@ public class HotelItem {
         return fprice;
     }
 
-    public void setFprice(int fprice) {
+    public void setFormerprice(int fprice) {
         this.fprice = fprice;
     }
 
@@ -82,88 +80,8 @@ public class HotelItem {
         return pprice;
     }
 
-    public void setPprice(int pprice) {
+    public void setProductprice(int pprice) {
         this.pprice = pprice;
     }
 
-    /*
-    public String getFormerprice() {
-        return formerprice;
-    }
-
-    public void setFormerprice(String formerprice) {
-        this.formerprice = formerprice;
-    }
-
-    public String getProductprice() {
-        return productprice;
-    }
-
-    public void setProductprice(String productprice) {
-        this.productprice = productprice;
-    }
-
-    public String getProductdate_e() {
-        return productdate_e;
-    }
-
-    public void setProductdate_e(String productdate_e) {
-        this.productdate_e = productdate_e;
-    }
-
-    public String getProductdate_s() {
-        return productdate_s;
-    }
-
-    public void setProductdate_s(String productdate_s) {
-        this.productdate_s = productdate_s;
-    }
-
-    public String getProductaddress() {
-        return productaddress;
-    }
-
-    public void setProductaddress(String productaddress) {
-        this.productaddress = productaddress;
-    }
-
-
-    public String getProductname() {
-        return productname;
-    }
-
-    public void setProductname(String productname) {
-        this.productname = productname;
-    }
-
-    public int getProductpid() {
-        return productpid;
-    }
-
-    public void setProductpid(int productpid) {
-        this.productpid = productpid;
-    }
-
-    public int getProductimage() {
-        return productimage;
-    }
-
-    public void setProductimage(int resId) {
-        this.productimage = resId;
-    }
-
-    @Override
-    public String toString() {
-        return "Hotel_item{" +
-                "productname='" + productname + '\'' +
-                ", productpid='" + productpid + '\'' +
-                ", productaddress='" + productaddress + '\'' +
-                ", formerprice=" + formerprice +
-                ", productprice=" + productprice +
-                ", productdate_e='" + productdate_e + '\'' +
-                ", productdate_s='" + productdate_s + '\'' +
-                ", productimage=" + productimage +
-                '}';
-    }
-*/
 }
