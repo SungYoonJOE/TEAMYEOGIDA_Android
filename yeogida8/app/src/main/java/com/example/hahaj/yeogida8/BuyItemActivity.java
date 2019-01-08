@@ -1,6 +1,8 @@
 package com.example.hahaj.yeogida8;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,11 +22,12 @@ public class BuyItemActivity extends AppCompatActivity {
     ImageButton btn_onof;
     int i=0;
     boolean isLike;
+    private int ppid;
 
     //지도API
     //LinearLayout mapview;
     TMapView tmap;
-    private final String MAPAPPKEY = "";
+    private final String MAPAPPKEY = "1947620f-e0aa-43a5-8e27-11c6d1dab9b5";
     double lat;
     double lng;
 
@@ -32,6 +35,13 @@ public class BuyItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_item);
+
+
+        //personpid 불러오기
+        SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
+        //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
+        ppid = pref.getInt("personpid", 0);
+        Log.d("제품조회 ppid>> ",""+ppid);
 
         double lat = 37.6026422;
         double lng = 126.953058;

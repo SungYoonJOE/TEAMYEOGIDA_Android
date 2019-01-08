@@ -2,27 +2,91 @@ package com.example.hahaj.yeogida8;
 
 public class HotelItem {
 
-    String productname;
-    String productpid;
-    String productaddress;
-    String formerprice;
-    String productprice;
-    String productdate_e;
-    String productdate_s;
-    int productimage;
+    int productpid;
+    String pname;
+    String pimg;
+    String paddr;
+    String pdate_e;
+    String pdate_s;
+    int fprice;
+    int pprice;
 
-
-    public HotelItem(String productname, String productpid, String productaddress, String formerprice, String productprice, String productdate_e, String productdate_s, int productimage) {
-        this.productname = productname;
+    public HotelItem(int productpid, String pimg, String pname, String pdate_s, String pdate_e, String paddr, int fprice, int pprice){
         this.productpid = productpid;
-        this.productaddress = productaddress;
-        this.formerprice = formerprice;
-        this.productprice = productprice;
-        this.productdate_e = productdate_e;
-        this.productdate_s = productdate_s;
-        this.productimage = productimage;
+        this.pimg = pimg;
+        this.pname = pname;
+        this.pdate_s= pdate_s;
+        this.pdate_e= pdate_e;
+        this.paddr= paddr;
+        this.fprice= fprice;
+        this.pprice= pprice;
     }
 
+    public int getProductpid() {
+        return productpid;
+    }
+
+    public void setProductpid(int productpid) {
+        this.productpid = productpid;
+    }
+
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
+    }
+
+    public String getPimg() {
+        return pimg;
+    }
+
+    public void setPimg(String pimg) {
+        this.pimg = pimg;
+    }
+
+    public String getPaddr() {
+        return paddr;
+    }
+
+    public void setPaddr(String paddr) {
+        this.paddr = paddr;
+    }
+
+    public String getPdate_e() {
+        return pdate_e;
+    }
+
+    public void setPdate_e(String pdate_e) {
+        this.pdate_e = pdate_e;
+    }
+
+    public String getPdate_s() {
+        return pdate_s;
+    }
+
+    public void setPdate_s(String pdate_s) {
+        this.pdate_s = pdate_s;
+    }
+
+    public int getFprice() {
+        return fprice;
+    }
+
+    public void setFprice(int fprice) {
+        this.fprice = fprice;
+    }
+
+    public int getPprice() {
+        return pprice;
+    }
+
+    public void setPprice(int pprice) {
+        this.pprice = pprice;
+    }
+
+    /*
     public String getFormerprice() {
         return formerprice;
     }
@@ -72,11 +136,11 @@ public class HotelItem {
         this.productname = productname;
     }
 
-    public String getProductpid() {
+    public int getProductpid() {
         return productpid;
     }
 
-    public void setProductpid(String productpid) {
+    public void setProductpid(int productpid) {
         this.productpid = productpid;
     }
 
@@ -101,4 +165,5 @@ public class HotelItem {
                 ", productimage=" + productimage +
                 '}';
     }
+*/
 }
