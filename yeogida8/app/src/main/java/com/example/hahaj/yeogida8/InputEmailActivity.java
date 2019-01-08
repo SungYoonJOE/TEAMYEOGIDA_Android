@@ -33,6 +33,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 public class InputEmailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     //메인화면으로 보낼것
@@ -134,7 +136,7 @@ public class InputEmailActivity extends AppCompatActivity implements AdapterView
                 //redirectMainActivity();
 
                 //서버에 strpid, nickname, yeogidaEmail 보내고 personpid를 받는다.
-                new JSONTask().execute("http://10.10.102.168:8080/json");
+                new JSONTask().execute("http://172.16.120.74:3000/json");
 
                 Log.d("여기까지?", ""+personpid);
 
@@ -193,17 +195,25 @@ public class InputEmailActivity extends AppCompatActivity implements AdapterView
         @Override
         protected String doInBackground(String... urls) {
             try {
+                Log.d("doInBackground 확인", "doIn");
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
+
+                nickname= URLEncoder.encode(nickname, "UTF-8");
+                String decnick = URLDecoder.decode(nickname, "UTF-8");
+
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("kakaonickname", nickname);
+                jsonObject.put("kakaonickname", decnick);
                 jsonObject.put("kakaopid", strpid);
                 jsonObject.put("email", yeogidaEmail);
+
+                Log.d("들어갔는지 확인", "jsonOk??");
+                Log.d("nickname 인코딩 변환", ""+nickname);
+                Log.d("nickname 디코딩 변환", ""+decnick);
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
 
                 try{
-                    //URL url = new URL("http://192.168.25.16:3000/users");
                     URL url = new URL(urls[0]);
                     //연결을 함
                     con = (HttpURLConnection) url.openConnection();
