@@ -61,7 +61,7 @@ public class Mylist_Fragment extends Fragment {
         //객체 배열 생성
         //Product[] productArr = new Product[];
 
-        //new JSONTask().execute("http://192.168.1.141:3000/sell/mysell_info");
+        //new JSONTask().execute("http://172.16.120.84:8080/sell/mysell_info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.mylist_fragment, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.listView);
