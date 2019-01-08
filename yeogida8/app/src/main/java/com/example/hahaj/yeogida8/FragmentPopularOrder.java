@@ -101,6 +101,7 @@ public class FragmentPopularOrder extends Fragment {
             view.setProductPrice(item.getPprice());
             view.setProductDate_e(item.getPdate_e());
             return view;
+
         }
     }
 }
