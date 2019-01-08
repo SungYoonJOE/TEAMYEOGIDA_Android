@@ -45,7 +45,7 @@ public class Mylist_MainActivity extends AppCompatActivity implements  Navigatio
     ImageButton imgright;
     NavigationView nav_id;
 
-    int personpid;
+    int ppid;
 
 
     //프레그먼트
@@ -54,12 +54,12 @@ public class Mylist_MainActivity extends AppCompatActivity implements  Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mylist_activity_main);
 
-
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
-        int personpid = pref.getInt("personpid", 0);
-        Log.d("mylist 메인에 personpid :", ""+personpid);
+        ppid = pref.getInt("personpid", 0);
+        Log.d("ppid in 마이페이지>> ",""+ppid);
+
 
         t1 = findViewById(R.id.toolbar);
         setSupportActionBar(t1);
@@ -180,6 +180,7 @@ public class Mylist_MainActivity extends AppCompatActivity implements  Navigatio
             //Intent intent_my = new Intent(getApplicationContext(), Mylist_MainActivity.class);
             Log.d("인텐트","나와라1");
             //startActivity(intent_my);
+
         }
 
         else if(id == R.id.sell_buy) {// 구매,판매내역 화면으로 이동
@@ -238,9 +239,9 @@ public class Mylist_MainActivity extends AppCompatActivity implements  Navigatio
                         SharedPreferences.Editor editor = pref.edit();
                         editor.remove("personpid");
                         editor.commit();
-                        personpid =12345678;
+                        ppid =12345678;
                         Log.d("personpid 삭제", "삭제함!!!!!!!!!!!!!!!");
-                        Log.d("personpid 삭제", ""+personpid);
+                        Log.d("personpid 삭제", ""+ppid);
                         redirectLoginActivity();
                     }
                 });

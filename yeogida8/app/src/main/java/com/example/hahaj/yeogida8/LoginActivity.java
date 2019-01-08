@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     Button kakaologinbtn;
     int personpid;
     String strpid;
-    String nickname;
+    String nickname, decnick;
     String email;
 
     /*
@@ -136,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                     nickname = result.getNickname();
                     email = result.getKakaoAccount().getEmail();
 
-                    new JSONTask().execute("http://172.16.120.74:3000/login");
+                    new JSONTask().execute("http://192.168.1.141:3000/login");
 
                     //redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
                 }
@@ -153,13 +153,14 @@ public class LoginActivity extends AppCompatActivity {
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
                 nickname=URLEncoder.encode(nickname, "UTF-8");
-                String decnick = URLDecoder.decode(nickname, "UTF-8");
+                decnick = URLDecoder.decode(nickname, "UTF-8");
 
                 JSONObject jsonObject = new JSONObject();
 
                 jsonObject.put("kakaonickname", decnick);
                 jsonObject.put("kakaopid", strpid);
                 jsonObject.put("email", email);
+
                 Log.d("들어갔는지 확인", "jsonOk??");
                 Log.d("nickname 인코딩 변환", ""+nickname);
                 Log.d("nickname 디코딩 변환", ""+decnick);
@@ -274,9 +275,17 @@ public class LoginActivity extends AppCompatActivity {
     }
     //이메일입력 화면으로 이동
     protected void redirectInputEmailActivity(String strpid, String nickname){
+
+        try {
+            nickname=URLEncoder.encode(nickname, "UTF-8");
+            decnick = URLDecoder.decode(nickname, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         Intent intent = new Intent(this, InputEmailActivity.class);
         intent.putExtra("pid", strpid);
-        intent.putExtra("nickname", nickname);
+        intent.putExtra("nickname", decnick);
         Log.d("카카오 pid : ", ""+intent.getLongExtra("pid", 0));
         Log.d("카카오 nickname : ", ""+intent.getStringExtra("nickname"));
         startActivityForResult(intent, BasicInfo.LOGINTOEMAIL);
