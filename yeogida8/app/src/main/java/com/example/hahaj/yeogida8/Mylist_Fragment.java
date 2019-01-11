@@ -61,7 +61,7 @@ public class Mylist_Fragment extends Fragment {
         Log.d("ppid in 내상품목록>> ", "" + ppid);
 
         //통신
-        new JSONTask().execute("http://172.16.120.175:8080/sell/mysell_info");
+        new JSONTask().execute("http://172.16.120.100:3000/sell/mysell_info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.mylist_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
@@ -70,8 +70,8 @@ public class Mylist_Fragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) //position은 몇번째 아이템인지 인덱스값
             {
-                HotelItem item = (HotelItem) adapter.getItem(position);
-                Toast.makeText(getContext(), "선택 : " + item.getPname(), Toast.LENGTH_LONG).show();
+                //HotelItem item = (HotelItem) adapter.getItem(position);
+                //Toast.makeText(getContext(), "선택 : " + item.getPname(), Toast.LENGTH_LONG).show();
                 //인텐트 사용하여 상품수정/삭제 화면으로 이동 & productpid 서버에 넘김
                 redirectMylistToUpdateActivity(productpid);
 
@@ -216,13 +216,14 @@ public class Mylist_Fragment extends Fragment {
                     int productpid = jsonObject.getInt("productpid");
                     String productimg = jsonObject.getString("productimage");
                     String productname = jsonObject.getString("productname");
-                    String date_s = jsonObject.get("productdate_s").toString();
-                    String date_e = jsonObject.get("productdate_e").toString();
+                    String date_s = jsonObject.get("productdate_s").toString().substring(0, 10);
+                    //date_s.substring(0, 9);
+                    String date_e = jsonObject.get("productdate_e").toString().substring(0, 10);
                     String productaddr = jsonObject.getString("productaddress");
                     int forprice = jsonObject.getInt("formerprice");
                     int productprice = jsonObject.getInt("productprice");
-                    //Log.d("리스트에 들어가야함1", ""+productpid+", ,"+productimg+", ,"+productname);
-                    //Log.d("리스트에 들어가야함2", "시작"+date_s+"끝"+date_e+", ,"+productaddr+", ,"+forprice+", ,"+productprice);
+                    Log.d("내상품리스트1", ""+productpid+", ,"+productimg+", ,"+productname);
+                    Log.d("내상품리스트2", "시작"+date_s+"끝"+date_e+", ,"+productaddr+", ,"+forprice+", ,"+productprice);
 
                     adapter.addItem(new HotelItem(productpid, productimg, productname, date_s, date_e, productaddr, forprice, productprice));
                     listView.setAdapter(adapter);
@@ -233,6 +234,5 @@ public class Mylist_Fragment extends Fragment {
                 e1.printStackTrace();
             }
         }
-
     }
 }
