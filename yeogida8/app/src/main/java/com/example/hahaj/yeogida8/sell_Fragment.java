@@ -55,7 +55,7 @@ public class sell_Fragment extends Fragment {
         Log.d("ppid in 판매내역 목록>> ", "" + ppid);
 
         //통신
-        new JSONTask().execute("http://172.16.120.175:8080/sell/sold_info");
+        new JSONTask().execute("http://172.16.120.100:3000/sell/sold_info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.sell_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
@@ -210,13 +210,13 @@ public class sell_Fragment extends Fragment {
                     int productpid = jsonObject.getInt("productpid");
                     String productimg = jsonObject.getString("productimage");
                     String productname = jsonObject.getString("productname");
-                    String date_s = jsonObject.get("productdate_s").toString();
-                    String date_e = jsonObject.get("productdate_e").toString();
+                    String date_s = jsonObject.get("productdate_s").toString().substring(0, 10);
+                    String date_e = jsonObject.get("productdate_e").toString().substring(0, 10);
                     String productaddr = jsonObject.getString("productaddress");
                     int forprice = jsonObject.getInt("formerprice");
                     int productprice = jsonObject.getInt("productprice");
-                    //Log.d("리스트에 들어가야함1", ""+productpid+", ,"+productimg+", ,"+productname);
-                    //Log.d("리스트에 들어가야함2", "시작"+date_s+"끝"+date_e+", ,"+productaddr+", ,"+forprice+", ,"+productprice);
+                    Log.d("판매리스트1", ""+productpid+", ,"+productimg+", ,"+productname);
+                    Log.d("판매리스트2", "시작"+date_s+"끝"+date_e+", ,"+productaddr+", ,"+forprice+", ,"+productprice);
 
                     adapter.addItem(new HotelItem(productpid, productimg, productname, date_s, date_e, productaddr, forprice, productprice));
                     listView.setAdapter(adapter);

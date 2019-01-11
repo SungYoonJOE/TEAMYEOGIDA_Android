@@ -108,8 +108,8 @@ public class Sellbuylist_MainActivity extends AppCompatActivity implements  Navi
         getSupportFragmentManager().beginTransaction().add(R.id.container, fragment1).commit();
 
         TabLayout tabs=(TabLayout) findViewById(R.id.tabs);
-        tabs.addTab(tabs.newTab().setText("구매"));
-        tabs.addTab(tabs.newTab().setText("판매"));
+        tabs.addTab(tabs.newTab().setText("판매내역"));
+        tabs.addTab(tabs.newTab().setText("구매내역"));
         //tabs.addTab(tabs.newTab());
 
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

@@ -55,7 +55,7 @@ public class Recentlist_Fragment extends Fragment {
         Log.d("ppid in 최근 본 목록>> ", "" + ppid);
 
         //통신
-        new JSONTask().execute("http://172.16.120.175:8080/search/info");
+        new JSONTask().execute("http://172.16.120.100:3000/search/info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.recentlist_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
@@ -210,8 +210,8 @@ public class Recentlist_Fragment extends Fragment {
                     int productpid = jsonObject.getInt("productpid");
                     String productimg = jsonObject.getString("productimage");
                     String productname = jsonObject.getString("productname");
-                    String date_s = jsonObject.get("productdate_s").toString();
-                    String date_e = jsonObject.get("productdate_e").toString();
+                    String date_s = jsonObject.get("productdate_s").toString().substring(0, 10);
+                    String date_e = jsonObject.get("productdate_e").toString().substring(0, 10);
                     String productaddr = jsonObject.getString("productaddress");
                     int forprice = jsonObject.getInt("formerprice");
                     int productprice = jsonObject.getInt("productprice");

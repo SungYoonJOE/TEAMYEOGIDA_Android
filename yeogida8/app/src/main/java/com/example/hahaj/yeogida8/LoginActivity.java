@@ -136,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                     nickname = result.getNickname();
                     email = result.getKakaoAccount().getEmail();
 
-                    new JSONTask().execute("http://172.16.120.175:8080/login");
+                    new JSONTask().execute("http://172.16.120.100:3000/login");
 
                     //redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
                 }

@@ -1,6 +1,8 @@
 package com.example.hahaj.yeogida8;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +26,7 @@ public class Fragment2 extends Fragment {
 
     EditText editText;
     EditText editText2;
-    int personpid;
+    int ppid;
     String f2area;
 
 
@@ -33,10 +35,16 @@ public class Fragment2 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Intent f1intent = getActivity().getIntent();
-        personpid = f1intent.getIntExtra("personpid", 0);
+        //personpid = f1intent.getIntExtra("personpid", 0);
         f2area = f1intent.getStringExtra("area");
        // Log.d("f2 인기순 ppid: ", ""+personpid);
         //Log.d("f2 area : ", f2area);
+
+        //personpid 불러오기
+        SharedPreferences pref = this.getActivity().getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
+        //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
+        ppid = pref.getInt("personpid", 0);
+        Log.d("ppid in 인기순목록>> ", "" + ppid);
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment2, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.listView);
@@ -62,7 +70,7 @@ public class Fragment2 extends Fragment {
                 //서버에 personpid를 전송
 
                 //인텐트사용하여 상품정보(상품구매)화면으로 이동
-                redirectMainToBuyActivity(personpid);
+                redirectMainToBuyActivity(ppid);
             }
         });
 
