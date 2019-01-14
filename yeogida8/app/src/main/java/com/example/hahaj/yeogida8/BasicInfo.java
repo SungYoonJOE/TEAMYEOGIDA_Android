@@ -10,6 +10,7 @@ public class BasicInfo {
     public static final int REQUEST_CODE_MAINTOBUY = 110;
 
     public static final int REQUEST_CODE_MYLISTTOUPDATE = 120;
+    public static final int REQUEST_CODE_LIKEDTOBUY = 130;
 
 
     //SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
