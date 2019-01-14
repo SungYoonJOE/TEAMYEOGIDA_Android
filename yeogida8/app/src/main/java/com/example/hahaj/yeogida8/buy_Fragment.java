@@ -55,7 +55,7 @@ public class buy_Fragment extends Fragment {
         Log.d("ppid in 구매내역 목록>> ", "" + ppid);
 
         //통신
-        new JSONTask().execute("http://172.16.120.100:3000/purchase/info");
+        new JSONTask().execute("http://192.168.0.11:3000/purchase/info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.buy_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);

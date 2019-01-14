@@ -96,6 +96,11 @@
         </activity>
 
         <!-- 상품수정,삭제 -->
+        <activity android:name=".UpOrDeleteActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".UpdateItemActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />

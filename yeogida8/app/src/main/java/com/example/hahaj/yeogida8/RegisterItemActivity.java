@@ -22,17 +22,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
+import java.util.Date;
 
 public class RegisterItemActivity extends AppCompatActivity {
+
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
     private static final int PICK_IMAGE_REQUEST = 1;
     private String TAG = "RegisterItemActivity";
@@ -65,7 +65,6 @@ public class RegisterItemActivity extends AppCompatActivity {
     String regAboutItem;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +80,6 @@ public class RegisterItemActivity extends AppCompatActivity {
         //int i= pref.getInt("personpid", 0);
         //int i = pre.getCount();
         Log.d("메인->상품등록 personpid", ""+personpid);
-
 
         /*
         //메인에서 전달받은 personpid
@@ -157,16 +155,15 @@ public class RegisterItemActivity extends AppCompatActivity {
                         //서버로 보낼때는 "010"+itemPhoneNum
                         //서버로 전송
 
-                        //통신은 network() 로 뺐음.
-                        netWork();
-                        /*
+                        //통신은 network() 로 못뺌 무조건 통신하고자하는 곳에 아래 코드를 써야한다.
+//                        netWork();
                         final Future uploading = Ion.with(RegisterItemActivity.this)
-                                .load("POST", "http://172.16.120.83:3000/product/register")
+                                .load("POST", "http://192.168.219.193:3000/product/register")
                                 //String 추가
                                 .setLogging("MyLogs", Log.DEBUG)
                                 //타임아웃 설정
                                 .setTimeout(150000)
-                                .setMultipartParameter("personpid", "6")
+                                .setMultipartParameter("personpid", Integer.toString(personpid))
                                 .setMultipartParameter("productname", itemName)
                                 .setMultipartParameter("text", regAboutItem)
                                 //이미지 파일 추가
@@ -191,9 +188,36 @@ public class RegisterItemActivity extends AppCompatActivity {
                                             Log.d("여기까지 55555", "이");
                                             Toast.makeText(getApplicationContext(), jobj.getString("message"), Toast.LENGTH_SHORT).show();
 
+//                                          서버로 부터 응답을 받아 온다. 아래는 Test 코드. 보낸거 그대로 받아오기.
+                                            /*
+                                            int personPid = jobj.getInt("personpid");
+                                            String product_Name = jobj.getString("productname");
+                                            String text = jobj.getString("text");
+                                            String productDate_s = jobj.getString("productdate_s");
+                                            String productDate_e = jobj.getString("productdate_e");
+                                            String productAddr = jobj.getString("productaddress");
+                                            String productUrl = jobj.getString("productUrl");
 
-//                                    서버로 부터 응답을 받아 온다.
+                                            /*
+                                            int formerPrice = jobj.getInt("fomerprice");
+                                            int productPrice = jobj.getInt("productprice");
+                                            String productPhone = jobj.getString("productphone");
+                                            */
 
+                                            /*
+                                            Toast.makeText(getApplicationContext(), personPid,);
+                                            Log.d("personPid", String.valueOf(personPid));
+                                            Log.d("product_Name", product_Name);
+                                            Log.d("text", text);
+                                            Log.d("productDate_s", productDate_s);
+                                            Log.d("productDate_e", productDate_e);
+                                            Log.d("productAddr", productAddr);
+                                            Log.d("productUrl", productUrl);
+                                            /*
+                                            Log.d("formerPrice", String.valueOf(formerPrice));
+                                            Log.d("productPrice", String.valueOf(productPrice));
+                                            Log.d("productPhone", productPhone);
+                                            */
                                         } catch (JSONException e1) {
                                             e1.printStackTrace();
                                         }
@@ -202,11 +226,8 @@ public class RegisterItemActivity extends AppCompatActivity {
                         show();
                         //메인화면으로 이동
                         //redirectMainActivity(1);
-                     */
                     }
-
                 }
-
             }
         });
     }
@@ -288,7 +309,7 @@ public class RegisterItemActivity extends AppCompatActivity {
                     }
                     */
 
-                //진권 코드 - 위의 PICK_IMAGE_REQUEST는 그대로 사용했어
+                //진권 코드
                 case PICK_IMAGE_REQUEST:
                     Log.d("여기까지", "ㅇ3");
                     if (resultCode == RESULT_OK) {
@@ -550,7 +571,6 @@ public class RegisterItemActivity extends AppCompatActivity {
     }
 
 
-
     protected void redirectMainActivity(int personpid) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("personpid", personpid);
@@ -565,67 +585,5 @@ public class RegisterItemActivity extends AppCompatActivity {
     public void redirectRegToSearchAddr(){
         Intent intent = new Intent(this, SearchAddrActivity.class);
         startActivity(intent);
-    }
-
-    /*
-     서버로 보내고 내가 보낸 6개 정보 그대로 받아오는 코드.
-     받아와서 HotelItemView로 6개의 data 보내 화면에 HotelItemView에서 초기화 시킨 후 뿌려주기
-     하지만, 아직 안해봤지만 될거같음.
-     */
-    public void netWork() {
-        final Future uploading = Ion.with(RegisterItemActivity.this)
-                .load("POST", "http://172.16.120.83:3000/product/register")
-                //String 추가
-                .setLogging("MyLogs", Log.DEBUG)
-                //타임아웃 설정
-                .setTimeout(150000)
-                .setMultipartParameter("personpid", "6")
-                .setMultipartParameter("productname", itemName)
-                .setMultipartParameter("text", regAboutItem)
-                //이미지 파일 추가
-//                        .setMultipartFile("productimage", f)
-                //String 추가
-                .setMultipartParameter("productdate_s",strfirstDate)
-                .setMultipartParameter("productdate_e", strlastDate)
-                .setMultipartParameter("productaddress", itemAddr)
-                .setMultipartParameter("productUrl", itemURL)
-                .setMultipartParameter("formerprice", price)
-                .setMultipartParameter("productprice", newPrice)
-                .setMultipartParameter("productphone",itemPhoneNum)
-                //형식 지정
-                .asString()
-                //응답방식???
-                .withResponse()
-                .setCallback(new FutureCallback<Response<String>>() {
-                    @Override
-                    public void onCompleted(Exception e, Response<String> result) {
-                        try{
-                            JSONObject jobj = new JSONObject(result.getResult());
-                            Log.d("여기까지 55555", "이");
-                            //서버로부터 JSON 파싱.
-                            Toast.makeText(getApplicationContext(), jobj.getString("message"), Toast.LENGTH_SHORT).show();
-
-                            String product_Name = jobj.getString("productname");
-                            String text = jobj.getString("text");
-                            String productDate_s = jobj.getString("productdate_s");
-                            String productDate_e = jobj.getString("productname_e");
-                            String productAddr = jobj.getString("productaddress");
-                            String productUrl = jobj.getString("productUrl");
-                            String formerPrice = jobj.getString("fomerprice");
-                            String productPrice = jobj.getString("productprice");
-                            String productPhone = jobj.getString("productphone");
-
-//                            HotelItemView hotelItem = new HotelItemView();
-
-                        } catch (JSONException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                });
-        show();
-        //메인화면으로 이동
-        //redirectMainActivity(1)이거 일단 주석처리 한 이유는 응답받기 위해서야
-        //바로 메인 넘어가버리면 응답받는게 안되더라고
-        //redirectMainActivity(1);
     }
 }

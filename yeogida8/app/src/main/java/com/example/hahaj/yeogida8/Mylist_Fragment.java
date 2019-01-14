@@ -47,7 +47,7 @@ public class Mylist_Fragment extends Fragment {
     EditText editText;
     EditText editText2;
     int productpid = 1;
-    int ppid;
+    int personpid;
     ListView listView;
 
     @Nullable
@@ -57,14 +57,22 @@ public class Mylist_Fragment extends Fragment {
         //personpid 불러오기
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
-        ppid = pref.getInt("personpid", 0);
-        Log.d("ppid in 내상품목록>> ", "" + ppid);
+        personpid = pref.getInt("personpid", 0);
+        Log.d("personpid in 내상품목록>> ", "" + personpid);
 
-        //통신
-        new JSONTask().execute("http://172.16.120.100:3000/sell/mysell_info");
+//      통신
+      new JSONTask().execute("http://192.168.0.11:3000/sell/mysell_info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.mylist_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
+
+
+        //dummy data
+/*
+        final HotelAdapter adapter=new HotelAdapter();
+        adapter.addItem(new HotelItem(productpid, null, "연어 펜션", "2019-01-10", "2019-01-11", "서울시 합정동", 2000, 1000));
+        listView.setAdapter(adapter);
+*/
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -74,6 +82,7 @@ public class Mylist_Fragment extends Fragment {
                 //Toast.makeText(getContext(), "선택 : " + item.getPname(), Toast.LENGTH_LONG).show();
                 //인텐트 사용하여 상품수정/삭제 화면으로 이동 & productpid 서버에 넘김
                 redirectMylistToUpdateActivity(productpid);
+//                new JSONTask().execute("http://192.168.219.193:3000/sell/mysell_info");
 
             }
         });
@@ -118,13 +127,14 @@ public class Mylist_Fragment extends Fragment {
         }
     }
 
-    //내상품리스트에서 상품수정화면으로 이동
+    //내상품리스트에서 상품수정or삭제화면으로 이동
     public void redirectMylistToUpdateActivity(int productpid) {
-        Intent intent_toupdate = new Intent(getContext(), UpdateItemActivity.class);
+        Intent intent_toupdate = new Intent(getContext(), UpOrDeleteActivity.class);
         intent_toupdate.putExtra("productpid", productpid);
-        //startActivity(intent_toupdate);
+//        startActivity(intent_toupdate);
         startActivityForResult(intent_toupdate, BasicInfo.REQUEST_CODE_MYLISTTOUPDATE);
     }
+
 
     public class JSONTask extends AsyncTask<String, String, String> {
 
@@ -135,7 +145,7 @@ public class Mylist_Fragment extends Fragment {
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("seller_personpid", ppid);
+                jsonObject.put("seller_personpid", personpid);
                 Log.d("json put 다음", "");
 
                 HttpURLConnection con = null;
@@ -212,6 +222,7 @@ public class Mylist_Fragment extends Fragment {
 
                 //Log.d("jsonArray개수>",""+jsonArray.length());
                 for (int i = 0; i < jsonArray.length(); i++) {
+
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     int productpid = jsonObject.getInt("productpid");
                     String productimg = jsonObject.getString("productimage");
@@ -227,7 +238,6 @@ public class Mylist_Fragment extends Fragment {
 
                     adapter.addItem(new HotelItem(productpid, productimg, productname, date_s, date_e, productaddr, forprice, productprice));
                     listView.setAdapter(adapter);
-
                 }
 
             } catch (JSONException e1) {

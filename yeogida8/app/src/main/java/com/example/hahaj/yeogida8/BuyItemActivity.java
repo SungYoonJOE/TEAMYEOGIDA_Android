@@ -106,14 +106,14 @@ public class BuyItemActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "찜 상품에 등록되었습니다.", Toast.LENGTH_LONG).show();
                     isLike = true;
                     //서버로 정보 전달
-                    new JSONTask2().execute("http://172.16.120.100:3000/choice/register");
+                    new JSONTask2().execute("http://192.168.0.11:3000/choice/register");
                 }
                 else if(i==0){
                     btn_onof.setImageResource(R.drawable.likeoff);
                     Toast.makeText(getApplicationContext(), "찜 상품이 취소되었습니다.", Toast.LENGTH_LONG).show();
                     isLike = false;
                     //서버로 정보 전달
-                    new JSONTask2().execute("http://172.16.120.100:3000/choice/delete");
+                    new JSONTask2().execute("http://192.168.0.11:3000/choice/delete");
                 }
             }
         });
@@ -312,7 +312,6 @@ public class BuyItemActivity extends AppCompatActivity {
     }
 
     //찜 등록 및 삭제 통신코드
-
     public class JSONTask2 extends AsyncTask<String, String, String> {
 
         @Override
@@ -396,6 +395,7 @@ public class BuyItemActivity extends AppCompatActivity {
 
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -407,5 +407,4 @@ public class BuyItemActivity extends AppCompatActivity {
                 }
         }
     }
-
 }

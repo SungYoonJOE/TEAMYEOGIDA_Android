@@ -136,9 +136,9 @@ public class LoginActivity extends AppCompatActivity {
                     nickname = result.getNickname();
                     email = result.getKakaoAccount().getEmail();
 
-                    new JSONTask().execute("http://172.16.120.100:3000/login");
+                    new JSONTask().execute("http://192.168.0.11:3000/login");
 
-                    //redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
+//                    redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
                 }
             });
         }
@@ -230,10 +230,8 @@ public class LoginActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return "";
         }
-
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);

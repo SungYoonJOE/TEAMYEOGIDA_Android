@@ -74,9 +74,9 @@ public class HotelItemView extends LinearLayout {
             @Override
             public void run() {
                 try {
-                    //URL url = new URL("http://cfs11.tistory.com/image/33/tistory/2009/02/26/22/41/49a69bf854e7c");
+                    URL url = new URL("http://cfs11.tistory.com/image/33/tistory/2009/02/26/22/41/49a69bf854e7c");
 
-                    URL url = new URL(productimage);
+//                    URL url = new URL(productimage);
 
                     HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                     conn.setDoInput(true);

@@ -105,6 +105,7 @@ public class sell_Fragment extends Fragment {
             if(convertView==null) {
                 view= new HotelItemView(getContext());
             }
+
             else{
                 view= (HotelItemView) convertView;
             }
