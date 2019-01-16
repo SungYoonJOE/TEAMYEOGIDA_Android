@@ -38,6 +38,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class BuyItemActivity extends AppCompatActivity {
+
+    NetworkUrl url = new NetworkUrl();
+
     //ImageView imageView;
     Bitmap bitmap;
     ImageView imageView1;
@@ -84,7 +87,7 @@ public class BuyItemActivity extends AppCompatActivity {
         //productpid = productpidIntent.getIntExtra("personpid", 0);
 
         //통신-제품상세정보 받아오기
-        new JSONTask().execute("http://172.16.120.100:3000/product/info");
+        new JSONTask().execute(url.getMainUrl() + "/product/info");
 
 
         //double lat = 37.6026422;
@@ -105,15 +108,17 @@ public class BuyItemActivity extends AppCompatActivity {
                     btn_onof.setImageResource(R.drawable.likeon);
                     Toast.makeText(getApplicationContext(), "찜 상품에 등록되었습니다.", Toast.LENGTH_LONG).show();
                     isLike = true;
+                    //통신
                     //서버로 정보 전달
-                    new JSONTask2().execute("http://192.168.0.11:3000/choice/register");
+//                    new JSONTask2().execute(url.getMainUrl() + "/choice/register");
                 }
                 else if(i==0){
                     btn_onof.setImageResource(R.drawable.likeoff);
                     Toast.makeText(getApplicationContext(), "찜 상품이 취소되었습니다.", Toast.LENGTH_LONG).show();
                     isLike = false;
+                    //통신
                     //서버로 정보 전달
-                    new JSONTask2().execute("http://192.168.0.11:3000/choice/delete");
+//                    new JSONTask2().execute(url.getMainUrl() + "/choice/delete");
                 }
             }
         });

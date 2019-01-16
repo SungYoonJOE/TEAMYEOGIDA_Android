@@ -42,11 +42,12 @@ import java.util.List;
 
 public class Mylist_Fragment extends Fragment {
 
+    NetworkUrl url = new NetworkUrl();
     HotelAdapter adapter;
 
     EditText editText;
     EditText editText2;
-    int productpid = 1;
+    int productpid;
     int personpid;
     ListView listView;
 
@@ -61,18 +62,19 @@ public class Mylist_Fragment extends Fragment {
         Log.d("personpid in 내상품목록>> ", "" + personpid);
 
 //      통신
-      new JSONTask().execute("http://192.168.0.11:3000/sell/mysell_info");
+//      new JSONTask().execute(url.getMainUrl() + "/sell/mysell_info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.mylist_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
 
 
         //dummy data
-/*
+
         final HotelAdapter adapter=new HotelAdapter();
         adapter.addItem(new HotelItem(productpid, null, "연어 펜션", "2019-01-10", "2019-01-11", "서울시 합정동", 2000, 1000));
+        adapter.addItem(new HotelItem(productpid, null, "08 펜션", "2019-02-10", "2019-02-11", "고양시 마두동", 5000, 1000));
         listView.setAdapter(adapter);
-*/
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -81,14 +83,19 @@ public class Mylist_Fragment extends Fragment {
                 //HotelItem item = (HotelItem) adapter.getItem(position);
                 //Toast.makeText(getContext(), "선택 : " + item.getPname(), Toast.LENGTH_LONG).show();
                 //인텐트 사용하여 상품수정/삭제 화면으로 이동 & productpid 서버에 넘김
-                redirectMylistToUpdateActivity(productpid);
-//                new JSONTask().execute("http://192.168.219.193:3000/sell/mysell_info");
+                redirectMylistToUpOrDeleteActivity(productpid);
+                //통신
+//                new JSONTask().execute(url.getMainUrl() + "/sell/mysell_info");
 
             }
         });
 
         return rootView;
 
+    }
+
+    public int getProductpid() {
+        return this.productpid;
     }
 
     class HotelAdapter extends BaseAdapter {
@@ -128,7 +135,7 @@ public class Mylist_Fragment extends Fragment {
     }
 
     //내상품리스트에서 상품수정or삭제화면으로 이동
-    public void redirectMylistToUpdateActivity(int productpid) {
+    public void redirectMylistToUpOrDeleteActivity(int productpid) {
         Intent intent_toupdate = new Intent(getContext(), UpOrDeleteActivity.class);
         intent_toupdate.putExtra("productpid", productpid);
 //        startActivity(intent_toupdate);
@@ -220,11 +227,11 @@ public class Mylist_Fragment extends Fragment {
             try {
                 JSONArray jsonArray = new JSONArray(result);
 
-                //Log.d("jsonArray개수>",""+jsonArray.length());
+                Log.d("jsonArray개수>",""+jsonArray.length());
                 for (int i = 0; i < jsonArray.length(); i++) {
 
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int productpid = jsonObject.getInt("productpid");
+                    productpid = jsonObject.getInt("productpid");
                     String productimg = jsonObject.getString("productimage");
                     String productname = jsonObject.getString("productname");
                     String date_s = jsonObject.get("productdate_s").toString().substring(0, 10);

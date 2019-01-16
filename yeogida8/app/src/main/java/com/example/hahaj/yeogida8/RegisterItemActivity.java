@@ -37,6 +37,8 @@ public class RegisterItemActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private String TAG = "RegisterItemActivity";
 
+    NetworkUrl url = new NetworkUrl();
+
     ImageView mPhoto;
     Bitmap checkImg;
     EditText inputName, inputAddr_detail, inputURL, inputPhoneNum;
@@ -158,7 +160,7 @@ public class RegisterItemActivity extends AppCompatActivity {
                         //통신은 network() 로 못뺌 무조건 통신하고자하는 곳에 아래 코드를 써야한다.
 //                        netWork();
                         final Future uploading = Ion.with(RegisterItemActivity.this)
-                                .load("POST", "http://192.168.219.193:3000/product/register")
+                                .load("POST", url.getMainUrl() + "/product/register")
                                 //String 추가
                                 .setLogging("MyLogs", Log.DEBUG)
                                 //타임아웃 설정

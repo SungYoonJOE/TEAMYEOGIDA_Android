@@ -36,6 +36,8 @@ import java.util.ArrayList;
 
 public class Likedlist_Fragment extends Fragment {
 
+    NetworkUrl url = new NetworkUrl();
+
     HotelAdapter adapter;
 
     EditText editText;
@@ -55,8 +57,8 @@ public class Likedlist_Fragment extends Fragment {
         ppid = pref.getInt("personpid", 0);
         Log.d("ppid in 찜목록>> ", "" + ppid);
 
-        //통신172.16.120.100:300
-        new JSONTask().execute("http://192.168.0.11:3000/choice/info");
+        //통신
+//        new JSONTask().execute(url.getMainUrl() + "/choice/info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.likedlist_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);

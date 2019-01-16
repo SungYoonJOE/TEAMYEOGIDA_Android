@@ -40,6 +40,9 @@ public class UpdateItemActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private String TAG = "UpdateItemActivity";
 
+    NetworkUrl url = new NetworkUrl();
+    Mylist_Fragment myFrag = new Mylist_Fragment();
+
     ImageView mPhoto;
     Bitmap checkImg;
     EditText inputName, inputAddr_detail, inputURL, inputPhoneNum;
@@ -50,7 +53,7 @@ public class UpdateItemActivity extends AppCompatActivity {
     //핸드폰 내 갤러리에서 사진 경로.
     String path;
 
-    int personpid;
+    int personpid, productpid;
 
     private String strfirstDate, strlastDate; //예약 시작 날짜, 예약 마지막 날짜 2018-02-14
     int intFirstday, intLastday, intFirstmon, intLastmon;
@@ -84,6 +87,8 @@ public class UpdateItemActivity extends AppCompatActivity {
         //int i = pre.getCount();
         Log.d("메인->상품등록 personpid", ""+personpid);
 
+//        productpid = myFrag.getProductpid();
+
         /*
         //메인에서 전달받은 personpid
         Intent intent = getIntent();
@@ -101,9 +106,15 @@ public class UpdateItemActivity extends AppCompatActivity {
         inputPhoneNum = (EditText)findViewById(R.id.inputPhoneNum_up);
         inputAboutItem = (EditText)findViewById(R.id.inputAboutItem_up);
 
+        //productpid 넘겨 받기
+        Intent intent = getIntent();
+        productpid = intent.getExtras().getInt("productpid");
+
+        /*
         Intent intentAddr = getIntent();
         String res_addr = intentAddr.getStringExtra("address");
         txtAddr.setText(res_addr);
+        */
 
         //사진추가를 누를 경우
         mPhoto = (ImageView)findViewById(R.id.mPhoto_up);
@@ -128,7 +139,7 @@ public class UpdateItemActivity extends AppCompatActivity {
         //날짜 선택
         initDate();
 
-        //등록버튼을 누를 경우
+        //수정버튼을 누를 경우
         btn_reg = (Button)findViewById(R.id.btn_reg_up);
         btn_reg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,12 +172,12 @@ public class UpdateItemActivity extends AppCompatActivity {
                         //통신은 network() 로 못뺌 무조건 통신하고자하는 곳에 아래 코드를 써야한다.
 //                        netWork();
                         final Future uploading = Ion.with(UpdateItemActivity.this)
-                                .load("POST", "http://192.168.0.11:3000/product/update")
+                                .load("POST", url.getMainUrl() + "/product/update")
                                 //String 추가
                                 .setLogging("MyLogs", Log.DEBUG)
                                 //타임아웃 설정
                                 .setTimeout(150000)
-                                .setMultipartParameter("productpid", "6")
+                                .setMultipartParameter("productpid", Integer.toString(productpid))
                                 .setMultipartParameter("productname", itemName)
                                 .setMultipartParameter("prpductUrl", itemURL)
                                 //이미지 파일 추가
