@@ -1,19 +1,23 @@
 package com.example.hahaj.yeogida8;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +28,6 @@ import com.skt.Tmap.TMapView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -37,19 +40,23 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class BuyItemActivity extends AppCompatActivity {
+import static org.apache.http.protocol.HTTP.USER_AGENT;
 
-    NetworkUrl url = new NetworkUrl();
 
-    //ImageView imageView;
-    Bitmap bitmap;
-    ImageView imageView1;
-    TextView itemName, itemAddr, itemURL, itemStartDate, itemEndDate, itemPrice, new_itemPrice, itemDeadline, aboutItem2;
-    ImageButton btn_onof;
-    int i=0;
-    boolean isLike;
-    private int ppid;
-    private int productpid = 9;
+public class UpOrDeleteActivity extends AppCompatActivity {
+
+
+    private Bitmap bitmap;
+    private ImageView imageView1;
+    private ImageButton btn_onof;
+    private int personpid, productpid;
+
+    private TextView itemName, itemAddr, itemURL, itemStartDate, itemEndDate, itemPrice, new_itemPrice, itemDeadline, aboutItem;
+    private Button btn_delete, btn_update;
+
+    private NetworkUrl url = new NetworkUrl();
+    private Mylist_Fragment myFragment = new Mylist_Fragment();
+
 
     //지도API
     //LinearLayout mapview;
@@ -58,78 +65,153 @@ public class BuyItemActivity extends AppCompatActivity {
     double lat;
     double lng;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buy_item);
+        setContentView(R.layout.activity_up_or_delete);
 
-        imageView1 = (ImageView)findViewById(R.id.image1);
+
+        imageView1 = (ImageView)findViewById(R.id.image1_RE);
         //imageView1.setImageResource(R.drawable.item1);
-        itemName = (TextView)findViewById(R.id.itemName);
-        itemAddr = (TextView)findViewById(R.id.itemAddr);
-        itemURL = (TextView)findViewById(R.id.itemURL);
-        itemStartDate = (TextView)findViewById(R.id.itemStartDate);
-        itemEndDate = (TextView)findViewById(R.id.itemEndDate);
+        itemName = (TextView)findViewById(R.id.itemName_RE);
+        itemAddr = (TextView)findViewById(R.id.itemAddr_RE);
+        itemURL = (TextView)findViewById(R.id.itemURL_RE);
+        itemStartDate = (TextView)findViewById(R.id.itemStartDate_RE);
+        itemEndDate = (TextView)findViewById(R.id.itemEndDate_RE);
+        itemPrice = (TextView)findViewById(R.id.itemPrice_RE);
+        new_itemPrice = (TextView)findViewById(R.id.new_itemPrice_RE);
+        itemDeadline = (TextView)findViewById(R.id.itemDeadline_RE);
+        aboutItem = (TextView)findViewById(R.id.aboutItem_RE);
 
-        itemPrice = (TextView)findViewById(R.id.itemPrice);
-        new_itemPrice = (TextView)findViewById(R.id.new_itemPrice);
-        itemDeadline = (TextView)findViewById(R.id.itemDeadline);
-        aboutItem2 = (TextView)findViewById(R.id.aboutItem2);
+
+        //test코드
+//        aboutItem.setText("고진권");
 
 
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
-        ppid = pref.getInt("personpid", 0); //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
-        Log.d("제품(상세)조회/구매화면 ppid>> ",""+ppid);
-
-        //productpid 불러오기
-        Intent productpidIntent = getIntent();
-        //productpid = productpidIntent.getIntExtra("personpid", 0);
-
-        //통신-제품상세정보 받아오기
-        new JSONTask().execute(url.getMainUrl() + "/product/info");
+        //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
+        personpid = pref.getInt("personpid", 0);
 
 
-        //double lat = 37.6026422;
-        //double lng = 126.953058;
-        likeItem();
-        //initTmap(lng, lat);
+        BuyItemActivity buy = new BuyItemActivity();
+//        ppid = buy.getProductPid();
+        Log.d("제품조회 personpid>> ",""+personpid);
+
+
+        Intent intent = getIntent();
+        productpid = intent.getExtras().getInt("productpid");
+        Log.d("제품번호 productpid>> ",""+productpid);
+
+
+//        통신. 제품 조회하여 서버에서 원래 상품 data 가져오기.
+        new JSONTask_getItemData().execute(url.getMainUrl() + "/product/info");
+
+        double lat = 37.6026422;
+        double lng = 126.953058;
+
+
+        initTmap(lng, lat);
         Log.d("문제확인6", "여기 아니다!!!!!!!!");
-        //addMarker(lng, lat);
-    }
-    //찜 기능
-    public void likeItem(){
-        btn_onof = (ImageButton)findViewById(R.id.btn_likeonoff);
-        btn_onof.setOnClickListener(new View.OnClickListener() {
+        addMarker(lng, lat);
+
+
+        //판매자가 상품을 삭제하는 기능
+        btn_delete = (Button)findViewById(R.id.btn_delete);
+        btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                i=1-i;
-                if(i==1){
-                    btn_onof.setImageResource(R.drawable.likeon);
-                    Toast.makeText(getApplicationContext(), "찜 상품에 등록되었습니다.", Toast.LENGTH_LONG).show();
-                    isLike = true;
-                    //통신
-                    //서버로 정보 전달
-                    new JSONTask2().execute(url.getMainUrl() + "/choice/register");
-                }
-                else if(i==0){
-                    btn_onof.setImageResource(R.drawable.likeoff);
-                    Toast.makeText(getApplicationContext(), "찜 상품이 취소되었습니다.", Toast.LENGTH_LONG).show();
-                    isLike = false;
-                    //통신
-                    //서버로 정보 전달
-                    new JSONTask2().execute(url.getMainUrl() + "/choice/delete");
-                }
+                //통신
+                new JSONTask_deleteItem().execute(url.getMainUrl() + "/product/delete");
+                deleteShow();
+                //서버에 알림
+                //이전화면으로 이동
+            }
+
+        });
+
+
+
+        btn_update = (Button)findViewById(R.id.btn_update);
+        btn_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UpdateItemActivity.class);
+                intent.putExtra("productpid", productpid);
+                startActivity(intent);
             }
         });
     }
+
+    //상품 수정
+    /*
+    public void updateProduct(int productpid) {
+        Intent update_intent = new Intent(this, UpdateItemActivity.class);
+        update_intent.putExtra("productpid", productpid);
+        Log.d("상품 pid", Integer.toString(productpid));
+        startActivity(update_intent);
+//        finish();
+    }
+    */
+
+
+    //상품 삭제후 알림 메세지.
+    public void deleteShow(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("메시지");
+        builder.setMessage("상품이 삭제되었습니다!");
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "삭제를 선택", Toast.LENGTH_LONG).show();
+                //서버에 productpid을 GET방식으로 전송
+                new JSONTask_deleteItem().execute(url.getMainUrl() + "/product/delete");
+                /*
+                try {
+                    sendGet(url.getMainUrl() + "/product/delete");
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+                */
+                redirectToMylist(productpid);
+
+            }
+        });
+        builder.show();
+    }
+
+
+    //삭제 후 내상품리스트로 넘어가는 메소드
+    /*
+    public void redirectToMylist(int productpid){
+        Intent delintent = new Intent(this, Mylist_MainActivity.class);
+        delintent.putExtra("productpid", productpid);
+        Log.d("상품 pid", Integer.toString(productpid));
+        startActivity(delintent);
+        finish();
+    }
+    */
+
+
+    //삭제 후 내상품리스트로 넘어가는 메소드
+    public void redirectToMylist(int productpid) {
+        Intent intent = new Intent();
+        setResult(BasicInfo.REQUEST_CODE_MYLIST);
+        finish();
+    }
+
 
     //TMap 생성
     private void initTmap(double lng, double lat){
         tmap = new TMapView(this);
         tmap.setSKTMapApiKey(MAPAPPKEY);
         Log.d("문제확인1", "여기 아니다!!!!!!!!");
-        ConstraintLayout mapview = (ConstraintLayout) findViewById(R.id.mapview);
+        ConstraintLayout mapview = (ConstraintLayout) findViewById(R.id.mapview_RE);
         Log.d("문제확인2", "여기 아니다!!!!!!!!");
         this.lat = lat;
         this.lng = lng;
@@ -142,6 +224,7 @@ public class BuyItemActivity extends AppCompatActivity {
         Log.d("문제확인3", "여기 아니다!!!!!!!!");
     }
 
+
     private void addMarker(double lng, double lat){
         //this.lat = lat;
         //this.lng = lng;
@@ -152,6 +235,9 @@ public class BuyItemActivity extends AppCompatActivity {
         tmap.addMarkerItem("marker", marker);
         Log.d("문제확인5", "여기 아니다!!!!!!!!");
     }
+
+
+
 
     public void setProductimage(final String productimage){
 
@@ -183,11 +269,34 @@ public class BuyItemActivity extends AppCompatActivity {
         } catch (InterruptedException e){
             e.printStackTrace();
         }
-
     }
 
-    //제품 정보 받아오는 통신코드
-    public class JSONTask extends AsyncTask<String, String, String> {
+
+    /*
+    private void sendGet(String targetUrl) throws Exception {
+
+        URL url = new URL(targetUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+        con.setRequestMethod("GET"); // optional default is GET
+        con.setRequestProperty("User-Agent", USER_AGENT);
+
+        int responseCode = con.getResponseCode();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+    }
+    */
+
+    //item상세 정보 가져오기.
+    //가져온후 data뿌리기
+    public class JSONTask_getItemData extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... urls) {
@@ -195,9 +304,11 @@ public class BuyItemActivity extends AppCompatActivity {
                 Log.d("doInBackground 확인", "doIn");
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
+
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("productpid", productpid);
-                jsonObject.put("personpid", ppid);
+                jsonObject.put("personpid", personpid);
+
                 Log.d("json put 다음", "");
 
                 HttpURLConnection con = null;
@@ -265,8 +376,15 @@ public class BuyItemActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
-            if(result==null) return;
+
+//            final Mylist_Fragment.HotelAdapter adapter = new Mylist_Fragment.HotelAdapter();
+            if(result==null) {
+                Toast.makeText(getApplicationContext(), "삭제할 상품이 없습니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             try {
+
                 JSONObject jsonObject = new JSONObject(result);
 
                 int propid = jsonObject.getInt("productpid");
@@ -289,13 +407,6 @@ public class BuyItemActivity extends AppCompatActivity {
                 Log.d("파싱확인4", "정가"+forprice+", 판매가"+productprice+", 설명"+productText);
                 Log.d("파싱확인5", "찜여부"+choice);
 
-                //찜 상태
-                if(choice==1){
-                    btn_onof.setImageResource(R.drawable.likeon);
-                } else{
-                    btn_onof.setImageResource(R.drawable.likeoff);
-                }
-
                 //지도
                 initTmap(addr_x, addr_y);
                 addMarker(addr_x, addr_y);
@@ -309,25 +420,28 @@ public class BuyItemActivity extends AppCompatActivity {
                 itemEndDate.setText(date_e);
                 itemPrice.setText(forprice+"");
                 new_itemPrice.setText(productprice+"");
-                aboutItem2.setText(productText);
+                aboutItem.setText(productText);
+
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
         }
     }
 
-    //찜 등록 및 삭제 통신코드
-    public class JSONTask2 extends AsyncTask<String, String, String> {
+
+    public class JSONTask_deleteItem extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... urls) {
+
             try {
                 Log.d("doInBackground 확인", "doIn");
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
+
+                Log.d("productpid>>>>>>>>>>>>>", Integer.toString(productpid));
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("choice_productpid", productpid);
-                jsonObject.put("choice_personpid", ppid);
+                jsonObject.accumulate("productpid", productpid);
                 Log.d("json put 다음", "");
 
                 HttpURLConnection con = null;
@@ -337,22 +451,25 @@ public class BuyItemActivity extends AppCompatActivity {
                     URL url = new URL(urls[0]);
                     //연결을 함
                     con = (HttpURLConnection) url.openConnection();
-
-                    con.setRequestMethod("POST");//POST방식으로 보냄
-                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
-                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
-                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
-                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
-                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
+                    con.setRequestMethod("GET");
                     con.connect();
+//                    con.setRequestMethod("GET");//GET방식으로 보냄
+//                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
+//                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
+//                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
+//                    con.setDoOutput(false);//Outstream으로 post 데이터를 넘겨주겠다는 의미
+//                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
+//                    con.getResponseCode();
+//                    con.connect();
 
                     //서버로 보내기위해서 스트림 만듬
-                    OutputStream outStream = con.getOutputStream();
-                    //버퍼를 생성하고 넣음
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
-                    writer.write(jsonObject.toString());
-                    writer.flush();
-                    writer.close();//버퍼를 받아줌
+//                    OutputStream outStream = con.getOutputStream();
+//                    //버퍼를 생성하고 넣음
+//                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+//                    writer.write(query);
+//                    writer.flush();
+//                    writer.close();//버퍼를 받아줌
+//                    outStream.close();
 
                     //서버로 부터 데이터를 받음
                     InputStream stream = con.getInputStream();
@@ -395,21 +512,25 @@ public class BuyItemActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
-            if(result==null) return;
-            if(result=="success"){Toast.makeText(getApplication(), "기능 성공", Toast.LENGTH_SHORT).show();}
 
-        }
-    }
+//            final Mylist_Fragment.HotelAdapter adapter = new Mylist_Fragment.HotelAdapter();
+            if(result==null) {
+                Toast.makeText(getApplicationContext(), "삭제할 상품이 없습니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case BasicInfo.REQUEST_CODE_LIKEDTOBUY:
-                if(resultCode == RESULT_OK){
-                    //productpid = data.getIntExtra("productpid", 0);
-                    Log.d("찜->구매 이동 ", "");
-                }
+            try {
+                JSONObject jsonObj = new JSONObject(result);
+//                String message = jsonObj.getString("message");
+                int message = jsonObj.getInt("message");
+                Toast.makeText(getApplicationContext(),Integer.toString(message),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
+
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }
+
+

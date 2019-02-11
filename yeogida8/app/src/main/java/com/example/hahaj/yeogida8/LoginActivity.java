@@ -46,6 +46,9 @@ import java.util.List;
 
 
 public class LoginActivity extends AppCompatActivity {
+
+    NetworkUrl url = new NetworkUrl();
+
     private SessionCallback callback;
     private LoginButton btn_kakao_login;
     Button kakaologinbtn;
@@ -136,9 +139,9 @@ public class LoginActivity extends AppCompatActivity {
                     nickname = result.getNickname();
                     email = result.getKakaoAccount().getEmail();
 
-                    new JSONTask().execute("http://172.16.120.100:3000/login");
+                    new JSONTask().execute(url.getMainUrl() + "/login");
 
-                    //redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
+//                    redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
                 }
             });
         }
@@ -230,10 +233,8 @@ public class LoginActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return "";
         }
-
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
@@ -268,11 +269,10 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 
-
             }catch (ParseException e){ ;}
-
         }
     }
+
     //이메일입력 화면으로 이동
     protected void redirectInputEmailActivity(String strpid, String nickname){
 

@@ -2,14 +2,14 @@ package com.example.hahaj.yeogida8;
 
 public class HotelItem {
 
-    int productpid;
-    String pname;
-    String pimg;
-    String paddr;
-    String pdate_e;
-    String pdate_s;
-    int fprice;
-    int pprice;
+    private int productpid;
+    private String pname;
+    private String pimg;
+    private String paddr;
+    private String pdate_e;
+    private String pdate_s;
+    private int fprice;
+    private int pprice;
 
     public HotelItem(int productpid, String pimg, String pname, String pdate_s, String pdate_e, String paddr, int fprice, int pprice){
         this.productpid = productpid;

@@ -9,8 +9,16 @@ public class BasicInfo {
     public static final int REQUEST_CODE_MAINTOREGISTERITEM = 102;
     public static final int REQUEST_CODE_MAINTOBUY = 110;
 
-    public static final int REQUEST_CODE_MYLISTTOUPDATE = 120;
+    public static final int REQUEST_CODE_UPORDELETE = 120;
     public static final int REQUEST_CODE_LIKEDTOBUY = 130;
+
+    public static final int REQUEST_CODE_MYLIST = 31875668;
+
+    public static final int SEARCH_ADDRESS_FROM_UPDATE = 20000;
+    public static final int SEARCH_ADDRESS_FROM_REGISTER= 20001;
+
+    public static final int REDIRECT_UPDATE = 70000;
+    public static final int REDIRECT_REGISTER = 80000;
 
 
     //SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
