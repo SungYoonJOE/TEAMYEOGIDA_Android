@@ -210,9 +210,9 @@ public class Mylist_MainActivity extends AppCompatActivity implements  Navigatio
             startActivity(intent_recent);
         }
 
-
         return false;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -225,6 +225,7 @@ public class Mylist_MainActivity extends AppCompatActivity implements  Navigatio
 
     //로그아웃 재확인 메시지
     public void checkLogoutShow(){
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("로그아웃");
         builder.setMessage("로그아웃 하시겠습니까?");
@@ -245,6 +246,7 @@ public class Mylist_MainActivity extends AppCompatActivity implements  Navigatio
                         redirectLoginActivity();
                     }
                 });
+
                 Toast.makeText(getApplicationContext(), "예를 선택", Toast.LENGTH_LONG).show();
             }
         });

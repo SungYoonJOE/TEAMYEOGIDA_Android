@@ -272,7 +272,7 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/btn_reg_up"
+            android:id="@+id/btn_update_Re"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"

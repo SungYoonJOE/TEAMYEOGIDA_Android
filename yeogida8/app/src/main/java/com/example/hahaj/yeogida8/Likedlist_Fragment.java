@@ -47,6 +47,7 @@ public class Likedlist_Fragment extends Fragment {
     ListView listView;
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class Likedlist_Fragment extends Fragment {
         Log.d("ppid in 찜목록>> ", "" + ppid);
 
         //통신
-//        new JSONTask().execute(url.getMainUrl() + "/choice/info");
+        new JSONTask().execute(url.getMainUrl() + "/choice/info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.likedlist_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);

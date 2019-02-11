@@ -57,7 +57,7 @@ public class sell_Fragment extends Fragment {
         Log.d("ppid in 판매내역 목록>> ", "" + ppid);
 
         //통신
-//        new JSONTask().execute(url.getMainUrl() + "/sell/sold_info");
+        new JSONTask().execute(url.getMainUrl() + "/sell/sold_info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.sell_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);

@@ -57,7 +57,7 @@ public class Recentlist_Fragment extends Fragment {
         Log.d("ppid in 최근 본 목록>> ", "" + ppid);
 
         //통신
-//        new JSONTask().execute(url.getMainUrl()+ "/search/info");
+        new JSONTask().execute(url.getMainUrl()+ "/search/info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.recentlist_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);

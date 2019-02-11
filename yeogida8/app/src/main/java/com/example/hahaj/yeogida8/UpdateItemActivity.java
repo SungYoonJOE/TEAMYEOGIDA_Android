@@ -10,8 +10,10 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,24 +33,36 @@ import com.koushikdutta.ion.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
 
 public class UpdateItemActivity extends AppCompatActivity {
 
-    //
-    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
+//    private static final int SEARCH_ADDRESS_ACTIVITY = 20000;
     private static final int PICK_IMAGE_REQUEST = 1;
     private String TAG = "UpdateItemActivity";
 
+
     NetworkUrl url = new NetworkUrl();
     Mylist_Fragment myFrag = new Mylist_Fragment();
+
+
 
     ImageView mPhoto;
     Bitmap checkImg;
     EditText inputName, inputAddr_detail, inputURL, inputPhoneNum;
     TextView selectFirst, selectLast, aboutItem1, txtAddr;
     EditText inputPrice, inputNewPrice, inputAboutItem;
-    Button btn_reg, btn_searchAddr;
+    Button btn_updateRe, btn_searchAddr;
 
     //핸드폰 내 갤러리에서 사진 경로.
     String path;
@@ -60,15 +74,16 @@ public class UpdateItemActivity extends AppCompatActivity {
 
 
     //서버로 부터 응답받을때 필요한 변수들.
-    String itemName;
-    String itemAddr;
-    String itemAddr_detail;
-    String itemURL;
-    String price;
+
+    private String itemName;
+    private String itemAddr;
+    private String itemAddr_detail;
+    private String itemURL;
+    private String price;
     //int price = Integer.parseInt(inputPrice.getText().toString());
-    String newPrice;
-    String itemPhoneNum;
-    String regAboutItem;
+    private String newPrice;
+    private String itemPhoneNum;
+    private String regAboutItem;
 
 
     @Override
@@ -76,18 +91,35 @@ public class UpdateItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_item_re);
 
+
+        /*
+        mPhoto = (ImageView)findViewById(R.id.mPhoto_up);
+        //imageView1.setImageResource(R.drawable.item1);
+        inputName = (EditText)findViewById(R.id.inputName_up);
+        txtAddr = (TextView)findViewById(R.id.txtAddr_up);
+        inputAddr_detail = (EditText)findViewById(R.id.inputAddr_detail_up);
+        inputURL = (EditText)findViewById(R.id.inputURL_up);
+        selectFirst= (TextView)findViewById(R.id.selectFirst_up);
+        selectLast= (TextView)findViewById(R.id.selectLast_up);
+        inputPrice= (EditText) findViewById(R.id.inputPrice_up);
+        inputNewPrice= (EditText) findViewById(R.id.inputNewPrice_up);
+        inputPhoneNum= (EditText) findViewById(R.id.inputPhoneNum_up);
+        inputAboutItem = (EditText) findViewById(R.id.inputAboutItem_up);
+        */
+
+        //        통신.
+        // 제품 조회하여 서버에서 원래 상품 data 가져오기.
+//        new JSONTask_getItemData().execute(url.getMainUrl() + "/product/info");
+
         Ion.getDefault(this).configure().setLogging("ion-sample", Log.DEBUG);
 
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         personpid = pref.getInt("personpid", 0);
-        //PreferenceClass pre = new PreferenceClass(getApplicationContext());
-        //int i= pref.getInt("personpid", 0);
-        //int i = pre.getCount();
-        Log.d("메인->상품등록 personpid", ""+personpid);
 
-//        productpid = myFrag.getProductpid();
+        Log.d("메인->상품등록 personpid", ""+personpid);
+        productpid = myFrag.getProductpid();
 
         /*
         //메인에서 전달받은 personpid
@@ -110,11 +142,11 @@ public class UpdateItemActivity extends AppCompatActivity {
         Intent intent = getIntent();
         productpid = intent.getExtras().getInt("productpid");
 
-        /*
-        Intent intentAddr = getIntent();
-        String res_addr = intentAddr.getStringExtra("address");
-        txtAddr.setText(res_addr);
-        */
+
+//        Intent intentAddr = getIntent();
+//        String res_addr = intentAddr.getStringExtra("address_update");
+//        txtAddr.setText(res_addr);
+
 
         //사진추가를 누를 경우
         mPhoto = (ImageView)findViewById(R.id.mPhoto_up);
@@ -140,8 +172,8 @@ public class UpdateItemActivity extends AppCompatActivity {
         initDate();
 
         //수정버튼을 누를 경우
-        btn_reg = (Button)findViewById(R.id.btn_reg_up);
-        btn_reg.setOnClickListener(new View.OnClickListener() {
+        btn_updateRe = (Button)findViewById(R.id.btn_update_Re);
+        btn_updateRe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemName = inputName.getText().toString().trim();
@@ -154,18 +186,21 @@ public class UpdateItemActivity extends AppCompatActivity {
                 itemPhoneNum = inputPhoneNum.getText().toString().trim();
                 regAboutItem = inputAboutItem.getText().toString().trim();
 
+
                 if(selectFirst.length()<6 || selectLast.length()<6 || itemName.getBytes().length<=0 || itemAddr.getBytes().length<=0 || itemAddr_detail.getBytes().length<=0 ||itemURL.getBytes().length<=0 || price.length() <2 || newPrice.length() <2||itemPhoneNum.length()<1 ||regAboutItem.length()<0) {
                     Toast.makeText(getApplicationContext(), "빠짐없이 입력해주세요.", Toast.LENGTH_LONG).show();
                     //show();
                 }
+
                 else if(path == null){
                     Toast.makeText(getApplicationContext(), "빠짐없이 입력해주세요2.", Toast.LENGTH_LONG).show();
                 }
+
                 else{
 
                     if(itemPhoneNum.length()<8){
                         Toast.makeText(getApplicationContext(), "핸드폰 번호는 8글자 입력해주세요.", Toast.LENGTH_LONG).show();
-                    }else {
+                    } else {
                         //서버로 보낼때는 "010"+itemPhoneNum
                         //서버로 전송
 
@@ -199,7 +234,7 @@ public class UpdateItemActivity extends AppCompatActivity {
                                     public void onCompleted(Exception e, Response<String> result) {
                                         try{
                                             JSONObject jobj = new JSONObject(result.getResult());
-                                            Log.d("여기까지 55555", "이");
+                                            Log.d("여기까지 7777", "이");
                                             Toast.makeText(getApplicationContext(), jobj.getString("message"), Toast.LENGTH_SHORT).show();
 
 //                                          서버로 부터 응답을 받아 온다. 아래는 Test 코드. 보낸거 그대로 받아오기.
@@ -246,6 +281,32 @@ public class UpdateItemActivity extends AppCompatActivity {
         });
     }
 
+    //등록완료 메시지
+    public void show(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("메시지");
+        builder.setMessage("해당 상픔이 수정 완료되었습니다!");
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //서버에 personpid와 상품정보를 전송
+                redirectMainActivity(personpid);
+//                Toast.makeText(getApplicationContext(), "예를 선택", Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.show();
+    }
+
+
+    protected void redirectMainActivity(int personpid) {
+        Intent intent = new Intent(this, MainActivity.class);
+//        intent.putExtra("personpid", personpid);
+        //Log.d("카카오 pid : ", ""+intent.getLongExtra("pid", 0));
+        //Log.d("카카오 nickname : ", ""+intent.getStringExtra("nickname"));
+        startActivity(intent);
+        finish();
+    }
+
     /*
     //갤러리에서 사진 선택
     private void takePictureFromGallery(){
@@ -256,7 +317,6 @@ public class UpdateItemActivity extends AppCompatActivity {
 
     }
     */
-
 
     private void takePictureFromGallery(){
         /* 성윤코드 (갤러리에서 사진 선택하는 화면으로 넘어가기)
@@ -278,7 +338,6 @@ public class UpdateItemActivity extends AppCompatActivity {
     }
 
 
-
     /*
      폰에서 사진을 지정하면 해당 사진 주소를 가져온다.
      */
@@ -293,6 +352,7 @@ public class UpdateItemActivity extends AppCompatActivity {
 
         return cursor.getString(column_index);
     }
+
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -334,14 +394,21 @@ public class UpdateItemActivity extends AppCompatActivity {
 //                    Log.d("이미지", img.toString());
 //                    upload.setVisibility(View.VISIBLE);
                     }
+                    break;
 
                     //주소받아오기
-                case SEARCH_ADDRESS_ACTIVITY:
-                    if (resultCode == RESULT_OK) {
-                        String addr = data.getExtras().getString("data");
-                        if (addr != null) {
-                            txtAddr.setText(addr);
+                case BasicInfo.SEARCH_ADDRESS_FROM_UPDATE:
+                    Log.d("주소받아오기 REQUEST>>", "여기까지 인정1");
+
+                    switch(resultCode) {
+                        case BasicInfo.REDIRECT_UPDATE: {
+                            Log.d("주소받아오기 REQUEST>>", "여기까지 인정2");
+                            String addr = data.getExtras().getString("address_update");
                             Toast.makeText(this, "찾은 주소 : " + addr, Toast.LENGTH_SHORT).show();
+                            if (addr != null) {
+                                txtAddr.setText(addr);
+                                Toast.makeText(this, "찾은 주소 : " + addr, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                     break;
@@ -351,8 +418,10 @@ public class UpdateItemActivity extends AppCompatActivity {
                         int personpid = intent.getIntExtra("personpid", 0);
                         //이 personpid와 함께 서버에 상품정보 전송
                     }
+                    break;
             }
-        }catch (Exception e) {
+
+        } catch (Exception e) {
             Toast.makeText(this, "오류가 있습니다.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
@@ -568,36 +637,12 @@ public class UpdateItemActivity extends AppCompatActivity {
         return format;
     }
 
-    //등록완료 메시지
-    public void show(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("메시지");
-        builder.setMessage("등록이 완료되었습니다!");
-        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //서버에 personpid와 상품정보를 전송
-                redirectMainActivity(personpid);
-                Toast.makeText(getApplicationContext(), "예를 선택", Toast.LENGTH_LONG).show();
-            }
-        });
-        builder.show();
-    }
-
-
-    protected void redirectMainActivity(int personpid) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("personpid", personpid);
-        //Log.d("카카오 pid : ", ""+intent.getLongExtra("pid", 0));
-        //Log.d("카카오 nickname : ", ""+intent.getStringExtra("nickname"));
-        startActivity(intent);
-        finish();
-    }
-
 
     //주소찾기 버튼 누르면 이동
     public void redirectRegToSearchAddr(){
         Intent intent = new Intent(this, SearchAddrActivity.class);
-        startActivity(intent);
+        intent.putExtra("whereFrom", 2);
+        startActivityForResult(intent, BasicInfo.SEARCH_ADDRESS_FROM_UPDATE);
     }
+
 }

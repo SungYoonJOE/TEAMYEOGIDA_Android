@@ -110,7 +110,7 @@ public class BuyItemActivity extends AppCompatActivity {
                     isLike = true;
                     //통신
                     //서버로 정보 전달
-//                    new JSONTask2().execute(url.getMainUrl() + "/choice/register");
+                    new JSONTask2().execute(url.getMainUrl() + "/choice/register");
                 }
                 else if(i==0){
                     btn_onof.setImageResource(R.drawable.likeoff);
@@ -118,7 +118,7 @@ public class BuyItemActivity extends AppCompatActivity {
                     isLike = false;
                     //통신
                     //서버로 정보 전달
-//                    new JSONTask2().execute(url.getMainUrl() + "/choice/delete");
+                    new JSONTask2().execute(url.getMainUrl() + "/choice/delete");
                 }
             }
         });

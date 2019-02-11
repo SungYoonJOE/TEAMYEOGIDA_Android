@@ -40,6 +40,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.apache.http.protocol.HTTP.USER_AGENT;
+
+
 public class UpOrDeleteActivity extends AppCompatActivity {
 
 
@@ -54,6 +57,7 @@ public class UpOrDeleteActivity extends AppCompatActivity {
     private NetworkUrl url = new NetworkUrl();
     private Mylist_Fragment myFragment = new Mylist_Fragment();
 
+
     //지도API
     //LinearLayout mapview;
     TMapView tmap;
@@ -61,10 +65,15 @@ public class UpOrDeleteActivity extends AppCompatActivity {
     double lat;
     double lng;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_up_or_delete);
+
 
         imageView1 = (ImageView)findViewById(R.id.image1_RE);
         //imageView1.setImageResource(R.drawable.item1);
@@ -78,8 +87,9 @@ public class UpOrDeleteActivity extends AppCompatActivity {
         itemDeadline = (TextView)findViewById(R.id.itemDeadline_RE);
         aboutItem = (TextView)findViewById(R.id.aboutItem_RE);
 
+
         //test코드
-        aboutItem.setText("고진권");
+//        aboutItem.setText("고진권");
 
 
         //personpid 불러오기
@@ -87,17 +97,19 @@ public class UpOrDeleteActivity extends AppCompatActivity {
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         personpid = pref.getInt("personpid", 0);
 
+
         BuyItemActivity buy = new BuyItemActivity();
 //        ppid = buy.getProductPid();
         Log.d("제품조회 personpid>> ",""+personpid);
+
 
         Intent intent = getIntent();
         productpid = intent.getExtras().getInt("productpid");
         Log.d("제품번호 productpid>> ",""+productpid);
 
-//        통신. 제품 조회하여 서버에서 원래 상품 data 가져오기.
-//        new JSONTask_getItemData().execute(url.getMainUrl() + "/product/info");
 
+//        통신. 제품 조회하여 서버에서 원래 상품 data 가져오기.
+        new JSONTask_getItemData().execute(url.getMainUrl() + "/product/info");
 
         double lat = 37.6026422;
         double lng = 126.953058;
@@ -113,33 +125,43 @@ public class UpOrDeleteActivity extends AppCompatActivity {
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //통신
+                new JSONTask_deleteItem().execute(url.getMainUrl() + "/product/delete");
                 deleteShow();
                 //서버에 알림
                 //이전화면으로 이동
             }
+
         });
+
+
 
         btn_update = (Button)findViewById(R.id.btn_update);
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateProduct(productpid);
+                Intent intent = new Intent(getApplicationContext(), UpdateItemActivity.class);
+                intent.putExtra("productpid", productpid);
+                startActivity(intent);
             }
         });
     }
 
     //상품 수정
+    /*
     public void updateProduct(int productpid) {
         Intent update_intent = new Intent(this, UpdateItemActivity.class);
         update_intent.putExtra("productpid", productpid);
         Log.d("상품 pid", Integer.toString(productpid));
         startActivity(update_intent);
 //        finish();
-
     }
+    */
 
-    //상품 삭제.
+
+    //상품 삭제후 알림 메세지.
     public void deleteShow(){
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("메시지");
         builder.setMessage("상품이 삭제되었습니다!");
@@ -148,9 +170,14 @@ public class UpOrDeleteActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(getApplicationContext(), "삭제를 선택", Toast.LENGTH_LONG).show();
                 //서버에 productpid을 GET방식으로 전송
-                //통신
-//                new JSONTask_deleteItem().execute(url.getMainUrl() + "/product/delete");
-
+                new JSONTask_deleteItem().execute(url.getMainUrl() + "/product/delete");
+                /*
+                try {
+                    sendGet(url.getMainUrl() + "/product/delete");
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+                */
                 redirectToMylist(productpid);
 
             }
@@ -158,7 +185,9 @@ public class UpOrDeleteActivity extends AppCompatActivity {
         builder.show();
     }
 
-    //수정 or 삭제 후 내상품리스트로 넘어가는 메소드
+
+    //삭제 후 내상품리스트로 넘어가는 메소드
+    /*
     public void redirectToMylist(int productpid){
         Intent delintent = new Intent(this, Mylist_MainActivity.class);
         delintent.putExtra("productpid", productpid);
@@ -166,7 +195,15 @@ public class UpOrDeleteActivity extends AppCompatActivity {
         startActivity(delintent);
         finish();
     }
+    */
 
+
+    //삭제 후 내상품리스트로 넘어가는 메소드
+    public void redirectToMylist(int productpid) {
+        Intent intent = new Intent();
+        setResult(BasicInfo.REQUEST_CODE_MYLIST);
+        finish();
+    }
 
 
     //TMap 생성
@@ -200,6 +237,8 @@ public class UpOrDeleteActivity extends AppCompatActivity {
     }
 
 
+
+
     public void setProductimage(final String productimage){
 
         Thread mThread = new Thread(){
@@ -230,10 +269,30 @@ public class UpOrDeleteActivity extends AppCompatActivity {
         } catch (InterruptedException e){
             e.printStackTrace();
         }
-
     }
 
 
+    /*
+    private void sendGet(String targetUrl) throws Exception {
+
+        URL url = new URL(targetUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+        con.setRequestMethod("GET"); // optional default is GET
+        con.setRequestProperty("User-Agent", USER_AGENT);
+
+        int responseCode = con.getResponseCode();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+    }
+    */
 
     //item상세 정보 가져오기.
     //가져온후 data뿌리기
@@ -370,19 +429,19 @@ public class UpOrDeleteActivity extends AppCompatActivity {
     }
 
 
-
-
     public class JSONTask_deleteItem extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... urls) {
+
             try {
                 Log.d("doInBackground 확인", "doIn");
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
 
+                Log.d("productpid>>>>>>>>>>>>>", Integer.toString(productpid));
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("productpid", productpid);
+                jsonObject.accumulate("productpid", productpid);
                 Log.d("json put 다음", "");
 
                 HttpURLConnection con = null;
@@ -392,22 +451,25 @@ public class UpOrDeleteActivity extends AppCompatActivity {
                     URL url = new URL(urls[0]);
                     //연결을 함
                     con = (HttpURLConnection) url.openConnection();
-
-                    con.setRequestMethod("GET");//POST방식으로 보냄
-                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
-                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
-                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
-                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
-                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
+                    con.setRequestMethod("GET");
                     con.connect();
+//                    con.setRequestMethod("GET");//GET방식으로 보냄
+//                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
+//                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
+//                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
+//                    con.setDoOutput(false);//Outstream으로 post 데이터를 넘겨주겠다는 의미
+//                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
+//                    con.getResponseCode();
+//                    con.connect();
 
                     //서버로 보내기위해서 스트림 만듬
-                    OutputStream outStream = con.getOutputStream();
-                    //버퍼를 생성하고 넣음
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
-                    writer.write(jsonObject.toString());
-                    writer.flush();
-                    writer.close();//버퍼를 받아줌
+//                    OutputStream outStream = con.getOutputStream();
+//                    //버퍼를 생성하고 넣음
+//                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+//                    writer.write(query);
+//                    writer.flush();
+//                    writer.close();//버퍼를 받아줌
+//                    outStream.close();
 
                     //서버로 부터 데이터를 받음
                     InputStream stream = con.getInputStream();
@@ -459,7 +521,9 @@ public class UpOrDeleteActivity extends AppCompatActivity {
 
             try {
                 JSONObject jsonObj = new JSONObject(result);
-                String message = jsonObj.getString("message");
+//                String message = jsonObj.getString("message");
+                int message = jsonObj.getInt("message");
+                Toast.makeText(getApplicationContext(),Integer.toString(message),Toast.LENGTH_LONG).show();
                 Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
 
             } catch (JSONException e1) {
@@ -468,3 +532,5 @@ public class UpOrDeleteActivity extends AppCompatActivity {
         }
     }
 }
+
+

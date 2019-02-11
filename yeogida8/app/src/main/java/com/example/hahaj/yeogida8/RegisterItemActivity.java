@@ -33,7 +33,7 @@ import java.util.Date;
 
 public class RegisterItemActivity extends AppCompatActivity {
 
-    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
+//    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
     private static final int PICK_IMAGE_REQUEST = 1;
     private String TAG = "RegisterItemActivity";
 
@@ -46,10 +46,13 @@ public class RegisterItemActivity extends AppCompatActivity {
     EditText inputPrice, inputNewPrice, inputAboutItem;
     Button btn_reg, btn_searchAddr;
 
+
+
     //핸드폰 내 갤러리에서 사진 경로.
     String path;
 
     int personpid;
+
 
     private String strfirstDate, strlastDate; //예약 시작 날짜, 예약 마지막 날짜 2018-02-14
     int intFirstday, intLastday, intFirstmon, intLastmon;
@@ -73,6 +76,7 @@ public class RegisterItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_item);
 
         Ion.getDefault(this).configure().setLogging("ion-sample", Log.DEBUG);
+//        Ion.getDefault(this).configure().getResponseCache().setCaching(false);
 
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
@@ -83,12 +87,15 @@ public class RegisterItemActivity extends AppCompatActivity {
         //int i = pre.getCount();
         Log.d("메인->상품등록 personpid", ""+personpid);
 
+
         /*
         //메인에서 전달받은 personpid
         Intent intent = getIntent();
         personpid = intent.getIntExtra("personpid", 0);
         Log.d("메인->상품등록 personpid", ""+personpid);
         */
+
+
 
         inputName = (EditText)findViewById(R.id.inputName);
         txtAddr = (TextView)findViewById(R.id.txtAddr);
@@ -101,7 +108,7 @@ public class RegisterItemActivity extends AppCompatActivity {
         inputAboutItem = (EditText)findViewById(R.id.inputAboutItem);
 
         Intent intentAddr = getIntent();
-        String res_addr = intentAddr.getStringExtra("address");
+        String res_addr = intentAddr.getStringExtra("address_register");
         txtAddr.setText(res_addr);
 
         //사진추가를 누를 경우
@@ -124,14 +131,17 @@ public class RegisterItemActivity extends AppCompatActivity {
             }
         });
 
+
         //날짜 선택
         initDate();
 
         //등록버튼을 누를 경우
         btn_reg = (Button)findViewById(R.id.btn_reg);
         btn_reg.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+
                 itemName = inputName.getText().toString().trim();
                 itemAddr = txtAddr.getText().toString().trim();
                 itemAddr_detail = inputAddr_detail.getText().toString().trim();
@@ -142,16 +152,22 @@ public class RegisterItemActivity extends AppCompatActivity {
                 itemPhoneNum = inputPhoneNum.getText().toString().trim();
                 regAboutItem = inputAboutItem.getText().toString().trim();
 
+
                 if(selectFirst.length()<6 || selectLast.length()<6 || itemName.getBytes().length<=0 || itemAddr.getBytes().length<=0 || itemAddr_detail.getBytes().length<=0 ||itemURL.getBytes().length<=0 || price.length() <2 || newPrice.length() <2||itemPhoneNum.length()<1 ||regAboutItem.length()<0) {
                     Toast.makeText(getApplicationContext(), "빠짐없이 입력해주세요.", Toast.LENGTH_LONG).show();
                     //show();
                 }
+
+
                 else if(path == null){
                     Toast.makeText(getApplicationContext(), "빠짐없이 입력해주세요2.", Toast.LENGTH_LONG).show();
                 }
+
+
                 else{
 
                     if(itemPhoneNum.length()<8){
+
                         Toast.makeText(getApplicationContext(), "핸드폰 번호는 8글자 입력해주세요.", Toast.LENGTH_LONG).show();
                     }else {
                         //서버로 보낼때는 "010"+itemPhoneNum
@@ -227,8 +243,10 @@ public class RegisterItemActivity extends AppCompatActivity {
                                 });
                         show();
                         //메인화면으로 이동
-                        //redirectMainActivity(1);
+//                        redirectMainActivity(1);
+//                        redirectMainActivity(personpid);
                     }
+
                 }
             }
         });
@@ -286,7 +304,7 @@ public class RegisterItemActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        try{
+        try {
             switch (requestCode) {
                 //사진등록
                 /*성윤코드
@@ -311,6 +329,7 @@ public class RegisterItemActivity extends AppCompatActivity {
                     }
                     */
 
+
                 //진권 코드
                 case PICK_IMAGE_REQUEST:
                     Log.d("여기까지", "ㅇ3");
@@ -324,14 +343,27 @@ public class RegisterItemActivity extends AppCompatActivity {
                     }
 
                     //주소받아오기
-                case SEARCH_ADDRESS_ACTIVITY:
+                case BasicInfo.SEARCH_ADDRESS_FROM_REGISTER:
+
+                    switch(resultCode) {
+                        case BasicInfo.REDIRECT_REGISTER: {
+                            String addr = data.getExtras().getString("address_register");
+                            if (addr != null) {
+                                txtAddr.setText(addr);
+                                Toast.makeText(this, "찾은 주소 : " + addr, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    /*
                     if (resultCode == RESULT_OK) {
-                        String addr = data.getExtras().getString("data");
+                        String addr = data.getExtras().getString("address");
                         if (addr != null) {
                             txtAddr.setText(addr);
                             Toast.makeText(this, "찾은 주소 : " + addr, Toast.LENGTH_SHORT).show();
                         }
                     }
+                    */
                     break;
                 case BasicInfo.REQUEST_CODE_MAINTOREGISTERITEM:
                     if(resultCode == RESULT_OK){
@@ -390,6 +422,7 @@ public class RegisterItemActivity extends AppCompatActivity {
         });
         System.out.println("예약 시작 날짜 " + strfirstDate + "예약 마지막 날짜 " + strlastDate);
     }
+
 
     //예약 마지막 날짜 선택시 점검하는 기능
     private void checkDate(int firstMon, int lastMon, int firstDay, int lastDay, int lastYear){
@@ -550,9 +583,7 @@ public class RegisterItemActivity extends AppCompatActivity {
                 format = String.format("%d-", year) + (month + 1) + "-" + String.format("%d", dayOfMonth);
                 setSelectFirstOrSelectLast(flag, txtmsg);
             }
-
         }
-
         return format;
     }
 
@@ -570,6 +601,7 @@ public class RegisterItemActivity extends AppCompatActivity {
             }
         });
         builder.show();
+//        redirectMainActivity(personpid);
     }
 
 
@@ -586,6 +618,7 @@ public class RegisterItemActivity extends AppCompatActivity {
     //주소찾기 버튼 누르면 이동
     public void redirectRegToSearchAddr(){
         Intent intent = new Intent(this, SearchAddrActivity.class);
-        startActivity(intent);
+        intent.putExtra("whereFrom", 1);
+        startActivityForResult(intent, BasicInfo.SEARCH_ADDRESS_FROM_REGISTER);
     }
 }
