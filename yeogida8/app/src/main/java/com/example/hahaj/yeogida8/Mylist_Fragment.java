@@ -145,13 +145,17 @@ public class Mylist_Fragment extends Fragment {
         @Override
         public int getCount() { return items.size(); }//몇개의 아이템이 있니?
 
+
         public void addItem(HotelItem item) { items.add(item); }
+
 
         @Override
         public Object getItem(int position) { return items.get(position); }//몇 번째 아이템인지
 
+
         @Override
         public long getItemId(int position) { return position; }//id있음 넘겨줘
+
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -264,6 +268,7 @@ public class Mylist_Fragment extends Fragment {
                 Log.d("jsonArray개수>",""+jsonArray.length());
                 for (int i = 0; i < jsonArray.length(); i++) {
 
+
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     productpid = jsonObject.getInt("productpid");
                     String productimg = jsonObject.getString("productimage");
@@ -276,6 +281,7 @@ public class Mylist_Fragment extends Fragment {
                     int productprice = jsonObject.getInt("productprice");
                     Log.d("내상품리스트1", ""+productpid+", ,"+productimg+", ,"+productname);
                     Log.d("내상품리스트2", "시작"+date_s+"끝"+date_e+", ,"+productaddr+", ,"+forprice+", ,"+productprice);
+
 
                     adapter.addItem(new HotelItem(productpid, productimg, productname, date_s, date_e, productaddr, forprice, productprice));
                     listView.setAdapter(adapter);
