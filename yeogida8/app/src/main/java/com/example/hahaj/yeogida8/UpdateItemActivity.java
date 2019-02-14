@@ -56,7 +56,6 @@ public class UpdateItemActivity extends AppCompatActivity {
     Mylist_Fragment myFrag = new Mylist_Fragment();
 
 
-
     ImageView mPhoto;
     Bitmap checkImg;
     EditText inputName, inputAddr_detail, inputURL, inputPhoneNum;
@@ -203,9 +202,6 @@ public class UpdateItemActivity extends AppCompatActivity {
                     } else {
                         //서버로 보낼때는 "010"+itemPhoneNum
                         //서버로 전송
-
-                        //통신은 network() 로 못뺌 무조건 통신하고자하는 곳에 아래 코드를 써야한다.
-//                        netWork();
                         final Future uploading = Ion.with(UpdateItemActivity.this)
                                 .load("POST", url.getMainUrl() + "/product/update")
                                 //String 추가
@@ -283,6 +279,7 @@ public class UpdateItemActivity extends AppCompatActivity {
 
     //등록완료 메시지
     public void show(){
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("메시지");
         builder.setMessage("해당 상픔이 수정 완료되었습니다!");

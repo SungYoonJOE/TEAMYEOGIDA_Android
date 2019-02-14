@@ -96,7 +96,6 @@ public class RegisterItemActivity extends AppCompatActivity {
         */
 
 
-
         inputName = (EditText)findViewById(R.id.inputName);
         txtAddr = (TextView)findViewById(R.id.txtAddr);
         //inputAddr = (EditText)findViewById(R.id.inputAddr);
@@ -206,36 +205,7 @@ public class RegisterItemActivity extends AppCompatActivity {
                                             Log.d("여기까지 55555", "이");
                                             Toast.makeText(getApplicationContext(), jobj.getString("message"), Toast.LENGTH_SHORT).show();
 
-//                                          서버로 부터 응답을 받아 온다. 아래는 Test 코드. 보낸거 그대로 받아오기.
-                                            /*
-                                            int personPid = jobj.getInt("personpid");
-                                            String product_Name = jobj.getString("productname");
-                                            String text = jobj.getString("text");
-                                            String productDate_s = jobj.getString("productdate_s");
-                                            String productDate_e = jobj.getString("productdate_e");
-                                            String productAddr = jobj.getString("productaddress");
-                                            String productUrl = jobj.getString("productUrl");
-
-                                            /*
-                                            int formerPrice = jobj.getInt("fomerprice");
-                                            int productPrice = jobj.getInt("productprice");
-                                            String productPhone = jobj.getString("productphone");
-                                            */
-
-                                            /*
-                                            Toast.makeText(getApplicationContext(), personPid,);
-                                            Log.d("personPid", String.valueOf(personPid));
-                                            Log.d("product_Name", product_Name);
-                                            Log.d("text", text);
-                                            Log.d("productDate_s", productDate_s);
-                                            Log.d("productDate_e", productDate_e);
-                                            Log.d("productAddr", productAddr);
-                                            Log.d("productUrl", productUrl);
-                                            /*
-                                            Log.d("formerPrice", String.valueOf(formerPrice));
-                                            Log.d("productPrice", String.valueOf(productPrice));
-                                            Log.d("productPhone", productPhone);
-                                            */
+//
                                         } catch (JSONException e1) {
                                             e1.printStackTrace();
                                         }

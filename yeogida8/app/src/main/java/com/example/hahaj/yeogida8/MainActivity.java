@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RightDrawer에서 해당 메뉴화면 클릭 시 조건에 따라
     다음 화면으로 이동시키는 메소드.
      */
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
