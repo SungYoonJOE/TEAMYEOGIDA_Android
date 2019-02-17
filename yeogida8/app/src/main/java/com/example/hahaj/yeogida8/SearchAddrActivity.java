@@ -32,9 +32,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class SearchAddrActivity extends AppCompatActivity {
+
+
     // 우체국 오픈api 인증키
     private String _key = "";
-
     private TextView _addressEdit;
     private Button _searchBtn;
     private ListView _addressListView;
@@ -51,6 +52,7 @@ public class SearchAddrActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_addr);
 
+
         _addressEdit = (EditText)findViewById(R.id.addressedit);
         _searchBtn = (Button)findViewById(R.id.btnsearch);
         _addressListView = (ListView)findViewById(R.id.addresslist);
@@ -64,14 +66,13 @@ public class SearchAddrActivity extends AppCompatActivity {
             }
         });
     }
-    public void getAddress(String kAddress)
-    {
+
+    public void getAddress(String kAddress) {
         _putAddress = kAddress;
         new GetAddressDataTask().execute();
     }
 
-    private class GetAddressDataTask extends AsyncTask<String, Void, HttpResponse>
-    {
+    private class GetAddressDataTask extends AsyncTask<String, Void, HttpResponse> {
         @Override
         protected HttpResponse doInBackground(String... urls)
         {
@@ -157,18 +158,47 @@ public class SearchAddrActivity extends AppCompatActivity {
             _addressListAdapter = new ArrayAdapter<String>(SearchAddrActivity.this, android.R.layout.simple_list_item_1, addressStrArray);
             _addressListView.setAdapter(_addressListAdapter);
 
+
             //사용자가 선택한 항목
             _addressListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     String resAddr = (String)parent.getItemAtPosition(position);
                     Log.d("사용자가 선택한 주소", resAddr);
-                    Intent in2 = new Intent(getApplicationContext(), RegisterItemActivity.class);
-                    in2.putExtra("address", resAddr);
-                    startActivity(in2);
+
+
+                    /*등록 Activity에서 온것인지, 수정 Activity에서 온것인지 구분 필요*/
+                    Intent intent = getIntent();
+
+                    int which  = intent.getIntExtra("whereFrom", 0);
+                    Log.d("어디서 들어온것일까? ", Integer.toString(which));
+
+                    /*
+                      which값이 1이면 RegisterActivity에서 부른 것이다.
+                                2이면 UpdateActivity에서 부른 것이다.
+
+                    */
+                    if(which == 1) {
+                        Log.d("어디서 들어온것일까?1 ", Integer.toString(which));
+                        Intent intent2 = new Intent();
+                        intent2.putExtra("address_register", resAddr);
+                        setResult(BasicInfo.REDIRECT_REGISTER, intent2);
+                        finish();
+                    }
+
+                    else if(which == 2) {
+                        Log.d("어디서 들어온것일까?2 ", Integer.toString(which));
+                        Intent intent3 = new Intent();
+                        intent3.putExtra("address_update", resAddr);
+                        setResult(BasicInfo.REDIRECT_UPDATE, intent3);
+                        finish();
+                    }
+
+                    //나머지 which에따른 예외처리가 필요하다.
+
+//                    Log.d("어디서 들어온것일까?3", Integer.toString(which));
                 }
             });
         }
     }
-
 }

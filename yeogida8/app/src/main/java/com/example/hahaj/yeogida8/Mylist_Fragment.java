@@ -40,15 +40,31 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+
+/*
+
+         내 상품 조회 Activity에서는 최소한 통신을 1번 이상 해야 한다.
+           1. 이 Activity에 오기 위해서는 사용자가 등록한 내 상품 리스틀 서버로 부터 받아온다.
+           2. 수정과 삭제가 이루어 지고 나서 다시 반영되어야 하기 때문에 한 번 더 통신한다.
+
+*/
+
+
 public class Mylist_Fragment extends Fragment {
 
+    NetworkUrl url = new NetworkUrl();
     HotelAdapter adapter;
 
     EditText editText;
     EditText editText2;
-    int productpid = 1;
-    int ppid;
+    int productpid;
+    int personpid;
     ListView listView;
+
+    public int getProductpid() {
+        return this.productpid;
+    }
 
     @Nullable
     @Override
@@ -56,30 +72,70 @@ public class Mylist_Fragment extends Fragment {
 
         //personpid 불러오기
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
-        //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
-        ppid = pref.getInt("personpid", 0);
-        Log.d("ppid in 내상품목록>> ", "" + ppid);
 
-        //통신
-        new JSONTask().execute("http://172.16.120.100:3000/sell/mysell_info");
+        //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
+        personpid = pref.getInt("personpid", 0);
+        Log.d("personpid in 내상품목록>> ", "" + personpid);
+
+
+//      첫 번째 통신
+      new JSONTask().execute(url.getMainUrl() + "/sell/mysell_info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.mylist_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
+
+
+        //dummy data
+        /*
+        final HotelAdapter adapter=new HotelAdapter();
+        adapter.addItem(new HotelItem(productpid, null, "연어 펜션", "2019-01-10", "2019-01-11", "서울시 합정동", 2000, 1000));
+        adapter.addItem(new HotelItem(productpid, null, "08 펜션", "2019-02-10", "2019-02-11", "고양시 마두동", 5000, 1000));
+        listView.setAdapter(adapter);
+        */
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) //position은 몇번째 아이템인지 인덱스값
             {
-                //HotelItem item = (HotelItem) adapter.getItem(position);
+                HotelItem item = (HotelItem) adapter.getItem(position);
                 //Toast.makeText(getContext(), "선택 : " + item.getPname(), Toast.LENGTH_LONG).show();
                 //인텐트 사용하여 상품수정/삭제 화면으로 이동 & productpid 서버에 넘김
-                redirectMylistToUpdateActivity(productpid);
-
+                //redirectMylistToUpOrDeleteActivity();
+                Intent intent = new Intent(getContext(), UpOrDeleteActivity.class);
+                intent.putExtra("productpid", item.getProductpid());
+                startActivityForResult(intent, BasicInfo.REQUEST_CODE_UPORDELETE);
+                //2번째 통신
+//                new JSONTask().execute(url.getMainUrl() + "/sell/mysell_info");
             }
         });
-
         return rootView;
+    }
 
+
+
+    //호출된 ACTIVITY구별
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("돌아옴1", "돌아왔어1");
+        switch(requestCode) {
+            //UpOrDelete에서 돌아옴.
+
+            case BasicInfo.REQUEST_CODE_UPORDELETE: {
+                Log.d("돌아옴2", "돌아왔어2");
+                switch(resultCode) {
+                    //삭제가 되었을때 화면에 반영되어야 한다.
+                    case BasicInfo.REQUEST_CODE_MYLIST: {
+                        Log.d("돌아옴3", "돌아왔어3");
+                        new JSONTask().execute(url.getMainUrl() + "/sell/mysell_info");
+                    }
+                    break;
+                }
+            }
+            break;
+
+
+        }
     }
 
     class HotelAdapter extends BaseAdapter {
@@ -89,13 +145,17 @@ public class Mylist_Fragment extends Fragment {
         @Override
         public int getCount() { return items.size(); }//몇개의 아이템이 있니?
 
+
         public void addItem(HotelItem item) { items.add(item); }
+
 
         @Override
         public Object getItem(int position) { return items.get(position); }//몇 번째 아이템인지
 
+
         @Override
         public long getItemId(int position) { return position; }//id있음 넘겨줘
+
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -105,6 +165,7 @@ public class Mylist_Fragment extends Fragment {
             } else {
                 view = (HotelItemView) convertView;
             }
+
             HotelItem item = items.get(position);
             view.setProductname(item.getPname());
             view.setProductpid(item.getProductpid());
@@ -118,13 +179,6 @@ public class Mylist_Fragment extends Fragment {
         }
     }
 
-    //내상품리스트에서 상품수정화면으로 이동
-    public void redirectMylistToUpdateActivity(int productpid) {
-        Intent intent_toupdate = new Intent(getContext(), UpdateItemActivity.class);
-        intent_toupdate.putExtra("productpid", productpid);
-        //startActivity(intent_toupdate);
-        startActivityForResult(intent_toupdate, BasicInfo.REQUEST_CODE_MYLISTTOUPDATE);
-    }
 
     public class JSONTask extends AsyncTask<String, String, String> {
 
@@ -135,7 +189,7 @@ public class Mylist_Fragment extends Fragment {
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("seller_personpid", ppid);
+                jsonObject.put("seller_personpid", personpid);
                 Log.d("json put 다음", "");
 
                 HttpURLConnection con = null;
@@ -204,16 +258,19 @@ public class Mylist_Fragment extends Fragment {
             super.onPostExecute(result);
             //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
 
-            final HotelAdapter adapter=new HotelAdapter();
+            //final
+            adapter = new HotelAdapter();
             if(result==null) return;
 
             try {
                 JSONArray jsonArray = new JSONArray(result);
 
-                //Log.d("jsonArray개수>",""+jsonArray.length());
+                Log.d("jsonArray개수>",""+jsonArray.length());
                 for (int i = 0; i < jsonArray.length(); i++) {
+
+
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int productpid = jsonObject.getInt("productpid");
+                    productpid = jsonObject.getInt("productpid");
                     String productimg = jsonObject.getString("productimage");
                     String productname = jsonObject.getString("productname");
                     String date_s = jsonObject.get("productdate_s").toString().substring(0, 10);
@@ -225,9 +282,9 @@ public class Mylist_Fragment extends Fragment {
                     Log.d("내상품리스트1", ""+productpid+", ,"+productimg+", ,"+productname);
                     Log.d("내상품리스트2", "시작"+date_s+"끝"+date_e+", ,"+productaddr+", ,"+forprice+", ,"+productprice);
 
+
                     adapter.addItem(new HotelItem(productpid, productimg, productname, date_s, date_e, productaddr, forprice, productprice));
                     listView.setAdapter(adapter);
-
                 }
 
             } catch (JSONException e1) {

@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".yeogida.RegisterItemActivity">
+        tools:context=".yeogida.UpdateItemActivity">
         <ImageView
-            android:id="@+id/mPhoto"
+            android:id="@+id/mPhoto_up"
             android:layout_width="200dp"
             android:layout_height="160dp"
             android:layout_marginBottom="1dp"
@@ -23,15 +22,15 @@
             />
 
         <RelativeLayout
-            android:id="@+id/relativeLayout"
+            android:id="@+id/relativeLayout_up"
             android:layout_width="match_parent"
             android:layout_height="500dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mPhoto">
+            app:layout_constraintTop_toBottomOf="@+id/mPhoto_up">
 
             <EditText
-                android:id="@+id/inputName"
+                android:id="@+id/inputName_up"
                 android:layout_width="300dp"
                 android:layout_height="40dp"
                 android:layout_alignParentTop="true"
@@ -76,16 +75,16 @@
 
 
             <RelativeLayout
-                android:id="@+id/relAddr"
+                android:id="@+id/relAddr_up"
                 android:layout_width="match_parent"
                 android:layout_height="107dp"
-                android:layout_below="@+id/inputName">
+                android:layout_below="@+id/inputName_up">
 
                 <TextView
-                    android:id="@+id/txtAddr"
+                    android:id="@+id/txtAddr_up"
                     android:layout_width="300dp"
                     android:layout_height="52dp"
-                    android:layout_alignBaseline="@+id/btn_searchAddr"
+                    android:layout_alignBaseline="@+id/btn_searchAddr_up"
                     android:layout_alignParentStart="true"
                     android:ems="10"
                     android:hint="상품의 주소 입력"
@@ -93,7 +92,7 @@
                     android:textSize="15dp" />
 
                 <Button
-                    android:id="@+id/btn_searchAddr"
+                    android:id="@+id/btn_searchAddr_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -103,11 +102,11 @@
                     android:textSize="15dp" />
 
                 <EditText
-                    android:id="@+id/inputAddr_detail"
+                    android:id="@+id/inputAddr_detail_up"
                     android:layout_width="300dp"
                     android:layout_height="40dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignStart="@+id/relAddr"
+                    android:layout_alignStart="@+id/relAddr_up"
                     android:layout_marginBottom="16dp"
                     android:ems="10"
                     android:inputType="textPersonName"
@@ -116,7 +115,7 @@
             </RelativeLayout>
 
             <EditText
-                android:id="@+id/inputURL"
+                android:id="@+id/inputURL_up"
                 android:layout_width="300dp"
                 android:layout_height="40dp"
                 android:layout_alignParentTop="true"
@@ -127,7 +126,7 @@
                 android:textSize="15dp" />
 
             <LinearLayout
-                android:id="@+id/linearDate"
+                android:id="@+id/linearDate_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -135,7 +134,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txtFirstDay"
+                    android:id="@+id/txtFirstDay_up"
                     android:layout_width="wrap_content"
                     android:layout_height="17dp"
                     android:layout_marginLeft="16dp"
@@ -144,7 +143,7 @@
                     android:textSize="15dp" />
 
                 <TextView
-                    android:id="@+id/selectFirst"
+                    android:id="@+id/selectFirst_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -152,7 +151,7 @@
                     android:textSize="14dp" />
 
                 <TextView
-                    android:id="@+id/txtLastDay"
+                    android:id="@+id/txtLastDay_up"
                     android:layout_width="wrap_content"
                     android:layout_height="17dp"
                     android:layout_weight="1"
@@ -160,7 +159,7 @@
                     android:textSize="15dp" />
 
                 <TextView
-                    android:id="@+id/selectLast"
+                    android:id="@+id/selectLast_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -169,14 +168,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearPrice"
+                android:id="@+id/linearPrice_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txtPrice"
+                    android:id="@+id/txtPrice_up"
                     android:layout_width="wrap_content"
                     android:layout_height="17dp"
                     android:layout_marginLeft="16dp"
@@ -185,7 +184,7 @@
                     android:textSize="15dp" />
 
                 <EditText
-                    android:id="@+id/inputPrice"
+                    android:id="@+id/inputPrice_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -194,7 +193,7 @@
                     android:textSize="14dp" />
 
                 <TextView
-                    android:id="@+id/txtNewPrice"
+                    android:id="@+id/txtNewPrice_up"
                     android:layout_width="wrap_content"
                     android:layout_height="17dp"
                     android:layout_weight="1"
@@ -202,7 +201,7 @@
                     android:textSize="15dp" />
 
                 <EditText
-                    android:id="@+id/inputNewPrice"
+                    android:id="@+id/inputNewPrice_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -212,14 +211,14 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/relPhoneNum"
+                android:id="@+id/relPhoneNum_up"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="175dp">
 
                 <TextView
-                    android:id="@+id/pn1"
+                    android:id="@+id/pn1_up"
                     android:layout_width="wrap_content"
                     android:layout_height="29dp"
                     android:layout_alignParentBottom="true"
@@ -227,21 +226,21 @@
                     android:textSize="14dp" />
 
                 <TextView
-                    android:id="@+id/pn010"
+                    android:id="@+id/pn010_up"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/pn1"
+                    android:layout_toRightOf="@+id/pn1_up"
                     android:text="010 - "
                     android:textSize="14dp" />
 
                 <EditText
-                    android:id="@+id/inputPhoneNum"
+                    android:id="@+id/inputPhoneNum_up"
                     android:layout_width="209dp"
                     android:layout_height="38dp"
                     android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/pn010"
+                    android:layout_toRightOf="@+id/pn010_up"
                     android:hint="입력"
                     android:inputType="number"
                     android:maxLength="8"
@@ -249,21 +248,21 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/relAboutItem"
+                android:id="@+id/relAboutItem_up"
                 android:layout_width="310dp"
                 android:layout_height="168dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true">
 
                 <TextView
-                    android:id="@+id/aboutItem1"
+                    android:id="@+id/aboutItem1_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="상품 설명"
                     android:textSize="15dp"/>
 
                 <EditText
-                    android:id="@+id/inputAboutItem"
+                    android:id="@+id/inputAboutItem_up"
                     android:layout_width="300dp"
                     android:layout_height="150dp"
                     android:layout_below="@+id/aboutItem1"
@@ -273,15 +272,15 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/btn_reg"
+            android:id="@+id/btn_update_Re"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
             android:layout_marginTop="8dp"
-            android:text="등록하기"
+            android:text="수정하기"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout_up" />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

@@ -59,13 +59,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentRecentOreder fragment_recent_order;
     private FragmentPopularOrder fragment_popular_order;
     private FragmentDeadLineOrder fragment_deadline_order;
-    //여기까지
 
+
+    //여기까지
     Fragment1 fragment1;
     Fragment2 fragment2;
     Fragment3 fragment3;
     TextView textView;
     String[] items = {"전체","서울","경기","부산"};
+
 
     Toolbar t1;
     DrawerLayout mDrawerLayout;
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RightDrawer에서 해당 메뉴화면 클릭 시 조건에 따라
     다음 화면으로 이동시키는 메소드.
      */
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -197,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //통신으로 resSearch를 주고 해당 화면을 검색 후 해당상품 정보 화면 search_mainactivity에 있는 search_fragment에 띄워야함
         Log.d("입력 안하면 널값??",resSearch);
 
+
         //검색바
         ImageButton searchB = (ImageButton) findViewById(R.id.search_button);
         searchB.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent_search);
             }
         });
+
 
         //플로팅 버튼 액션
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -241,6 +247,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -296,11 +303,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+
     //로그아웃 알림창 띄우는화면으로 이동
     public void onButtonLogoutClicked(View v) {
         //Toast.makeText(this, "로그아웃 하시겠습니까?", Toast.LENGTH_LONG).show();
         checkLogoutShow();
     }
+
 
     //공지사항 및 라이센스 화면으로 이동.
     public void onButtonSettingClicked(View v) {
@@ -309,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(getApplicationContext(), SettingMainActivity.class);
         startActivityForResult(intent, REQUEST_CODE_NOTIFY_QNA);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -34,6 +34,7 @@ public class HotelItemView extends LinearLayout {
         super(context);
         init(context);
     }
+
     public HotelItemView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
@@ -74,14 +75,13 @@ public class HotelItemView extends LinearLayout {
             @Override
             public void run() {
                 try {
-                    //URL url = new URL("http://cfs11.tistory.com/image/33/tistory/2009/02/26/22/41/49a69bf854e7c");
+                    URL url = new URL("http://cfs11.tistory.com/image/33/tistory/2009/02/26/22/41/49a69bf854e7c");
 
-                    URL url = new URL(productimage);
+//                    URL url = new URL(productimage);
 
                     HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                     conn.setDoInput(true);
                     conn.connect();
-
                     InputStream is = conn.getInputStream();//InputStream값 가져오기
                     bitmap = BitmapFactory.decodeStream(is);//Bitmap으로 변ㅇ환
                 }catch (MalformedURLException e){
@@ -92,6 +92,7 @@ public class HotelItemView extends LinearLayout {
                 //super.run();
             }
         };
+
         mThread.start();
 
         try{

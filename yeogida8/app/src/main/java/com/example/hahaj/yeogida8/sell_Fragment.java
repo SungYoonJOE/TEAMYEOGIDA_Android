@@ -37,6 +37,8 @@ public class sell_Fragment extends Fragment {
 
     HotelAdapter adapter;
 
+    NetworkUrl url = new NetworkUrl();
+
     EditText editText;
     EditText editText2;
     int productpid = 1;
@@ -55,7 +57,7 @@ public class sell_Fragment extends Fragment {
         Log.d("ppid in 판매내역 목록>> ", "" + ppid);
 
         //통신
-        new JSONTask().execute("http://172.16.120.100:3000/sell/sold_info");
+        new JSONTask().execute(url.getMainUrl() + "/sell/sold_info");
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.sell_fragment, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
@@ -105,6 +107,7 @@ public class sell_Fragment extends Fragment {
             if(convertView==null) {
                 view= new HotelItemView(getContext());
             }
+
             else{
                 view= (HotelItemView) convertView;
             }
