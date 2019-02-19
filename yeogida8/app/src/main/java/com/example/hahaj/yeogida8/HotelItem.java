@@ -10,6 +10,7 @@ public class HotelItem {
     private String pdate_s;
     private int fprice;
     private int pprice;
+    private int producthit;
 
     public HotelItem(int productpid, String pimg, String pname, String pdate_s, String pdate_e, String paddr, int fprice, int pprice){
         this.productpid = productpid;
@@ -20,6 +21,18 @@ public class HotelItem {
         this.paddr= paddr;
         this.fprice= fprice;
         this.pprice= pprice;
+    }
+
+    public HotelItem(int productpid, String pimg, String pname, String pdate_s, String pdate_e, String paddr, int fprice, int pprice, int hit){
+        this.productpid = productpid;
+        this.pimg = pimg;
+        this.pname = pname;
+        this.pdate_s= pdate_s;
+        this.pdate_e= pdate_e;
+        this.paddr= paddr;
+        this.fprice= fprice;
+        this.pprice= pprice;
+        this.producthit = hit;
     }
 
     public int getProductpid() {
@@ -83,5 +96,9 @@ public class HotelItem {
     public void setProductprice(int pprice) {
         this.pprice = pprice;
     }
+
+    public int getProducthit(){return producthit;}
+
+    public void setProducthit(int hit){this.producthit = hit;}
 
 }
