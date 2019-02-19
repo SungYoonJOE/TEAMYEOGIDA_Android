@@ -33,6 +33,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 //최신순
 public class Fragment1 extends Fragment {
@@ -50,7 +52,7 @@ public class Fragment1 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 /*
-        //충격적인 사실 : Activity에서 Fragment로 데이터를 전달할 때는 Intent가 아니라 Bundle을 사용한다.
+        //Activity에서 Fragment로 데이터를 전달할 때는 Intent가 아니라 Bundle을 사용한다.
         Bundle bundleF1 = getArguments();
         if(bundleF1 == null){
             Log.d("bundle이 null일 경우", "null입니다..");
@@ -86,6 +88,7 @@ public class Fragment1 extends Fragment {
 
     //어댑터를 이용하여 data관리, 어댑터의 리턴값이 아이템으로 보임
     class HotelAdapter extends BaseAdapter {
+
         ArrayList<HotelItem> items = new ArrayList<HotelItem>();
 
         @Override
@@ -131,6 +134,11 @@ public class Fragment1 extends Fragment {
             view.setProductDate_e(item.getPdate_e());
             return view;
         }
+
+        //진권
+        public ArrayList<HotelItem> getArrayListItem() {
+            return this.items;
+        }
     }
 
 
@@ -143,6 +151,14 @@ public class Fragment1 extends Fragment {
 
     //다른 화면 -> 메인으로 오자마자 default값(지역: 전체) 상품들을 받는 통신코드
     public class DefaultMainJSONTask extends AsyncTask<String, String, String> {
+
+        ArrayList<HotelItem> items;
+
+        final HotelAdapter adapter=new HotelAdapter();
+
+        DefaultMainJSONTask() {
+            this.items = adapter.getArrayListItem();
+        }
 
         @Override
         protected String doInBackground(String... urls) {
@@ -221,7 +237,7 @@ public class Fragment1 extends Fragment {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            final HotelAdapter adapter=new HotelAdapter();
+            //final HotelAdapter adapter=new HotelAdapter();
             if(result==null) return;
 
             try {
@@ -239,15 +255,35 @@ public class Fragment1 extends Fragment {
                     String productaddr = jsonObject.getString("productaddress");
                     int producthit = jsonObject.getInt("producthit");
 
-                    Log.d("메인리스트1", "상품pid" + productpid + ", ," + productimg + ", 상품이름," + productname);
+                    Log.d("메인리스트1", "상품pid" + productpid + ", 상품이름," + productname);
                     Log.d("메인리스트2", "원가: " + forprice + ", 판매가: " + productprice);
                     Log.d("메인리스트3", "시작" + date_s + "끝" + date_e );
                     Log.d("메인리스트4", "상품 이미지: " + productimg);
-                    Log.d("메인리스트4", "상품 주소:"+productaddr+", 히트 수: "+producthit);
+                    Log.d("메인리스트5", "상품 주소:"+productaddr);
+                    Log.d("메인리스트6", "히트 수: "+producthit);
+                    Log.d("구분","------------------------------------");
 
                     adapter.addItem(new HotelItem(productpid, productimg, productname, date_s, date_e, productaddr, forprice, productprice));
                     listView.setAdapter(adapter);
                 }
+
+                Comparator<HotelItem> productpidAsc = new Comparator<HotelItem>() {
+                    @Override
+                    public int compare(HotelItem o1, HotelItem o2) {
+                        int ret = 0;
+
+                        if(o1.getProductpid()<o2.getProductpid())
+                            ret = 1;
+                        else if(o1.getProductpid() == o2.getProductpid())
+                            ret = 0;
+                        else
+                            ret = -1;
+                        return ret;
+                    }
+                };
+
+                Collections.sort(items, productpidAsc);
+                adapter.notifyDataSetChanged();
 
             }catch (JSONException e1){
                 e1.printStackTrace();
