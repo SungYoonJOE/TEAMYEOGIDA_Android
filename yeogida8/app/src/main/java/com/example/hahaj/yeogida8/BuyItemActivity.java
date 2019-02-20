@@ -11,6 +11,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +47,7 @@ public class BuyItemActivity extends AppCompatActivity {
     ImageView imageView1;
     TextView itemName, itemAddr, itemURL, itemStartDate, itemEndDate, itemPrice, new_itemPrice, itemDeadline, aboutItem2;
     ImageButton btn_onof;
+    Button btn_buy;
     int i=0;
     boolean isLike;
     private int ppid;
@@ -54,7 +56,7 @@ public class BuyItemActivity extends AppCompatActivity {
     //지도API
     //LinearLayout mapview;
     TMapView tmap;
-    private final String MAPAPPKEY = "";
+    private final String MAPAPPKEY = "1947620f-e0aa-43a5-8e27-11c6d1dab9b5";
     double lat;
     double lng;
 
@@ -96,6 +98,7 @@ public class BuyItemActivity extends AppCompatActivity {
         //initTmap(lng, lat);
         Log.d("문제확인6", "여기 아니다!!!!!!!!");
         //addMarker(lng, lat);
+        butItem();
     }
     //찜 기능
     public void likeItem(){
@@ -186,7 +189,24 @@ public class BuyItemActivity extends AppCompatActivity {
 
     }
 
-    //제품 정보 받아오는 통신코드
+    public void butItem() {
+        btn_buy = (Button) findViewById(R.id.btn_buy);
+        btn_buy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent productpidIntent = new Intent(getApplicationContext(), ChattingActivity.class);
+
+                productpidIntent.putExtra("producupid", productpid);
+
+                startActivity(productpidIntent);
+                Log.d("버튼눌림","buybuttonpressed");
+            }
+        });
+
+    }
+
+    //제품 정보 보내는 통신코드
     public class JSONTask extends AsyncTask<String, String, String> {
 
         @Override

@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     new JSONTask().execute(url.getMainUrl() + "/login");
 
-//                    redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
+                    //redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
                 }
             });
         }

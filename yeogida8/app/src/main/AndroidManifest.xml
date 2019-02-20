@@ -11,8 +11,6 @@
     <!-- tmap -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
-
     <application
         android:name=".GlobalApplication"
         android:allowBackup="true"
@@ -21,8 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".LoginActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -113,7 +110,11 @@
         <activity android:name=".Likedlist_MainActivity" />
         <activity android:name=".Recentlist_MainActivity" />
         <activity android:name=".Search_MainActivity" />
-        <activity android:name=".SearchAddrActivity"></activity>
+        <activity android:name=".SearchAddrActivity" />
+        <activity android:name=".ChatlistActivity" />
+        <activity android:name=".Chatsell_fragment" />
+        <activity android:name=".Chatbuy_fragment" />
+        <activity android:name=".ChattingActivity"></activity>
     </application>
 
 </manifest>

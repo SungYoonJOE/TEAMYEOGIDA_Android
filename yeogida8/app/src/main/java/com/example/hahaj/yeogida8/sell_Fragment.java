@@ -123,6 +123,7 @@ public class sell_Fragment extends Fragment {
             return view;
         }
     }
+
     public class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
