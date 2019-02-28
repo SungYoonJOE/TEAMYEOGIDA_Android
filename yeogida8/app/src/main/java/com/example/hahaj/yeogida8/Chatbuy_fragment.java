@@ -38,7 +38,7 @@ public class Chatbuy_fragment extends Fragment {
 
     ChatroomAdapter adapter;
     ListView listView;
-    int ppid=0;
+    int ppid=6;
     private int productpid;
     private NetworkUrl url = new NetworkUrl();
 
@@ -47,38 +47,42 @@ public class Chatbuy_fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
+        Toast.makeText(getContext(),"buy",Toast.LENGTH_SHORT).show();
+
+
         //personpid 불러오기
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
-        ppid = pref.getInt("personpid", 0);//pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
+        //ppid = pref.getInt("personpid", 0);
+        //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         Log.d("ppid in 최신순목록>> ", "" + ppid);
 
 
-        new JSONTask().execute(url.getMainUrl() + "chat/list/buyer");
+        new JSONTask().execute(url.getMainUrl() + "/chat/list/buyer");
 
         //리스트뷰 부분
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.activity_chatbuy__fragment, container, false);
-        listView = (ListView) rootView.findViewById(R.id.listView_sell);
+        listView = (ListView) rootView.findViewById(R.id.listView_buy);
 
         //다른 화면 -> 메인으로 오자마자 default값(지역: 전체) 상품들을 받는 통신코드
 
-        //adapter = new ChatroomAdapter();
-        /*
+//        adapter = new ChatroomAdapter();
+        //adapter = new Chatbuy_fragment.ChatroomAdapter();
+//        listView.setAdapter(adapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ChatroomItem item = (ChatroomItem) adapter.getItem(position);
                 Toast.makeText(getContext(), "선택된 것:"+item.getProduct_name(),Toast.LENGTH_SHORT).show();
             }
-
         });
-    */
+
         return rootView;
     }
 
     class ChatroomAdapter extends BaseAdapter {
 
-        ArrayList<ChatroomItem> items= new ArrayList<>();
+        ArrayList<ChatroomItem> items= new ArrayList<ChatroomItem>();
 
         public void addItem(ChatroomItem item) {
             items.add(item);
@@ -122,7 +126,8 @@ public class Chatbuy_fragment extends Fragment {
         @Override
         protected String doInBackground(String... urls) {
             try {
-                // 지역(전체)에 해당하는 상품을 받기 위해 서버에 보내는 값
+                Log.d("doInBackground 확인", "doIn");
+                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("personpid", ppid);
@@ -144,7 +149,6 @@ public class Chatbuy_fragment extends Fragment {
                     con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
                     con.connect();
 
-
                     //서버로 보내기위해서 스트림 만듬
                     OutputStream outStream = con.getOutputStream();
                     //버퍼를 생성하고 넣음
@@ -155,10 +159,12 @@ public class Chatbuy_fragment extends Fragment {
 
                     //서버로 부터 데이터를 받음
                     InputStream stream = con.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(stream));
-                    StringBuffer buffer = new StringBuffer();
-                    String line = "";
 
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer buffer = new StringBuffer();
+
+                    String line = "";
                     while ((line = reader.readLine()) != null) {
                         buffer.append(line);
                     }
@@ -191,29 +197,35 @@ public class Chatbuy_fragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
 
-            final ChatroomAdapter adapter=new ChatroomAdapter();
-            if(result==null) return;
+            final ChatroomAdapter adapter = new ChatroomAdapter();
+            if (result == null) return;
 
-                try {
-                    JSONArray jsonArray = new JSONArray(result);
+            try {
+                JSONArray jsonArray = new JSONArray(result);
 
-                    //Log.d("jsonArray개수>",""+jsonArray.length());
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Log.d("jsonArray개수>","hijson"+jsonArray.length());
 
-                        String productname = jsonObject.getString("product_name");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    Log.d("here","여기까지");
+                    int roompid = jsonObject.getInt("roompid");
+                    String productname = jsonObject.getString("productname");
 
-                        adapter.addItem(new ChatroomItem(productname));
-                        listView.setAdapter(adapter);
+                    Log.d(productname, "pname"+productname);
 
-                    }
 
-            }catch (JSONException e1){
+                    adapter.addItem(new ChatroomItem(productname));
+                    listView.setAdapter(adapter);
+
+                }
+
+            } catch (JSONException e1) {
                 e1.printStackTrace();
             }
         }
-    }
 
+    }
 
 }

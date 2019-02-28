@@ -14,10 +14,12 @@ public class ChatroomItemView extends LinearLayout {
 
     public ChatroomItemView(Context context) {
         super(context);
+        init(context);
     }
 
     public ChatroomItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     private void init(Context context) {

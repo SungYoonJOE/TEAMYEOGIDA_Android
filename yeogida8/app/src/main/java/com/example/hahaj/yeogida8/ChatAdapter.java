@@ -15,6 +15,7 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
     private List<ChatData> mDataset;
     private String myNickname;
+    int personpid=6;
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -33,9 +34,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
     // Provide a suitable constructor (depends on the kind of dataset)
     //nickname을 personpid로 바꾼다
-    public ChatAdapter(List<ChatData> myDataset, Context context, String myNickname) {
+    public ChatAdapter(List<ChatData> myDataset, Context context, int personpid) {
         mDataset = myDataset;
-        this.myNickname = myNickname;
+        this.personpid = personpid;
     }
 
     // Create new views (invoked by the layout manager)
@@ -56,7 +57,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         // - replace the contents of the view with that element
         ChatData chat=mDataset.get(position);
         holder.Textview_msg.setText(chat.getMsg());
-
 
         //person pid를 비교해서 띄움
         /*
@@ -83,7 +83,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     }
     public void addChat(ChatData chat) {
         mDataset.add(chat);
-        //새로 추가되는 Chatdata만 추가로 뿌려줌
+        //새로 추가되는 Chatdata만 추가
+
         notifyItemInserted(mDataset.size()-1);
+
     }
 }
