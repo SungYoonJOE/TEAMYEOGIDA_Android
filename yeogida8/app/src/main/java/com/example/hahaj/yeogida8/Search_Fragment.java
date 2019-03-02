@@ -53,17 +53,21 @@ public class Search_Fragment extends Fragment {
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         ppid = pref.getInt("personpid", 0);//pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         Log.d("ppid in 최신순목록>> ", "" + ppid);
-
+/*
         Intent res_search = getActivity().getIntent();
         searchItem = res_search.getStringExtra("searchItem");
         Log.d("res in Search_Fragment", searchItem);
-
-
+*/
+        Bundle resB = getArguments();
+        Log.d("bundle확인", ""+resB);
+        searchItem = resB.getString("searchItem");
+        Log.d("검색 in search_f", "" + searchItem);
         //통신 시작
-        new SearchJSONTask().execute(url.getMainUrl()+"?"+"browse"+"="+searchItem);
+        new SearchJSONTask().execute(url.getMainUrl() + "/" + "browse"+ "?"+"word"+ "=" + searchItem);
+
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.search_fragment, container, false);
-        ListView listView = (ListView) rootView.findViewById(R.id.listView);
+        listView = (ListView) rootView.findViewById(R.id.listView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -139,15 +143,21 @@ public class Search_Fragment extends Fragment {
         startActivityForResult(intent, BasicInfo.SEARCH_BUY);
     }
 
+
     //통신코드 작성
-    public class SearchJSONTask extends AsyncTask<String, String, String>{
+    protected class SearchJSONTask extends AsyncTask<String, String, String>{
 
         ArrayList<HotelItem> items;
 
+        String url;
         final HotelAdapter adapter = new HotelAdapter();
 
         SearchJSONTask(){
             this.items = adapter.getArrayListItem();
+        }
+
+        SearchJSONTask(String url) {
+
         }
 
         @Override
@@ -225,14 +235,14 @@ public class Search_Fragment extends Fragment {
                     String date_e = jsonObject.get("productdate_e").toString().substring(0, 10);
                     String productimg = jsonObject.getString("productimage");
                     String productaddr = jsonObject.getString("productaddress");
-                    int producthit = jsonObject.getInt("producthit");
+                    //int producthit = jsonObject.getInt("producthit");
 
                     Log.d("메인리스트1", "상품pid" + productpid + ", 상품이름," + productname);
                     Log.d("메인리스트2", "원가: " + forprice + ", 판매가: " + productprice);
                     Log.d("메인리스트3", "시작" + date_s + "끝" + date_e );
                     Log.d("메인리스트4", "상품 이미지: " + productimg);
                     Log.d("메인리스트5", "상품 주소:"+productaddr);
-                    Log.d("메인리스트6", "히트 수: "+producthit);
+                    //Log.d("메인리스트6", "히트 수: "+producthit);
                     Log.d("구분","------------------------------------");
 
                     adapter.addItem(new HotelItem(productpid, productimg, productname, date_s, date_e, productaddr, forprice, productprice));
