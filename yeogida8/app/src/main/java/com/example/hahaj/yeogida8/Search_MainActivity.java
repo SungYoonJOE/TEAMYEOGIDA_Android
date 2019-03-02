@@ -59,6 +59,12 @@ public class Search_MainActivity extends AppCompatActivity implements Navigation
         int personpid = pref.getInt("personpid", 0);
         Log.d("search의 메인 personpid :", ""+personpid);
 
+
+        Intent res_search = getIntent();
+        String searchItem = res_search.getStringExtra("searchItem");
+        Log.d("res in Search_MainAct", searchItem);
+
+
         t1 = findViewById(R.id.toolbar);
         setSupportActionBar(t1);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -92,6 +98,9 @@ public class Search_MainActivity extends AppCompatActivity implements Navigation
 //                intent_search.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 //                startActivity(intent_search);
 
+                Intent intent_search = new Intent(getApplicationContext(), Search_Fragment.class);
+                intent_search.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent_search);
             }
         });
 
