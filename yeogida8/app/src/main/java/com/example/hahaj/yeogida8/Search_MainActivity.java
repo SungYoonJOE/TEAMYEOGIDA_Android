@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -18,12 +19,30 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.hahaj.yeogida8.Search_Fragment;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Search_MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -39,6 +58,7 @@ public class Search_MainActivity extends AppCompatActivity implements Navigation
 
     Search_Fragment searchFragment;
     TextView textView;
+    EditText search2txt;
 
     Toolbar t1;
     DrawerLayout mDrawerLayout;
@@ -46,12 +66,26 @@ public class Search_MainActivity extends AppCompatActivity implements Navigation
     ImageButton imgright;
     NavigationView nav_id;
     int personpid;
+    Search_Fragment searchF;
+
+    String resSearch;
 
     //프레그먼트
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.searchactivity_main);
+
+
+        t1 = findViewById(R.id.toolbar);
+        setSupportActionBar(t1);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mDrawerLayout = findViewById(R.id.activity_main);
+        imgright = findViewById(R.id.imgright);
+        nav_id = findViewById(R.id.nav_id);
+        //searchF=new Search_Fragment();
+
+        searchFragment = new Search_Fragment();
 
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
@@ -61,20 +95,22 @@ public class Search_MainActivity extends AppCompatActivity implements Navigation
 
 
         Intent res_search = getIntent();
-        String searchItem = res_search.getStringExtra("searchItem");
-        Log.d("res in Search_MainAct", searchItem);
+        resSearch = res_search.getStringExtra("searchItem");
+        Log.d("res in Search_MainAct",  resSearch);
 
 
-        t1 = findViewById(R.id.toolbar);
-        setSupportActionBar(t1);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        mDrawerLayout = findViewById(R.id.activity_main);
-        imgright = findViewById(R.id.imgright);
-        nav_id = findViewById(R.id.nav_id);
+        Bundle searchBundle = new Bundle(1);
+        searchBundle.putString("searchItem", resSearch);
+        Log.d("bundle에 들어갔나", searchBundle.getString("searchItem"));
+        searchFragment.setArguments(searchBundle);
+
 
         if(nav_id != null) {
             nav_id.setNavigationItemSelectedListener(this);
         }
+
+        search2txt = (EditText)findViewById(R.id.search2txt);
+
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         imgright.setOnClickListener(new View.OnClickListener() {
@@ -94,19 +130,28 @@ public class Search_MainActivity extends AppCompatActivity implements Navigation
             public void onClick(View v) {
                 Snackbar.make(v,"검색눌림", Snackbar.LENGTH_LONG)
                         .setAction("Action",null).show();
-//                Intent intent_search = new Intent(getApplicationContext(), Search_MainActivity.class);
-//                intent_search.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                startActivity(intent_search);
+                resSearch = search2txt.getText().toString();
 
-                Intent intent_search = new Intent(getApplicationContext(), Search_Fragment.class);
-                intent_search.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent_search);
+                //Intent intent_search = new Intent(getApplicationContext(), Search_Fragment.class);
+                //intent_search.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                //startActivity(intent_search);
+
+                Bundle searchBundle2 = new Bundle(1);
+                searchBundle2.putString("searchItem", resSearch);
+                Log.d("searchBundle2 확인>", ""+searchBundle2.getString("searchItem"));
+                searchFragment.setArguments(searchBundle2);
+
+//                Search_Fragment sf = new Search_Fragment();
+//                sf.SearchJSONTask().execute(url.getMainUrl() + "/" + "browse"+ "?"+"word"+ "=" + searchItem);
+
+
+                //new SearchJSONTask().execute(url.getMainUrl() + "/" + "browse"+ "?"+"word"+ "=" + searchItem);
             }
         });
 
 
         nav_id.bringToFront();
-        searchFragment =new Search_Fragment();
+        //searchFragment =new Search_Fragment();
 
         textView = (TextView) findViewById(R.id.textView);
 

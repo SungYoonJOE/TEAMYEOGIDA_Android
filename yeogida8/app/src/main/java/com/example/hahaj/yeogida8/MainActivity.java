@@ -197,9 +197,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         searchtxt =(EditText) findViewById(R.id.searchtext);
-        resSearch = searchtxt.getText().toString();
+        //resSearch = searchtxt.getText().toString();
         //통신으로 resSearch를 주고 해당 화면을 검색 후 해당상품 정보 화면 search_mainactivity에 있는 search_fragment에 띄워야함
-        Log.d("검색한 단어",resSearch);
+       // Log.d("검색한 단어",resSearch);
 
 
         //검색바
@@ -209,12 +209,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 Snackbar.make(v,"검색눌림", Snackbar.LENGTH_LONG)
                         .setAction("Action",null).show();
+                resSearch = searchtxt.getText().toString();
                 Log.d("입력 안하면 널값??",resSearch);
                 //검색시 해당 상품 정보 화면으로 이동.
                 Intent intent_search = new Intent(getApplicationContext(), Search_MainActivity.class);
                 intent_search.putExtra("searchItem", resSearch);
                 //intent_search.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent_search);
+                //Bundle searchB = new Bundle(1);
+                //searchB.putString("serachItem", resSearch);
+
             }
         });
 
@@ -415,21 +419,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
         finish();
     }
-/*
-    public static Fragment newInstance(String str1){
-        Fragment1 frag1 = new Fragment1();
-        Bundle arg = new Bundle();
-        arg.putString("area", str1);
-        frag1.setArguments(arg);
-        return frag1;
-    }
-*/
-    public void processIntent(Intent intent){
-        if(intent != null){
-            Bundle bundle = intent.getExtras();
-
-        }
-    }
 
     //메인에서 제품 등록하는 화면으로 이동하는 메소드
     public void redirectMainToRegisterActivity(int personpid){
@@ -444,29 +433,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(this, BuyItemActivity.class);
         intent.putExtra("personpid", 0);
         startActivityForResult(intent, BasicInfo.REQUEST_CODE_MAINTOBUY);
-    }
-
-    //메인에서 Fragment1로 personid를 보내는 메소드
-    public void passF1(String aarea){
-        /*
-        Bundle bundle = new Bundle(1);
-        bundle.putString("area", aarea);
-        Log.d("bundle들어갔는지 확인", ""+bundle.getString(aarea));
-        fragment1.setArguments(bundle);
-        */
-        Intent areaIntent = new Intent(this, Fragment1.class);
-        areaIntent.putExtra("area", aarea);
-        startActivity(areaIntent);
-
-        //setResult(Activity.RESULT_CANCELED, areaIntent);
-    }
-
-    //메인에서 Fragment2로 personid를 보내는 메소드
-    public void passPersonpid2(int personpid){
-        Intent pintent = new Intent(this, Fragment1.class);
-        pintent.putExtra("personpid", personpid);
-        pintent.putExtra("area", area);
-        startActivity(pintent);
     }
 
     //메인에서 Fragment3로 personid를 보내는 메소드
