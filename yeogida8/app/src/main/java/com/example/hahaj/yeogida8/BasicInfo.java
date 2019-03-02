@@ -20,6 +20,8 @@ public class BasicInfo {
     public static final int REDIRECT_UPDATE = 70000;
     public static final int REDIRECT_REGISTER = 80000;
 
+    public static final int SEARCH_BUY = 4000;
+
 
     //SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
 }
