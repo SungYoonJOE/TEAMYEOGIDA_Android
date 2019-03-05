@@ -141,7 +141,11 @@ public class LoginActivity extends AppCompatActivity {
 
                     //new JSONTask().execute(url.getMainUrl() + "/login");
 
+<<<<<<< HEAD
                     redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
+=======
+                    //redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
+>>>>>>> upstream/dev
                 }
             });
         }
@@ -173,7 +177,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 try{
-                    //URL url = new URL("http://192.168.25.16:3000/users");
                     URL url = new URL(urls[0]);
                     //연결을 함
                     con = (HttpURLConnection) url.openConnection();

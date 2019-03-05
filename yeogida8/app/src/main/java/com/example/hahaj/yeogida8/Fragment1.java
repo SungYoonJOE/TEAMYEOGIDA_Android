@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +47,7 @@ public class Fragment1 extends Fragment {
     EditText editText2;
     int ppid=0;
     ListView listView;
+    String area;
     private NetworkUrl url = new NetworkUrl();
     int productpid;
 
@@ -52,23 +55,24 @@ public class Fragment1 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-/*
-        //Activity에서 Fragment로 데이터를 전달할 때는 Intent가 아니라 Bundle을 사용한다.
-        Bundle bundleF1 = getArguments();
-        if(bundleF1 == null){
-            Log.d("bundle이 null일 경우", "null입니다..");
-        }
-        String area = bundleF1.getString("areaFromMain");
-        Log.d("메인에서 온 지역", area);
-*/
-
         //personpid 불러오기
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         ppid = pref.getInt("personpid", 0);//pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         Log.d("ppid in 최신순목록>> ", "" + ppid);
 
-        //다른 화면 -> 메인으로 오자마자 default값(지역: 전체) 상품들을 받는 통신코드
-        new DefaultMainJSONTask().execute(url.getMainUrl()+"?"+"area"+"="+"");
+        Bundle b1 = getArguments();
+        if(b1 != null) {
+            area = b1.getString("area");
+            Log.d("area 확인 제발>>", "" + area);
+            if(area=="전체"){
+                new DefaultMainJSONTask().execute(url.getMainUrl() + "?" + "area" + "=" + "");
+            }
+            new AreaMainJSONTask().execute(url.getMainUrl()+"?"+"area"+"="+area);
+        }
+        else {
+            //다른 화면 -> 메인으로 오자마자 default값(지역: 전체) 상품들을 받는 통신코드
+            new DefaultMainJSONTask().execute(url.getMainUrl() + "?" + "area" + "=" + "");
+        }
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment1, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
@@ -202,6 +206,139 @@ public class Fragment1 extends Fragment {
                     writer.flush();
                     writer.close();//버퍼를 받아줌
 */
+                    //서버로 부터 데이터를 받음
+                    InputStream stream = con.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(stream));
+                    StringBuffer buffer = new StringBuffer();
+                    String line = "";
+
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    return buffer.toString();//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (con != null) {
+                        con.disconnect();
+                    }
+                    try {
+                        if (reader != null) {
+                            reader.close();//버퍼를 닫아줌
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            //final HotelAdapter adapter=new HotelAdapter();
+            if(result==null) return;
+
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    int productpid = jsonObject.getInt("productpid");
+                    String productname = jsonObject.getString("productname");
+                    int forprice = jsonObject.getInt("formerprice");
+                    int productprice = jsonObject.getInt("productprice");
+                    String date_s = jsonObject.get("productdate_s").toString().substring(0, 10);
+                    String date_e = jsonObject.get("productdate_e").toString().substring(0, 10);
+                    String productimg = jsonObject.getString("productimage");
+                    String productaddr = jsonObject.getString("productaddress");
+                    int producthit = jsonObject.getInt("producthit");
+
+                    Log.d("메인리스트1", "상품pid" + productpid + ", 상품이름," + productname);
+                    Log.d("메인리스트2", "원가: " + forprice + ", 판매가: " + productprice);
+                    Log.d("메인리스트3", "시작" + date_s + "끝" + date_e );
+                    Log.d("메인리스트4", "상품 이미지: " + productimg);
+                    Log.d("메인리스트5", "상품 주소:"+productaddr);
+                    Log.d("메인리스트6", "히트 수: "+producthit);
+                    Log.d("구분","------------------------------------");
+
+                    adapter.addItem(new HotelItem(productpid, productimg, productname, date_s, date_e, productaddr, forprice, productprice));
+                    listView.setAdapter(adapter);
+                }
+
+                Comparator<HotelItem> productpidAsc = new Comparator<HotelItem>() {
+                    @Override
+                    public int compare(HotelItem o1, HotelItem o2) {
+                        int ret = 0;
+
+                        if(o1.getProductpid()<o2.getProductpid())
+                            ret = 1;
+                        else if(o1.getProductpid() == o2.getProductpid())
+                            ret = 0;
+                        else
+                            ret = -1;
+                        return ret;
+                    }
+                };
+
+                Collections.sort(items, productpidAsc);
+                adapter.notifyDataSetChanged();
+
+            }catch (JSONException e1){
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    //지역(서울/경기/부산)에 따라 상품 정렬 하는 통신코드
+    public class AreaMainJSONTask extends AsyncTask<String, String, String> {
+
+        ArrayList<HotelItem> items;
+
+        final HotelAdapter adapter=new HotelAdapter();
+
+        AreaMainJSONTask() {
+            this.items = adapter.getArrayListItem();
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                Log.d("doInBackground 확인", "doIn");
+                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
+
+                //String area = ""; // 지역(전체)에 해당하는 상품을 받기 위해 서버에 보내는 값
+
+                JSONObject jsonObject = new JSONObject();
+
+                jsonObject.put("area", area);
+                Log.d("area 값>>", "" + area);
+
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+
+
+                try {
+                    URL url = new URL(urls[0]);
+                    //연결을 함
+                    con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("GET");//GET방식으로 보냄
+                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
+                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
+                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
+                    con.setDoOutput(false); //true이면 내부적으로 다시 POST로 바꾸기 때문에 GET을 위해 false
+                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
+                    con.connect();
+
                     //서버로 부터 데이터를 받음
                     InputStream stream = con.getInputStream();
                     reader = new BufferedReader(new InputStreamReader(stream));

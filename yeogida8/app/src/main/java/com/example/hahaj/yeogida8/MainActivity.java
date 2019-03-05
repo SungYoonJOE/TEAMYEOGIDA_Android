@@ -1,5 +1,6 @@
 package com.example.hahaj.yeogida8;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Fragment2 fragment2;
     Fragment3 fragment3;
     TextView textView;
+    EditText searchtxt;
     String[] items = {"전체","서울","경기","부산"};
 
 
@@ -83,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RightDrawer에서 해당 메뉴화면 클릭 시 조건에 따라
     다음 화면으로 이동시키는 메소드.
      */
-
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -206,11 +206,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+<<<<<<< HEAD
         EditText search=(EditText) findViewById(R.id.searchtext);
         //search.setSelection(2);
         resSearch=search.getText().toString();
+=======
+
+        searchtxt =(EditText) findViewById(R.id.searchtext);
+        //resSearch = searchtxt.getText().toString();
+>>>>>>> upstream/dev
         //통신으로 resSearch를 주고 해당 화면을 검색 후 해당상품 정보 화면 search_mainactivity에 있는 search_fragment에 띄워야함
-        Log.d("입력 안하면 널값??",resSearch);
+       // Log.d("검색한 단어",resSearch);
 
 
         //검색바
@@ -220,11 +226,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 Snackbar.make(v,"검색눌림", Snackbar.LENGTH_LONG)
                         .setAction("Action",null).show();
+                resSearch = searchtxt.getText().toString();
                 Log.d("입력 안하면 널값??",resSearch);
                 //검색시 해당 상품 정보 화면으로 이동.
                 Intent intent_search = new Intent(getApplicationContext(), Search_MainActivity.class);
-                intent_search.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent_search.putExtra("searchItem", resSearch);
+                //intent_search.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent_search);
+                //Bundle searchB = new Bundle(1);
+                //searchB.putString("serachItem", resSearch);
+
             }
         });
 
@@ -264,10 +275,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                textView.setText(items[position]);
-                if(position==0)area = "전체";
-                else if(position == 1) area = "서울";
-                else if(position == 2) area = "경기";
-                else if(position == 3) area = "부산";
+                if(position==0){
+                    area = "전체";
+                    Bundle b1 = new Bundle(1);
+                    b1.putString("area", area);
+                    fragment1.setArguments(b1);
+                    fragment2.setArguments(b1);
+                    fragment3.setArguments(b1);
+                }
+                else if(position == 1) {
+                    area = "서울";
+                    Bundle b1 = new Bundle(1);
+                    b1.putString("area", area);
+                    fragment1.setArguments(b1);
+                    fragment2.setArguments(b1);
+                    fragment3.setArguments(b1);
+                }
+                else if(position == 2) {
+                    area = "경기";
+                    Bundle b1 = new Bundle(1);
+                    b1.putString("area", area);
+                    fragment1.setArguments(b1);
+                    fragment2.setArguments(b1);
+                    fragment3.setArguments(b1);
+                }
+                else if(position == 3) {
+                    area = "부산";
+                    Bundle b1 = new Bundle(1);
+                    b1.putString("area", area);
+                    fragment1.setArguments(b1);
+                    fragment2.setArguments(b1);
+                    fragment3.setArguments(b1);
+                }
             }
 
             @Override
@@ -413,22 +452,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivityForResult(intent, BasicInfo.REQUEST_CODE_MAINTOBUY);
     }
 
-    //메인에서 Fragment1로 personid를 보내는 메소드
-    public void passPersonpid1(int personpid){
-        Intent pintent = new Intent(this, Fragment1.class);
-        pintent.putExtra("personpid", personpid);
-        pintent.putExtra("area", area);
-        startActivity(pintent);
-    }
-
-    //메인에서 Fragment2로 personid를 보내는 메소드
-    public void passPersonpid2(int personpid){
-        Intent pintent = new Intent(this, Fragment1.class);
-        pintent.putExtra("personpid", personpid);
-        pintent.putExtra("area", area);
-        startActivity(pintent);
-    }
-
     //메인에서 Fragment3로 personid를 보내는 메소드
     public void passPersonpid3(int personpid){
         Intent pintent = new Intent(this, Fragment1.class);
@@ -436,128 +459,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pintent.putExtra("area", area);
         startActivity(pintent);
     }
-/*
-    //통신코드
-    public class JSONTask extends AsyncTask<String, String, String> {
 
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                Log.d("doInBackground 확인", "doIn");
-                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
-
-                nickname= URLEncoder.encode(nickname, "UTF-8");
-                String decnick = URLDecoder.decode(nickname, "UTF-8");
-
-                JSONObject jsonObject = new JSONObject();
-
-                jsonObject.put("kakaonickname", decnick);
-                jsonObject.put("kakaopid", strpid);
-                jsonObject.put("email", email);
-                Log.d("들어갔는지 확인", "jsonOk??");
-                Log.d("nickname이 변환", ""+nickname);
-
-                HttpURLConnection con = null;
-                BufferedReader reader = null;
-
-
-                try{
-                    //URL url = new URL("http://192.168.25.16:3000/users");
-                    URL url = new URL(urls[0]);
-                    //연결을 함
-                    con = (HttpURLConnection) url.openConnection();
-
-                    con.setRequestMethod("POST");//POST방식으로 보냄
-                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
-                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
-                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
-                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
-                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
-                    con.connect();
-
-                    //서버로 보내기위해서 스트림 만듬
-                    OutputStream outStream = con.getOutputStream();
-                    //버퍼를 생성하고 넣음
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
-                    writer.write(jsonObject.toString());
-                    writer.flush();
-                    writer.close();//버퍼를 받아줌
-
-                    //서버로 부터 데이터를 받음
-                    InputStream stream = con.getInputStream();
-
-                    reader = new BufferedReader(new InputStreamReader(stream));
-
-                    StringBuffer buffer = new StringBuffer();
-
-                    String line = "";
-                    while((line = reader.readLine()) != null){
-                        buffer.append(line);
-                    }
-
-                    return buffer.toString();//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
-
-                } catch (MalformedURLException e){
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if(con != null){
-                        con.disconnect();
-                    }
-                    try {
-                        if(reader != null){
-                            reader.close();//버퍼를 닫아줌
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return "";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
-
-            try {
-
-                JSONParser jsonParser = new JSONParser();
-                JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
-
-                personpid = Integer.parseInt(jsonObject.get("personpid").toString());
-
-                Log.d("파싱한 personpid", personpid+"");
-
-                //서버에서 받은 personpid를 pref_PERSONPID라는 파일 안 personpid라는 변수에 저장
-                SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);//pref_PERSONPID라는 파일생성
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putInt("personpid", personpid);
-                editor.commit();//작업완료
-
-                int i = pref.getInt("personpid", 0);//값이 없으면 0
-                ///int i = pre.getCount();
-                Log.d("personpid 잘 저장됐을까요", ""+i);
-
-                if(email==null) {
-                    redirectInputEmailActivity(strpid, nickname);
-                }else {
-                    if(personpid!=0) {
-                        redirectMainActivity(personpid);  //서버와 통신후 personpid를 받아 메인으로 이동
-                    }else{
-                        Log.d("personpid default임", "0");
-                    }
-                }
-
-
-            }catch (ParseException e){ ;}
-
-        }
-    }
-    */
 }

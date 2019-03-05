@@ -20,11 +20,15 @@ public class BasicInfo {
     public static final int REDIRECT_UPDATE = 70000;
     public static final int REDIRECT_REGISTER = 80000;
 
+<<<<<<< HEAD
     //채팅
     public static final int REQUEST_FROMSELLCHAT = 10101;
     public static final int REQUEST_FROMCHAT = 10102;
 
 
+=======
+    public static final int SEARCH_BUY = 4000;
+>>>>>>> upstream/dev
 
 
     //SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
