@@ -3,6 +3,7 @@ package com.example.hahaj.yeogida8;
 //채팅 구매목록 프레그먼트
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -41,14 +42,14 @@ public class Chatbuy_fragment extends Fragment {
     int ppid=6;
     private int productpid;
     private NetworkUrl url = new NetworkUrl();
+    int roompid;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-        Toast.makeText(getContext(),"buy",Toast.LENGTH_SHORT).show();
-
+        //Toast.makeText(getContext(),"buy",Toast.LENGTH_SHORT).show();
 
         //personpid 불러오기
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
@@ -72,8 +73,12 @@ public class Chatbuy_fragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ChatroomItem item = (ChatroomItem) adapter.getItem(position);
-                Toast.makeText(getContext(), "선택된 것:"+item.getProduct_name(),Toast.LENGTH_SHORT).show();
+                ChatroomItem item = (ChatroomItem) parent.getAdapter().getItem(position);
+                //Toast.makeText(getContext(), "선택된 것:"+item.getProduct_name(),Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), ChattingActivity.class);
+                intent.putExtra("roompid", item.roompid);
+                intent.putExtra("request",BasicInfo.REQUEST_FROMCHAT);
+                startActivity(intent);
             }
         });
 
@@ -210,13 +215,13 @@ public class Chatbuy_fragment extends Fragment {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     Log.d("here","여기까지");
-                    int roompid = jsonObject.getInt("roompid");
+                    roompid = jsonObject.getInt("roompid");
                     String productname = jsonObject.getString("productname");
 
                     Log.d(productname, "pname"+productname);
 
 
-                    adapter.addItem(new ChatroomItem(productname));
+                    adapter.addItem(new ChatroomItem(productname, roompid));
                     listView.setAdapter(adapter);
 
                 }

@@ -5,7 +5,7 @@ public class NetworkUrl {
 
     //main URL
     //Url 바뀌면 여기만 바꾸면 됨.
-    private String main = new String("");
+    private String main = new String("http://ef617dde.ngrok.io");
 
 
     public String getMainUrl() {

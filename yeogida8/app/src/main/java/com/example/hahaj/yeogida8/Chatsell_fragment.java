@@ -1,6 +1,7 @@
 package com.example.hahaj.yeogida8;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -41,6 +42,7 @@ public class Chatsell_fragment extends Fragment {
     int productpid = 1;
     int ppid=6;
     ListView listView;
+    int roompid;
 
     @Nullable
     @Override
@@ -69,8 +71,14 @@ public class Chatsell_fragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ChatroomItem item = (ChatroomItem) adapter.getItem(position);
-                Toast.makeText(getContext(), "선택된 것:"+item.getProduct_name(),Toast.LENGTH_SHORT).show();
+                ChatroomItem item = (ChatroomItem) parent.getAdapter().getItem(position);
+                //Toast.makeText(getContext(), "선택된 것:"+item.getProduct_name(),Toast.LENGTH_SHORT).show();
+
+                //sellfrag에서 온걸 알려줌
+                Intent intent = new Intent(getContext(), ChattingActivity.class);
+                intent.putExtra("request",BasicInfo.REQUEST_FROMSELLCHAT);
+                intent.putExtra("roompid", item.roompid);
+                startActivity(intent);
             }
         });
 
@@ -204,12 +212,13 @@ public class Chatsell_fragment extends Fragment {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     Log.d("here","여기까지");
-                    int roompid = jsonObject.getInt("roompid");
+                    roompid = jsonObject.getInt("roompid");
                     String productname = jsonObject.getString("productname");
 
-                    Log.d(productname, "pname"+productname);
+                    //Log.d(productname, "pname"+productname);
 
-                    adapter.addItem(new ChatroomItem(productname));
+                    adapter.addItem(new ChatroomItem(productname, roompid));
+                    Log.d("로그를"+i,productname+roompid);
                     listView.setAdapter(adapter);
 
                 }
@@ -221,4 +230,6 @@ public class Chatsell_fragment extends Fragment {
 
         }
 
-    }
+
+
+}

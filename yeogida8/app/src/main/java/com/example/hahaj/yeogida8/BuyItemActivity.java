@@ -50,13 +50,16 @@ public class BuyItemActivity extends AppCompatActivity {
     Button btn_buy;
     int i=0;
     boolean isLike;
-    private int ppid;
-    private int productpid = 9;
+    private int ppid = 11;
+    private int productpid;
+
+    //roompid
+    int roompid;
 
     //지도API
     //LinearLayout mapview;
     TMapView tmap;
-    private final String MAPAPPKEY = "";
+    private final String MAPAPPKEY = "1947620f-e0aa-43a5-8e27-11c6d1dab9b5 ";
     double lat;
     double lng;
 
@@ -80,13 +83,14 @@ public class BuyItemActivity extends AppCompatActivity {
 
 
         //personpid 불러오기
-        SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
-        ppid = pref.getInt("personpid", 0); //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
+        //SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
+        //ppid = pref.getInt("personpid", 0); //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         Log.d("제품(상세)조회/구매화면 ppid>> ",""+ppid);
 
         //productpid 불러오기
         Intent productpidIntent = getIntent();
-        //productpid = productpidIntent.getIntExtra("personpid", 0);
+        productpid = productpidIntent.getIntExtra("productpid", 0);
+
 
         //통신-제품상세정보 받아오기
         new JSONTask().execute(url.getMainUrl() + "/product/info");
@@ -192,14 +196,17 @@ public class BuyItemActivity extends AppCompatActivity {
     public void butItem() {
         btn_buy = (Button) findViewById(R.id.btn_buy);
         btn_buy.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
 
-                Intent productpidIntent = new Intent(getApplicationContext(), ChattingActivity.class);
+                new JSONTask3().execute(url.getMainUrl() + "/chat/frompurchase");
 
-                productpidIntent.putExtra("producupid", productpid);
-
-                startActivity(productpidIntent);
+                Intent intent = new Intent(getApplicationContext(), ChattingActivity.class);
+                intent.putExtra("roompid", roompid);
+                intent.putExtra("producupid", productpid);
+                startActivity(intent);
                 Log.d("버튼눌림","buybuttonpressed");
             }
         });
@@ -420,6 +427,104 @@ public class BuyItemActivity extends AppCompatActivity {
 
         }
     }
+
+    //roompid받아오기
+    public class JSONTask3 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                Log.d("doInBackground 확인", "doIn");
+                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("personpid", ppid);
+                jsonObject.put("productpid", productpid);
+                Log.d("json put 다음", "");
+
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+
+                try {
+                    URL url = new URL(urls[0]);
+                    //연결을 함
+                    con = (HttpURLConnection) url.openConnection();
+
+                    con.setRequestMethod("POST");//POST방식으로 보냄
+                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
+                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
+                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
+                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
+                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
+                    con.connect();
+
+                    //서버로 보내기위해서 스트림 만듬
+                    OutputStream outStream = con.getOutputStream();
+                    //버퍼를 생성하고 넣음
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+                    writer.write(jsonObject.toString());
+                    writer.flush();
+                    writer.close();//버퍼를 받아줌
+
+                    //서버로 부터 데이터를 받음
+                    InputStream stream = con.getInputStream();
+
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer buffer = new StringBuffer();
+
+                    String line = "";
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    return buffer.toString();//서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (con != null) {
+                        con.disconnect();
+                    }
+                    try {
+                        if (reader != null) {
+                            reader.close();//버퍼를 닫아줌
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
+            if(result==null)
+                return;
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                roompid = jsonObject.getInt("roompid");
+                Toast.makeText(getApplicationContext(), Integer.toString(roompid), Toast.LENGTH_LONG).show();
+
+            } catch(Exception e1) {
+
+                e1.printStackTrace();
+            }
+
+
+        }
+    }
+
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

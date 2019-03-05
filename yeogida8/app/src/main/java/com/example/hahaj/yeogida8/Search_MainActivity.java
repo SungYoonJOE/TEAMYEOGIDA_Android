@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
-public class Search_MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class    Search_MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     //화면 전환시 요청 코드//
     public static final int REQUEST_CODE_NOTIFY_QNA = 101;

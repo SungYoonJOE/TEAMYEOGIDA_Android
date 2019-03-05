@@ -4,6 +4,7 @@ package com.example.hahaj.yeogida8;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
     private List<ChatData> mDataset;
     private String myNickname;
-    int personpid=6;
+    int personpid=11;
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -59,17 +60,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         holder.Textview_msg.setText(chat.getMsg());
 
         //person pid를 비교해서 띄움
-        /*
-        if(chat.getNickname().equals(this.myNickname)) {
+        //여기 personpid비교로 바꿈
+        //GRAVITY로 정렬
+        if(chat.getPersonpid()==this.personpid) {
             //holder.Textview_msg.setBackgroundResource(R.drawable.chatbubble_right);
-            holder.Textview_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+            //holder.Textview_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+            holder.Textview_msg.setGravity(Gravity.RIGHT);
         }
         else{
             //holder.Textview_msg.setBackgroundResource(R.drawable.chatbubble);
-            holder.Textview_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+            holder.Textview_msg.setGravity(View.TEXT_ALIGNMENT_TEXT_START);
 
         }
-        */
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

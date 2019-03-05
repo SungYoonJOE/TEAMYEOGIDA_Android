@@ -6,6 +6,15 @@ import java.io.Serializable;
 
 public class ChatData implements Serializable {
     private String msg;
+    private int personpid;
+
+    public int getPersonpid() {
+        return personpid;
+    }
+
+    public void setPersonpid(int personpid) {
+        this.personpid = personpid;
+    }
 
     public String getMsg() {
         return msg;

@@ -4,9 +4,23 @@ package com.example.hahaj.yeogida8;
 
 public class ChatroomItem {
     String product_name;
+    int roompid;
+
+    public int getRoompid() {
+        return roompid;
+    }
+
+    public void setRoompid(int roompid) {
+        this.roompid = roompid;
+    }
 
     public ChatroomItem(String product_name) {
         this.product_name = product_name;
+    }
+
+    public ChatroomItem(String product_name, int roompid) {
+        this.product_name = product_name;
+        this.roompid = roompid;
     }
 
     public String getProduct_name() {
