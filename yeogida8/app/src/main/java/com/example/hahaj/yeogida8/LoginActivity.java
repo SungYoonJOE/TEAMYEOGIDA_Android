@@ -139,13 +139,9 @@ public class LoginActivity extends AppCompatActivity {
                     nickname = result.getNickname();
                     email = result.getKakaoAccount().getEmail();
 
-                    //new JSONTask().execute(url.getMainUrl() + "/login");
-
-<<<<<<< HEAD
-                    redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
-=======
+                    new JSONTask().execute(url.getMainUrl() + "/login");
                     //redirectMainActivity(personpid);//서버와 연결 안 할 때 연습용
->>>>>>> upstream/dev
+
                 }
             });
         }
