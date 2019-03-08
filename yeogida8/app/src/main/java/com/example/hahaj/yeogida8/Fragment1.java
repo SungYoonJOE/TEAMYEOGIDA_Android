@@ -49,6 +49,7 @@ public class Fragment1 extends Fragment {
     ListView listView;
     String area;
     private NetworkUrl url = new NetworkUrl();
+    int productpid;
 
     @Nullable
     @Override
@@ -75,14 +76,15 @@ public class Fragment1 extends Fragment {
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment1, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) //position은 몇번째 아이템인지 인덱스값
             {
 
+                HotelItem item = (HotelItem) parent.getAdapter().getItem(position);
+                productpid=item.getProductpid();
                 //인텐트사용하여 상품정보(상품구매)화면으로 이동
-                redirectMainToBuyActivity(ppid);
+                redirectMainToBuyActivity(ppid, productpid);
             }
         });
 
@@ -147,9 +149,11 @@ public class Fragment1 extends Fragment {
 
 
     //메인에서 상품 구매하는 화면으로 이동하는 메소드
-    public void redirectMainToBuyActivity(int personpid){
+    public void redirectMainToBuyActivity(int personpid, int productpid){
         Intent intent = new Intent(getContext(), BuyItemActivity.class);
         intent.putExtra("personpid", 0);
+        intent.putExtra("productpid", productpid);
+
         startActivityForResult(intent, BasicInfo.REQUEST_CODE_MAINTOBUY);
     }
 

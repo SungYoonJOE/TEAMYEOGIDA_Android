@@ -146,6 +146,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent_Recent);
         }
 
+        else if(id == R.id.chatting) { //채팅 화면으로 이동
+            personpid = pref.getInt("personpid", 0);
+            Log.d("최근본목록 선택할 때 personpid", ""+personpid);
+            //서버에 personpid 요청
+            Toast.makeText(this,"채팅 목록으로 이동", Toast.LENGTH_LONG).show();
+            Intent intent_Recent= new Intent(getApplicationContext(), ChatlistActivity.class);
+            intent_Recent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            mDrawerLayout.closeDrawer(navigationView);
+            startActivity(intent_Recent);
+        }
+
         return false;
     }
 
@@ -195,9 +206,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+<<<<<<< HEAD
+        EditText search=(EditText) findViewById(R.id.searchtext);
+        //search.setSelection(2);
+        resSearch=search.getText().toString();
+=======
 
         searchtxt =(EditText) findViewById(R.id.searchtext);
         //resSearch = searchtxt.getText().toString();
+>>>>>>> upstream/dev
         //통신으로 resSearch를 주고 해당 화면을 검색 후 해당상품 정보 화면 search_mainactivity에 있는 search_fragment에 띄워야함
        // Log.d("검색한 단어",resSearch);
 

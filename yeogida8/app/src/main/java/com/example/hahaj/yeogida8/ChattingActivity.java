@@ -1,31 +1,26 @@
 package com.example.hahaj.yeogida8;
 
+//채팅 화면
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
-
-import com.skt.Tmap.TMapMarkerItem;
-import com.skt.Tmap.TMapPoint;
-import com.skt.Tmap.TMapView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -37,183 +32,156 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-public class BuyItemActivity extends AppCompatActivity {
+public class ChattingActivity extends AppCompatActivity {
 
-    NetworkUrl url = new NetworkUrl();
-
-    //ImageView imageView;
-    Bitmap bitmap;
-    ImageView imageView1;
-    TextView itemName, itemAddr, itemURL, itemStartDate, itemEndDate, itemPrice, new_itemPrice, itemDeadline, aboutItem2;
-    ImageButton btn_onof;
-    Button btn_buy;
-    int i=0;
-    boolean isLike;
-    private int ppid = 11;
-    private int productpid;
-
-    //roompid
+    private NetworkUrl url = new NetworkUrl();
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private List<ChatData> chatDataList;
+    private EditText Edittext_chat;
+    private Button button_send;
+    private Button button_decicde;
     int roompid;
+    ChatData chat;
+    ChatData newchat;
 
-    //지도API
-    //LinearLayout mapview;
-    TMapView tmap;
-    private final String MAPAPPKEY = "";
-    double lat;
-    double lng;
+    private int productpid=11;
+    //닉네임 대신 personpid 이용하면됨!
+    private String nick = "nick1";
+    int personpid=6;
+
+    //private DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buy_item);
 
-        imageView1 = (ImageView)findViewById(R.id.image1);
-        //imageView1.setImageResource(R.drawable.item1);
-        itemName = (TextView)findViewById(R.id.itemName);
-        itemAddr = (TextView)findViewById(R.id.itemAddr);
-        itemURL = (TextView)findViewById(R.id.itemURL);
-        itemStartDate = (TextView)findViewById(R.id.itemStartDate);
-        itemEndDate = (TextView)findViewById(R.id.itemEndDate);
+        //어디서 왔냐에 따라 화면 바뀜
 
-        itemPrice = (TextView)findViewById(R.id.itemPrice);
-        new_itemPrice = (TextView)findViewById(R.id.new_itemPrice);
-        itemDeadline = (TextView)findViewById(R.id.itemDeadline);
-        aboutItem2 = (TextView)findViewById(R.id.aboutItem2);
+        //buy에서 올때
+        Intent intent=getIntent();
+        roompid = intent.getExtras().getInt("roompid");
+        Log.d("roompid",roompid+"hohoho");
 
+        int where = intent.getExtras().getInt("request");
+        if(where==BasicInfo.REQUEST_FROMSELLCHAT) {
+            setContentView(R.layout.activity_chattingforseller);
+
+            //구매확정버튼
+            button_decicde = findViewById(R.id.decidetosell);
+            button_decicde.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    new JSONTask3().execute(url.getMainUrl() + "/product/complete");
+                    Toast.makeText(getApplicationContext(),"HOHOHOHONALDO",Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
+        else
+            setContentView(R.layout.activity_chatting);
+        //
 
         //personpid 불러오기
-        //SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
-        //ppid = pref.getInt("personpid", 0); //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
-        Log.d("제품(상세)조회/구매화면 ppid>> ",""+ppid);
+        SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
+        //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
+        //personpid = pref.getInt("personpid", 0);
 
-        //productpid 불러오기
-        Intent productpidIntent = getIntent();
-        productpid = productpidIntent.getIntExtra("productpid", 0);
+        //통신
 
 
-        //통신-제품상세정보 받아오기
-        new JSONTask().execute(url.getMainUrl() + "/product/info");
+        Log.d("룸피드","roompid"+roompid);
+        init();
 
+        //전송버튼
+        button_send = findViewById(R.id.sendbutton);
+        //채팅 메세지
+        Edittext_chat = findViewById(R.id.chat);
 
-        //double lat = 37.6026422;
-        //double lng = 126.953058;
-        likeItem();
-        //initTmap(lng, lat);
-        Log.d("문제확인6", "여기 아니다!!!!!!!!");
-        //addMarker(lng, lat);
-        butItem();
-    }
-    //찜 기능
-    public void likeItem(){
-        btn_onof = (ImageButton)findViewById(R.id.btn_likeonoff);
-        btn_onof.setOnClickListener(new View.OnClickListener() {
+        button_send.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                i=1-i;
-                if(i==1){
-                    btn_onof.setImageResource(R.drawable.likeon);
-                    Toast.makeText(getApplicationContext(), "찜 상품에 등록되었습니다.", Toast.LENGTH_LONG).show();
-                    isLike = true;
-                    //통신
-                    //서버로 정보 전달
-                    new JSONTask2().execute(url.getMainUrl() + "/choice/register");
-                }
-                else if(i==0){
-                    btn_onof.setImageResource(R.drawable.likeoff);
-                    Toast.makeText(getApplicationContext(), "찜 상품이 취소되었습니다.", Toast.LENGTH_LONG).show();
-                    isLike = false;
-                    //통신
-                    //서버로 정보 전달
-                    new JSONTask2().execute(url.getMainUrl() + "/choice/delete");
+            public void onClick(View view) {
+                String msg = Edittext_chat.getText().toString();
+
+                if (msg != "") {
+                    chat = new ChatData();
+                    chat.setMsg(msg);
+                    new JSONTask2().execute(url.getMainUrl() + "/chat/message");
+                    init();
+
+
+                    //여기추가했음
+                    //mAdapter.notifyDataSetChanged();
+                    //mRecyclerView.setAdapter(mAdapter);
+                    //파이어베이스로 보내는 코드
+                    //myRef.push().setValue(chat);
                 }
             }
         });
+
+
     }
 
-    //TMap 생성
-    private void initTmap(double lng, double lat){
-        tmap = new TMapView(this);
-        tmap.setSKTMapApiKey(MAPAPPKEY);
-        Log.d("문제확인1", "여기 아니다!!!!!!!!");
-        ConstraintLayout mapview = (ConstraintLayout) findViewById(R.id.mapview);
-        Log.d("문제확인2", "여기 아니다!!!!!!!!");
-        this.lat = lat;
-        this.lng = lng;
-        //double lat = 37.5725749;
-        //double lng = 126.9789405;
-        tmap.setCenterPoint(lng, lat);
-        tmap.setZoomLevel(15);
+    private void init() {
+        //리사이클러뷰 연결 밑 사이즈 조정 레이아웃 매니져, 뷰 선언
+        new JSONTask().execute(url.getMainUrl() + "/chat/messagelist");
 
-        mapview.addView(tmap);
-        Log.d("문제확인3", "여기 아니다!!!!!!!!");
-    }
+        mRecyclerView = findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        ((LinearLayoutManager) mLayoutManager).setStackFromEnd(true);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
-    private void addMarker(double lng, double lat){
-        //this.lat = lat;
-        //this.lng = lng;
-        TMapPoint tPoint = new TMapPoint(lat, lng);
-        TMapMarkerItem marker = new TMapMarkerItem();
-        marker.setTMapPoint(tPoint);
-        Log.d("문제확인4", "여기 아니다!!!!!!!!");
-        tmap.addMarkerItem("marker", marker);
-        Log.d("문제확인5", "여기 아니다!!!!!!!!");
-    }
+        //채팅데이터리스트생성
+        chatDataList = new ArrayList<>();
+        mAdapter = new ChatAdapter(chatDataList, ChattingActivity.this, personpid) ;
 
-    public void setProductimage(final String productimage){
+        mRecyclerView.setAdapter(mAdapter);
 
-        Thread mThread = new Thread(){
+        // Write a message to the database
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //myRef = database.getReference();
+
+        /*
+        myRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void run() {
-                try {
-                    URL url = new URL(productimage);
-
-                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    conn.setDoInput(true);
-                    conn.connect();
-
-                    InputStream is = conn.getInputStream();//InputStream값 가져오기
-                    bitmap = BitmapFactory.decodeStream(is);//Bitmap으로 변ㅇ환
-                }catch (MalformedURLException e){
-                    e.printStackTrace();
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-                //super.run();
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                ChatData chat = dataSnapshot.getValue(ChatData.class);
+                ((ChatAdapter) mAdapter).addChat(chat);
             }
-        };
-        mThread.start();
-
-        try{
-            mThread.join();
-            imageView1.setImageBitmap(bitmap);
-        } catch (InterruptedException e){
-            e.printStackTrace();
-        }
-
-    }
-
-    public void butItem() {
-        btn_buy = (Button) findViewById(R.id.btn_buy);
-        btn_buy.setOnClickListener(new View.OnClickListener() {
-
 
             @Override
-            public void onClick(View v) {
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                new JSONTask3().execute(url.getMainUrl() + "/chat/frompurchase");
-
-                Intent intent = new Intent(getApplicationContext(), ChattingActivity.class);
-                intent.putExtra("roompid", roompid);
-                intent.putExtra("producupid", productpid);
-                startActivity(intent);
-                Log.d("버튼눌림","buybuttonpressed");
             }
-        });
 
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+
+        });*/
     }
 
-    //제품 정보 보내는 통신코드
+    //시작할때 채팅히스토리 받는 통신코드
     public class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -223,8 +191,7 @@ public class BuyItemActivity extends AppCompatActivity {
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("productpid", productpid);
-                jsonObject.put("personpid", ppid);
+                jsonObject.put("roompid", roompid);
                 Log.d("json put 다음", "");
 
                 HttpURLConnection con = null;
@@ -291,70 +258,53 @@ public class BuyItemActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
-            if(result==null) return;
+            Log.d("들어오는 pid", "들어온다");//서버로 부터 받은 값을 출력해주는 부분
+
+            if (result == null) return;
+
             try {
-                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = new JSONArray(result);
 
-                int propid = jsonObject.getInt("productpid");
-                String productimg = jsonObject.getString("productimage");
-                String productname = jsonObject.getString("productname");
-                double addr_x = jsonObject.getDouble("productaddress_x");
-                double addr_y = jsonObject.getDouble("productaddress_y");
-                String productURL = jsonObject.getString("productUrl");
-                String date_s = jsonObject.get("productdate_s").toString().substring(0, 10);
-                String date_e = jsonObject.get("productdate_e").toString().substring(0, 10);
-                String productaddr = jsonObject.getString("productaddress");
-                int forprice = jsonObject.getInt("formerprice");
-                int productprice = jsonObject.getInt("productprice");
-                String productText = jsonObject.getString("text");
-                int choice = jsonObject.getInt("choicechecker");
+                Log.d("jsonArray개수>","hijson"+jsonArray.length());
 
-                Log.d("파싱확인1", "상품pid>"+propid+", 이미지"+productimg+", 이름"+productname);
-                Log.d("파싱확인2", "x좌표"+addr_x+", y좌표"+addr_y+", 홈주소"+productURL);
-                Log.d("파싱확인3", "시작"+date_s+", 마지막"+date_e+", 주소"+productaddr);
-                Log.d("파싱확인4", "정가"+forprice+", 판매가"+productprice+", 설명"+productText);
-                Log.d("파싱확인5", "찜여부"+choice);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    Log.d("here","여기까지");
+                    //int roompid = jsonObject.getInt("roompid");
+                    int personpid = jsonObject.getInt("personpid");
+                    String message = jsonObject.getString("message");
+                    //Date date = jsonObject.getDate("date");
 
-                //찜 상태
-                if(choice==1){
-                    btn_onof.setImageResource(R.drawable.likeon);
-                } else{
-                    btn_onof.setImageResource(R.drawable.likeoff);
+                    newchat=new ChatData();
+                    newchat.setMsg(message);
+                    newchat.setPersonpid(personpid);
+                    ((ChatAdapter)mAdapter).addChat(newchat);
+
+                    //adapter.addItem(new ChatroomItem(productname));
+                    //listView.setAdapter(adapter);
+
                 }
 
-                //지도
-                initTmap(addr_x, addr_y);
-                addMarker(addr_x, addr_y);
-
-                //화면에 뿌리기
-                setProductimage(productimg);
-                itemName.setText(productname);
-                itemAddr.setText(productaddr);
-                itemURL.setText(productURL);
-                itemStartDate.setText(date_s);
-                itemEndDate.setText(date_e);
-                itemPrice.setText(forprice+"");
-                new_itemPrice.setText(productprice+"");
-                aboutItem2.setText(productText);
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
         }
+
     }
 
-    //찜 등록 및 삭제 통신코드
+    //버튼 누를때 채팅 보내는 통신코드
     public class JSONTask2 extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... urls) {
             try {
-                Log.d("doInBackground 확인", "doIn");
+                //Log.d("doInBackground 확인", "doIn");
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("choice_productpid", productpid);
-                jsonObject.put("choice_personpid", ppid);
+                jsonObject.put("roompid", roompid);
+                jsonObject.put("message", chat.getMsg());
+                jsonObject.put("personpid", personpid);
                 Log.d("json put 다음", "");
 
                 HttpURLConnection con = null;
@@ -422,24 +372,48 @@ public class BuyItemActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
-            if(result==null) return;
-            if(result=="success"){Toast.makeText(getApplication(), "기능 성공", Toast.LENGTH_SHORT).show();}
 
+            //이거 뭐지
+            if (result == null) return;
+
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+
+                Log.d("jsonArray개수>","hijson"+jsonArray.length());
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    Log.d("here2","여기까지2");
+                    //String message = jsonObject.getString("message");
+                    //Date date = jsonObject.getDate("date");
+
+                    //newchat=new ChatData();
+                    //newchat.setMsg(message);
+
+                    //((ChatAdapter)mAdapter).addChat(newchat);
+                    //((ChatAdapter)mAdapter).notifyDataSetChanged();
+                }
+
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
         }
+
+
+
     }
 
-    //roompid받아오기
+    //버튼 누르면 구매확정 정보전달
     public class JSONTask3 extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... urls) {
             try {
-                Log.d("doInBackground 확인", "doIn");
+                //Log.d("doInBackground 확인", "doIn");
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("personpid", ppid);
-                jsonObject.put("productpid", productpid);
+                jsonObject.put("roompid", roompid);
                 Log.d("json put 다음", "");
 
                 HttpURLConnection con = null;
@@ -507,35 +481,25 @@ public class BuyItemActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
-            if(result==null)
-                return;
+
+            //이거 뭐지
+            if (result == null) return;
+
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                roompid = jsonObject.getInt("roompid");
-                Toast.makeText(getApplicationContext(), Integer.toString(roompid), Toast.LENGTH_LONG).show();
+                String msg=jsonObject.getString("message");
 
-            } catch(Exception e1) {
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                Log.d("메세지다짜짠",msg);
 
+
+            } catch (JSONException e1) {
                 e1.printStackTrace();
             }
-
-
         }
+
+
+
     }
 
-
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-
-            case BasicInfo.REQUEST_CODE_LIKEDTOBUY:
-                if(resultCode == RESULT_OK){
-                    //productpid = data.getIntExtra("productpid", 0);
-                    Log.d("찜->구매 이동 ", "");
-                }
-        }
-    }
 }

@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.example.hahaj.yeogida8"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -18,6 +18,9 @@ android {
         }
     }
 }
+
+
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -46,4 +49,7 @@ dependencies {
     //서버와 로그인 통신
     //implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation files('libs/json-simple-1.1.1.jar')
+    //recyclerview
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+
 }

@@ -1,21 +1,23 @@
 package com.example.hahaj.yeogida8;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,93 +35,90 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class sell_Fragment extends Fragment {
+public class Chatsell_fragment extends Fragment {
 
-    HotelAdapter adapter;
-
+    ChatroomAdapter adapter;
     NetworkUrl url = new NetworkUrl();
-
-    EditText editText;
-    EditText editText2;
     int productpid = 1;
-    int ppid;
+    int ppid=6;
     ListView listView;
-
+    int roompid;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        //Toast.makeText(getContext(),"sell",Toast.LENGTH_SHORT).show();
+
         //personpid 불러오기
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
-        ppid = pref.getInt("personpid", 0);
+        //ppid = pref.getInt("personpid", 0);
         Log.d("ppid in 판매내역 목록>> ", "" + ppid);
 
         //통신
-        new JSONTask().execute(url.getMainUrl() + "/sell/sold_info");
+        new JSONTask().execute(url.getMainUrl() + "/chat/list/seller");
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.sell_fragment, container, false);
-        listView = (ListView) rootView.findViewById(R.id.listView);
+        //리스트뷰 부분
+
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.activity_chatsell_fragment, container, false);
+        listView = (ListView) rootView.findViewById(R.id.listView_sell);
+
+        //이거지움
+        //adapter = new Chatsell_fragment.ChatroomAdapter();
+        //listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) //position은 몇번째 아이템인지 인덱스값
-            {
-                HotelItem item = (HotelItem) adapter.getItem(position);
-                Toast.makeText(getContext(),"선택 : "+item.getPname(), Toast.LENGTH_LONG).show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ChatroomItem item = (ChatroomItem) parent.getAdapter().getItem(position);
+                //Toast.makeText(getContext(), "선택된 것:"+item.getProduct_name(),Toast.LENGTH_SHORT).show();
+
+                //sellfrag에서 온걸 알려줌
+                Intent intent = new Intent(getContext(), ChattingActivity.class);
+                intent.putExtra("request",BasicInfo.REQUEST_FROMSELLCHAT);
+                intent.putExtra("roompid", item.roompid);
+                startActivity(intent);
             }
         });
 
         return rootView;
     }
+    class ChatroomAdapter extends BaseAdapter {
 
-    class HotelAdapter extends BaseAdapter {
+        ArrayList<ChatroomItem> items= new ArrayList<>();
 
-        ArrayList<HotelItem> items = new ArrayList<HotelItem>();
-
-        @Override
-        public int getCount() //몇개의 아이템이 있니?
-        {
-            return items.size();
-        }
-
-        public void addItem(HotelItem item) {
+        public void addItem(ChatroomItem item) {
             items.add(item);
         }
 
         @Override
-        public Object getItem(int position) //몇 번째 아이템인지
-        {
+        public int getCount() {
+            return items.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
             return items.get(position);
         }
 
         @Override
-        public long getItemId(int position) //id있음 넘겨줘
-        {
+        public long getItemId(int position) {
             return position;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            HotelItemView view=null;
-            if(convertView==null) {
-                view= new HotelItemView(getContext());
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ChatroomItemView view = null;
+            if(convertView == null) {
+                view = new ChatroomItemView(getContext());
+            }
+            else {
+                view = (ChatroomItemView) convertView;
             }
 
-            else{
-                view= (HotelItemView) convertView;
-            }
-            HotelItem item=items.get(position);
-            view.setProductname(item.getPname());
-            view.setProductpid(item.getProductpid());
-            view.setProductAddress(item.getPaddr());
-            view.setProductimage(item.getPimg());
-            view.setFormerPrice(item.getFprice());
-            view.setProductDate_s(item.getPdate_s());
-            view.setProductPrice(item.getPprice());
-            view.setProductDate_e(item.getPdate_e());
+            ChatroomItem item = items.get(position);
+            view.setProduct_name(item.getProduct_name());
             return view;
         }
     }
@@ -133,7 +132,7 @@ public class sell_Fragment extends Fragment {
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("seller_personpid", ppid);
+                jsonObject.put("personpid", ppid);
                 Log.d("json put 다음", "");
 
                 HttpURLConnection con = null;
@@ -202,27 +201,24 @@ public class sell_Fragment extends Fragment {
             super.onPostExecute(result);
             //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
 
-            final HotelAdapter adapter=new HotelAdapter();
-            if(result==null) return;
+            final ChatroomAdapter adapter = new ChatroomAdapter();
+            if (result == null) return;
 
             try {
                 JSONArray jsonArray = new JSONArray(result);
 
-                //Log.d("jsonArray개수>",""+jsonArray.length());
+                Log.d("jsonArray개수>","hijson"+jsonArray.length());
+
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int productpid = jsonObject.getInt("productpid");
-                    String productimg = jsonObject.getString("productimage");
+                    Log.d("here","여기까지");
+                    roompid = jsonObject.getInt("roompid");
                     String productname = jsonObject.getString("productname");
-                    String date_s = jsonObject.get("productdate_s").toString().substring(0, 10);
-                    String date_e = jsonObject.get("productdate_e").toString().substring(0, 10);
-                    String productaddr = jsonObject.getString("productaddress");
-                    int forprice = jsonObject.getInt("formerprice");
-                    int productprice = jsonObject.getInt("productprice");
-                    Log.d("판매리스트1", ""+productpid+", ,"+productimg+", ,"+productname);
-                    Log.d("판매리스트2", "시작"+date_s+"끝"+date_e+", ,"+productaddr+", ,"+forprice+", ,"+productprice);
 
-                    adapter.addItem(new HotelItem(productpid, productimg, productname, date_s, date_e, productaddr, forprice, productprice));
+                    //Log.d(productname, "pname"+productname);
+
+                    adapter.addItem(new ChatroomItem(productname, roompid));
+                    Log.d("로그를"+i,productname+roompid);
                     listView.setAdapter(adapter);
 
                 }
@@ -232,6 +228,8 @@ public class sell_Fragment extends Fragment {
             }
         }
 
-    }
+        }
+
+
 
 }

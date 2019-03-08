@@ -2,9 +2,13 @@ package com.example.hahaj.yeogida8;
 
 public class NetworkUrl {
 
+
     //main URL
     //Url 바뀌면 여기만 바꾸면 됨.
-    private String main = new String("http://ef617dde.ngrok.io");
+
+    private String main = new String("");
+
+
 
     public String getMainUrl() {
         return this.main;
@@ -35,4 +39,5 @@ public class NetworkUrl {
     public static String product_choice_register;
     public static String product_choice_delete;
     */
+
 }

@@ -40,11 +40,15 @@ import java.util.Comparator;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
+<<<<<<< HEAD
+public class    Search_MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+=======
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Search_MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+>>>>>>> upstream/dev
 
     //화면 전환시 요청 코드//
     public static final int REQUEST_CODE_NOTIFY_QNA = 101;

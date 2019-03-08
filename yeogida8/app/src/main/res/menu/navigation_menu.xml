@@ -9,5 +9,7 @@
         android:title="찜한상품" />
     <item android:id="@+id/recentView"
         android:title="최근본목록" />
+    <item android:id="@+id/chatting"
+        android:title="채팅" />
 
 </menu>
