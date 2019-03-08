@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Fragment3 fragment3;
     TextView textView;
     EditText searchtxt;
+    //스피너에 들어갈 선택지
     String[] items = {"전체","서울","경기","부산"};
 
 
@@ -179,22 +181,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //passPersonpid3(personpid);
         Log.d("Fragment3에 personpid 보냄", ""+personpid);
 
+        //툴바
         t1 = findViewById(R.id.toolbar);
         setSupportActionBar(t1);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        //햄버거 버튼 눌렀을 때 옆에서 열리는게 드로어고 그 위에 뜨는 화면이 네비게이션뷰
+
         mDrawerLayout = findViewById(R.id.activity_main);
+        //네비게이션 드로어 여는 버튼(햄버거버튼)
         imgright = findViewById(R.id.imgright);
 
+        //네이게이션뷰
         navigationView = findViewById(R.id.nav_id);
+        //네비게이션뷰 앞으로 가져와 눌리게함(가려지지않게)
         navigationView.bringToFront();
 
+        //네비게이션 아이템 리스너
         if(navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
         }
 
+        //드로어 리스너
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        //햄버거버튼 눌리면 네비게이션뷰(드로어) 열림
         imgright.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+
 
         searchtxt =(EditText) findViewById(R.id.searchtext);
         //resSearch = searchtxt.getText().toString();
@@ -255,15 +267,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         textView = (TextView) findViewById(R.id.textView);
 
+        //스피너
         Spinner spinner=(Spinner)findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter= new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item,items
-        );//어레이 어댑터 객체 생성
+        //스피너에 올라갈 String값
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this, R.layout.spinner_item,items);//어레이 어댑터 객체 생성
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
         spinner.setAdapter(adapter);
 
-
+        //스피너 리스너
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -308,14 +320,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        //프래그먼트 설정 부분 -> 기본 프래그먼트 화면으로 fragment1설정해놓음
         getSupportFragmentManager().beginTransaction().add(R.id.container, fragment1).commit();
 
+        //탭 레이아웃
         TabLayout tabs=(TabLayout) findViewById(R.id.tabs);
+        //탭추가
         tabs.addTab(tabs.newTab().setText("최신순"));
         tabs.addTab(tabs.newTab().setText("인기순"));
         tabs.addTab(tabs.newTab().setText("마감임박"));
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
         //tabs.addTab(tabs.newTab());
 
+        //탭 리스너(눌릴때)
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -363,6 +380,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    //메뉴 아이템의 아이템이 눌렸을때 true반환
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {

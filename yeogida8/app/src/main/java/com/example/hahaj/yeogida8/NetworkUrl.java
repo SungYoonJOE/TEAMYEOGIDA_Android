@@ -9,7 +9,6 @@ public class NetworkUrl {
     private String main = new String("http://106ae1e8.ngrok.io");
 
 
-
     public String getMainUrl() {
         return this.main;
     }
