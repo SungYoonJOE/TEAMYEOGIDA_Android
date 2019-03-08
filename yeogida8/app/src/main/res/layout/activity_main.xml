@@ -55,13 +55,14 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
+                android:background="@color/whiteColor"
                 android:elevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    >
 
                     <View
                         android:layout_width="0dp"
@@ -69,20 +70,26 @@
                         android:layout_weight="1" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_weight="15"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/seachbar"
+                    android:background="@drawable/searchbarstyle">
 
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
                 <EditText
                         android:id="@+id/searchtext"
                         android:layout_weight="15"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:ems="10"
                         android:inputType="textPersonName"
                         android:layout_gravity="right|center"
-                        android:background="@drawable/search"
+                        android:background="@null"
                         />
 
                     <View
@@ -99,6 +106,11 @@
                         android:adjustViewBounds="true"
                         android:background="@drawable/ic_search"/>
 
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
                 </LinearLayout>
 
                     <View
@@ -108,9 +120,9 @@
 
                     <ImageButton
                         android:id="@+id/imgright"
-                        android:layout_weight="2"
+                        android:layout_weight="1.5"
                         android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_height="25dp"
                         android:adjustViewBounds="true"
                         android:layout_gravity="right|center"
                         android:background="@drawable/profileblue" />
@@ -140,19 +152,22 @@
                     android:id="@+id/tabs"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/background_light"
                     android:elevation="1dp"
-                    app:tabGravity="center"
-                    app:tabMode="scrollable"
-                    app:tabSelectedTextColor="@color/colorAccent"
-                    app:tabTextColor="@color/colorPrimary">
+                    app:tabGravity="fill"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/colorselectedTabtext"
+                    app:tabTextColor="@color/colorTab"
+
+                    >
 
                 </android.support.design.widget.TabLayout>
+
 
                 <Spinner
                     android:layout_weight="1.5"
                     android:layout_toRightOf="@+id/tabs"
-                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:layout_gravity="center"
                     android:id="@+id/spinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
@@ -177,7 +192,8 @@
             android:layout_gravity="bottom|end"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/floatingbutton" />
+            app:srcCompat="@drawable/floatingbutton"
+            android:background="@color/mainColor"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

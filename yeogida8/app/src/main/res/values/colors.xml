@@ -3,6 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="headerColor">#CDECFA</color>
+    <color name="whiteColor">#FFFFFF</color>
     <color name="mainColor">#6DB5E5</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorTab">#E2E2E2</color>
+    <color name="colorSpinner">#E2E2BB</color>
+    <color name="colorselectedTabtext">#000000</color>
+
 </resources>
