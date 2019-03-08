@@ -206,15 +206,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-<<<<<<< HEAD
-        EditText search=(EditText) findViewById(R.id.searchtext);
-        //search.setSelection(2);
-        resSearch=search.getText().toString();
-=======
-
         searchtxt =(EditText) findViewById(R.id.searchtext);
         //resSearch = searchtxt.getText().toString();
->>>>>>> upstream/dev
         //통신으로 resSearch를 주고 해당 화면을 검색 후 해당상품 정보 화면 search_mainactivity에 있는 search_fragment에 띄워야함
        // Log.d("검색한 단어",resSearch);
 
