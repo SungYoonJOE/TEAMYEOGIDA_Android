@@ -9,36 +9,6 @@
     android:id="@+id/activity_main"
     tools:context=".Recentlist_MainActivity">
 
-    <android.support.design.widget.NavigationView
-
-        app:headerLayout="@layout/header"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:menu="@menu/navigation_menu"
-        android:layout_gravity="end"
-        android:id="@+id/nav_id">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="300dp">
-
-            <ImageButton
-                android:layout_marginLeft="20dp"
-                android:id="@+id/img1"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@drawable/ic_hotel2"/>
-
-            <ImageButton
-                android:id="@+id/img2"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="30dp"
-                android:background="@drawable/ic_hotel"/>
-        </LinearLayout>
-    </android.support.design.widget.NavigationView>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -52,83 +22,44 @@
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+            <!--툴바-->
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
+                android:background="@color/whiteColor"
                 android:elevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:src="@drawable/lastestseen_blue"/>
+                    <!--간격 띄우기-->
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="3" />
+                        android:layout_weight="1" />
 
-                    <EditText
-                        android:id="@+id/editText3"
+                    <TextView
+                        android:id="@+id/recentlistView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:layout_gravity="right|center" />
-
+                        android:text="최근 본 목록"
+                        android:textSize="18dp"
+                        android:textColor="@color/mainColor"/>
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <ImageButton
-                        android:id="@+id/search_button"
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:layout_gravity="right|center"
-                        android:background="@drawable/ic_search"/>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <ImageButton
-                        android:id="@+id/imgright"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="right|center"
-                        android:background="@drawable/ic_action_name" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
+                        android:layout_weight="9" />
                 </LinearLayout>
 
             </android.support.v7.widget.Toolbar>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/background_light">
-
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/background_light"
-                    android:elevation="1dp"
-                    app:tabGravity="center"
-                    app:tabMode="scrollable"
-                    app:tabSelectedTextColor="@color/colorAccent"
-                    app:tabTextColor="@color/colorPrimary">
-
-                </android.support.design.widget.TabLayout>
-
-            </RelativeLayout>
 
         </android.support.design.widget.AppBarLayout>
 
