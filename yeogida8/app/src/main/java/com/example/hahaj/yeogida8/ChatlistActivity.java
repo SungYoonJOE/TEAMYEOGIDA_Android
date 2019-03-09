@@ -36,8 +36,8 @@ public class ChatlistActivity extends AppCompatActivity {
 
 
         //툴바
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+  //      setSupportActionBar(toolbar);
 
         //프래그먼트
         fragment_buy = new Chatbuy_fragment();

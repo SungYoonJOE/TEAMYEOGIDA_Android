@@ -10,9 +10,12 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:src="@drawable/blank" />
+        android:src="@drawable/blank"
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -23,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="productname"
-            android:textSize="15dp"/>
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/productaddress"
@@ -31,7 +35,6 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="hotel_address"
-            app:layout_constraintStart_toEndOf="@+id/textView1"
             android:layout_marginTop="5dp"
             android:textSize="15dp"/>
 
@@ -80,7 +83,6 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="formerprice"
-            app:layout_constraintStart_toEndOf="@+id/textView1"
             android:layout_marginTop="5dp"
             android:textSize="15dp"/>
 
@@ -99,7 +101,6 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="productprice"
-            app:layout_constraintStart_toEndOf="@+id/textView1"
             android:layout_marginTop="5dp"
             android:textSize="15dp"/>
 
@@ -113,12 +114,8 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:text="productpid"
-        app:layout_constraintStart_toEndOf="@+id/textView1"
         android:layout_marginTop="5dp"
         android:textSize="0dp"/>
-
-
-
 
     </LinearLayout>
 

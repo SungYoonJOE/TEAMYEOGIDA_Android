@@ -8,7 +8,7 @@
 
     android:textSize="15dp"
 
-    android:textColor="@color/colorTab"
+    android:textColor="#111111"
 
     android:background="@color/whiteColor"
 
