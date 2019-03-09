@@ -35,7 +35,7 @@ public class SearchAddrActivity extends AppCompatActivity {
 
 
     // 우체국 오픈api 인증키
-    private String _key = String.valueOf(R.string.addresskey);
+    private String _key = "";
     private TextView _addressEdit;
     private Button _searchBtn;
     private ListView _addressListView;

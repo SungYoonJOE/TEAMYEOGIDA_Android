@@ -3,6 +3,7 @@ package com.example.hahaj.yeogida8;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -38,6 +39,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 public class BuyItemActivity extends AppCompatActivity {
 
     NetworkUrl url = new NetworkUrl();
@@ -45,7 +47,8 @@ public class BuyItemActivity extends AppCompatActivity {
     //ImageView imageView;
     Bitmap bitmap;
     ImageView imageView1;
-    TextView itemName, itemAddr, itemURL, itemStartDate, itemEndDate, itemPrice, new_itemPrice, itemDeadline, aboutItem2;
+    TextView itemName, itemAddr, itemURL, itemStartDate, itemEndDate, itemPrice, new_itemPrice,aboutItem2;
+//    TextView itemDeadline;
     ImageButton btn_onof;
     Button btn_buy;
     int i=0;
@@ -59,7 +62,10 @@ public class BuyItemActivity extends AppCompatActivity {
     //지도API
     //LinearLayout mapview;
     TMapView tmap;
-    private final String MAPAPPKEY = String.valueOf(R.string.mapkey);
+    //private final String MAPAPPKEY = String.valueOf(R.string.mapkey);
+    //Resources res = context.getResources();
+    //private final String MAPAPPKEY = getResources().getString(getResources().getIdentifier("mapkey", "string", "com.example.hahaj.yeogida8"));
+    String MAPAPPKEY = getResources().getString(R.string.mapkey);
     double lat;
     double lng;
 
@@ -78,12 +84,12 @@ public class BuyItemActivity extends AppCompatActivity {
 
         itemPrice = (TextView)findViewById(R.id.itemPrice);
         new_itemPrice = (TextView)findViewById(R.id.new_itemPrice);
-        itemDeadline = (TextView)findViewById(R.id.itemDeadline);
+        //itemDeadline = (TextView)findViewById(R.id.itemDeadline);
         aboutItem2 = (TextView)findViewById(R.id.aboutItem2);
 
 
         //personpid 불러오기
-        //SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //ppid = pref.getInt("personpid", 0); //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         Log.d("제품(상세)조회/구매화면 ppid>> ",""+ppid);
 
@@ -522,9 +528,6 @@ public class BuyItemActivity extends AppCompatActivity {
 
         }
     }
-
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
