@@ -14,27 +14,31 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:background="@color/chattingbg"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:background="@color/chattingbg"
+        android:weightSum="15">
         <Button
             android:id="@+id/decidetosell"
             android:text="판매확정"
-            android:layout_width="80dp"
+            android:layout_weight="3"
+            android:layout_width="0dp"
             android:layout_height="match_parent" />
         <EditText
             android:id="@+id/chat"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="9"/>
         <Button
             android:id="@+id/sendbutton"
-            android:text="SEND"
-            android:layout_width="80dp"
+            android:text="send"
+            android:layout_weight="3"
+            android:layout_width="0dp"
             android:layout_height="match_parent" />
     </LinearLayout>
 

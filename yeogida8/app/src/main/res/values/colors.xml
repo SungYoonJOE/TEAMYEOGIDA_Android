@@ -6,8 +6,9 @@
     <color name="whiteColor">#FFFFFF</color>
     <color name="mainColor">#6DB5E5</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorTab">#E2E2E2</color>
+    <color name="colorTab">#D3D3D3</color>
     <color name="colorSpinner">#E2E2BB</color>
     <color name="colorselectedTabtext">#000000</color>
+    <color name="chattingbg">#F0FFFF</color>
 
 </resources>
