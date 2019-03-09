@@ -50,10 +50,10 @@ public class ChattingActivity extends AppCompatActivity {
     ChatData chat;
     ChatData newchat;
 
-    private int productpid=11;
+    private int productpid;
     //닉네임 대신 personpid 이용하면됨!
     private String nick = "nick1";
-    int personpid=6;
+    int personpid;
 
     //private DatabaseReference myRef;
 
@@ -92,7 +92,7 @@ public class ChattingActivity extends AppCompatActivity {
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
-        //personpid = pref.getInt("personpid", 0);
+        personpid = pref.getInt("personpid", 0);
 
         //통신
 
