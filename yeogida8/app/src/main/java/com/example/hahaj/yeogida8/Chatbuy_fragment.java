@@ -39,7 +39,7 @@ public class Chatbuy_fragment extends Fragment {
 
     ChatroomAdapter adapter;
     ListView listView;
-    int ppid=6;
+    int ppid;
     private int productpid;
     private NetworkUrl url = new NetworkUrl();
     int roompid;
@@ -53,7 +53,7 @@ public class Chatbuy_fragment extends Fragment {
 
         //personpid 불러오기
         SharedPreferences pref = this.getActivity().getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
-        //ppid = pref.getInt("personpid", 0);
+        ppid = pref.getInt("personpid", 0);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         Log.d("ppid in 최신순목록>> ", "" + ppid);
 
