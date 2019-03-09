@@ -14,12 +14,15 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:background="@color/chattingbg"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:orientation="horizontal"
+        android:background="@color/chattingbg"
         android:weightSum="1">
         <EditText
             android:id="@+id/chat"

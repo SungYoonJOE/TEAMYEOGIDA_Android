@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/activity_main"
-    tools:context=".yeogida.MainActivity">
+    tools:context=".MainActivity">
 
     <android.support.design.widget.NavigationView
 
@@ -23,19 +23,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="300dp">
 
-            <!--<ImageButton-->
-                <!--android:layout_marginLeft="20dp"-->
-                <!--android:id="@+id/img1"-->
-                <!--android:layout_width="100dp"-->
-                <!--android:layout_height="100dp"-->
-                <!--android:background="@drawable/ic_hotel2"/>-->
 
-            <!--<ImageButton-->
-                <!--android:id="@+id/img2"-->
-                <!--android:layout_width="100dp"-->
-                <!--android:layout_height="100dp"-->
-                <!--android:layout_marginLeft="30dp"-->
-                <!--android:background="@drawable/ic_hotel"/>-->
         </LinearLayout>
     </android.support.design.widget.NavigationView>
 
@@ -192,8 +180,9 @@
             android:layout_gravity="bottom|end"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/floatingbutton"
-            android:background="@color/mainColor"/>
+            android:backgroundTint="@color/mainColor"
+            app:srcCompat="@drawable/plusasset"
+            />
 
     </android.support.design.widget.CoordinatorLayout>
 

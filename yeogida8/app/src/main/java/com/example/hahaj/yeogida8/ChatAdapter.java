@@ -68,7 +68,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
             holder.Textview_msg.setGravity(Gravity.RIGHT);
         }
         else{
-            //holder.Textview_msg.setBackgroundResource(R.drawable.chatbubble);
+            //holder.Textview_msg.setBackgroundResource(R.drawable.chatbubble_left);
             holder.Textview_msg.setGravity(View.TEXT_ALIGNMENT_TEXT_START);
 
         }
