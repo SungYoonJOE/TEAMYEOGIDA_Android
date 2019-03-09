@@ -59,7 +59,7 @@ public class BuyItemActivity extends AppCompatActivity {
     //지도API
     //LinearLayout mapview;
     TMapView tmap;
-    private final String MAPAPPKEY = "";
+    private final String MAPAPPKEY = String.valueOf(R.string.mapkey);
     double lat;
     double lng;
 
