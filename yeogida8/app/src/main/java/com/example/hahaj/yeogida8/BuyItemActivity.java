@@ -45,7 +45,8 @@ public class BuyItemActivity extends AppCompatActivity {
     //ImageView imageView;
     Bitmap bitmap;
     ImageView imageView1;
-    TextView itemName, itemAddr, itemURL, itemStartDate, itemEndDate, itemPrice, new_itemPrice, itemDeadline, aboutItem2;
+    TextView itemName, itemAddr, itemURL, itemStartDate, itemEndDate, itemPrice, new_itemPrice,aboutItem2;
+//    TextView itemDeadline;
     ImageButton btn_onof;
     Button btn_buy;
     int i=0;
@@ -78,7 +79,7 @@ public class BuyItemActivity extends AppCompatActivity {
 
         itemPrice = (TextView)findViewById(R.id.itemPrice);
         new_itemPrice = (TextView)findViewById(R.id.new_itemPrice);
-        itemDeadline = (TextView)findViewById(R.id.itemDeadline);
+        //itemDeadline = (TextView)findViewById(R.id.itemDeadline);
         aboutItem2 = (TextView)findViewById(R.id.aboutItem2);
 
 
