@@ -16,26 +16,31 @@
             android:id="@+id/linear1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/whiteColor"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/image1"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:paddingBottom="5dp"
                 android:adjustViewBounds="true" />
 
-            <RelativeLayout
-                android:id="@+id/relNameLike"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TextView
                     android:id="@+id/itemName"
-                    android:layout_width="250dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="신라스테이 광화문"
-                    android:textColor="@android:color/black"
-                    android:textSize="25dp" />
-
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3" />
                 <ImageButton
                     android:id="@+id/btn_likeonoff"
                     android:layout_width="wrap_content"
@@ -43,118 +48,140 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
-                    android:layout_toEndOf="@+id/itemName"
-                    android:layout_toRightOf="@+id/itemName"
                     android:background="@android:color/transparent"
                     app:srcCompat="@drawable/likeoff" />
-            </RelativeLayout>
-
-            <!-- Address, URL, (Rel StartDate, EndDate)-->
-            <LinearLayout
-                android:id="@+id/linearAddr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/itemAddr"
-                    android:layout_width="250dp"
-                    android:layout_height="30dp"
-                    android:text="서울시 종로구 삼봉로 71 "
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp" />
-
-                <TextView
-                    android:id="@+id/itemURL"
-                    android:layout_width="350dp"
-                    android:layout_height="30dp"
-                    android:autoLink="web"
-                    android:linksClickable="true"
-                    android:text="http://www.shillastay.com/gwanghwamun/index.do "
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp">
-                    <TextView
-                        android:id="@+id/itemStartDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:text="2018.06.03"
-                        android:textColor="@android:color/black"
-                        android:textSize="15dp" />
-                    <TextView
-                        android:id="@+id/itemEndDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_toEndOf="@+id/itemStartDate"
-                        android:layout_toRightOf="@+id/itemStartDate"
-                        android:layout_weight="1"
-                        android:text=" 2018.06.18"
-                        android:textColor="@android:color/holo_red_light"
-                        android:textSize="15dp" />
-                </RelativeLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
             </LinearLayout>
 
-            <!--relPrice, new Price-->
-            <RelativeLayout
-                android:id="@+id/relPrice"
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
                 android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:src="@drawable/productbuy_location"/>
+                <TextView
+                    android:id="@+id/itemAddr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="대한민국 서울 종로구 삼봉로 71"
+                    android:textColor="#7f7f7f"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:src="@drawable/productbuy_web"/>
+                <TextView
+                    android:id="@+id/itemURL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="http://www.shillastay.com/gwanghwamun/index.do "
+                    android:textColor="#7f7f7f"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:src="@drawable/productbuy_won"/>
                 <TextView
                     android:id="@+id/itemPrice"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="15dp"
+                    android:textSize="13sp"
+                    android:textColor="#7f7f7f"
+                    android:lineSpacingExtra="1sp"
+                    android:gravity="end"
                     android:layout_weight="0"
-                    android:text="가격 : 250,000원"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp" />
+                    android:text="가격 : 250,000원" />
 
                 <TextView
                     android:id="@+id/new_itemPrice"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="#ea4335"
+                    android:lineSpacingExtra="1sp"
                     android:layout_alignParentTop="true"
                     android:layout_toEndOf="@+id/itemPrice"
                     android:layout_toRightOf="@+id/itemPrice"
                     android:layout_weight="1"
-                    android:text="100,000원"
-                    android:textColor="@android:color/holo_red_light"
-                    android:textSize="15dp" />
-                 <!--
-                <TextView
-                    android:id="@+id/itemDeadline"
+                    android:text="100,000원" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+                <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:src="@drawable/productbuy_calendar"/>
+                <TextView
+                    android:id="@+id/itemStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="15dp"
+                    android:textSize="14sp"
+                    android:textColor="#7f7f7f"
+                    android:text="2018.06.03" />
+                <TextView
+                    android:id="@+id/itemEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#7f7f7f"
                     android:layout_alignParentTop="true"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginRight="24dp"
-                    android:layout_weight="2"
-                    android:text="D-24H"
-                    android:textColor="@android:color/holo_red_light"
-                    android:textSize="15dp" />
-                    -->
-            </RelativeLayout>
+                    android:layout_toEndOf="@+id/itemStartDate"
+                    android:layout_toRightOf="@+id/itemStartDate"
+                    android:layout_weight="1"
+                    android:text=" 2018.06.18" />
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/relText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="5dp"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/aboutItem1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="상품 설명"
-                    android:textSize="15dp" />
-                <TextView
-                    android:id="@+id/aboutItem2"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="신라스테이 광화문입니다. 개인적인 사정으로 예약을 취소할 것 같습니다. 필요하신 분 찾습니다."/>
+                    android:textColor="#7f7f7f"
+                    android:textSize="13sp" />
+                    <TextView
+                        android:id="@+id/aboutItem2"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:textColor="#7f7f7f"
+                        android:textSize="13sp"
+                        android:text="신라스테이 광화문입니다. 개인적인 사정으로 예약을 취소할 것 같습니다. 필요하신 분 찾습니다."/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

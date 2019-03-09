@@ -3,6 +3,7 @@ package com.example.hahaj.yeogida8;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -38,6 +39,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 public class BuyItemActivity extends AppCompatActivity {
 
     NetworkUrl url = new NetworkUrl();
@@ -60,7 +62,10 @@ public class BuyItemActivity extends AppCompatActivity {
     //지도API
     //LinearLayout mapview;
     TMapView tmap;
-    private final String MAPAPPKEY = String.valueOf(R.string.mapkey);
+    //private final String MAPAPPKEY = String.valueOf(R.string.mapkey);
+    //Resources res = context.getResources();
+    //private final String MAPAPPKEY = getResources().getString(getResources().getIdentifier("mapkey", "string", "com.example.hahaj.yeogida8"));
+    String MAPAPPKEY = getResources().getString(R.string.mapkey);
     double lat;
     double lng;
 
@@ -523,9 +528,6 @@ public class BuyItemActivity extends AppCompatActivity {
 
         }
     }
-
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
