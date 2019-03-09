@@ -65,7 +65,8 @@ public class BuyItemActivity extends AppCompatActivity {
     //private final String MAPAPPKEY = String.valueOf(R.string.mapkey);
     //Resources res = context.getResources();
     //private final String MAPAPPKEY = getResources().getString(getResources().getIdentifier("mapkey", "string", "com.example.hahaj.yeogida8"));
-    String MAPAPPKEY = getResources().getString(R.string.mapkey);
+//    String MAPAPPKEY = getResources().getString(R.string.mapkey);
+    String MAPAPPKEY = "";
     double lat;
     double lng;
 
@@ -524,8 +525,6 @@ public class BuyItemActivity extends AppCompatActivity {
 
                 e1.printStackTrace();
             }
-
-
         }
     }
 
