@@ -9,7 +9,6 @@
     android:id="@+id/activity_main"
     tools:context=".Recentlist_MainActivity">
 
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,7 +49,7 @@
                         android:id="@+id/recentlistView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="최근 본 목록"
+                        android:text="최근 본 상품"
                         android:textSize="18dp"
                         android:textColor="@color/mainColor"/>
                     <View
