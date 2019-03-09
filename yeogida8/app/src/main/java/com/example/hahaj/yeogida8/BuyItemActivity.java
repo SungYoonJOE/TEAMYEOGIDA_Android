@@ -89,7 +89,7 @@ public class BuyItemActivity extends AppCompatActivity {
 
 
         //personpid 불러오기
-        //SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //ppid = pref.getInt("personpid", 0); //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         Log.d("제품(상세)조회/구매화면 ppid>> ",""+ppid);
 
