@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ import java.util.Calendar;
 
 public class UpdateItemActivity extends AppCompatActivity {
 
-//    private static final int SEARCH_ADDRESS_ACTIVITY = 20000;
+    //    private static final int SEARCH_ADDRESS_ACTIVITY = 20000;
     private static final int PICK_IMAGE_REQUEST = 1;
     private String TAG = "UpdateItemActivity";
 
@@ -56,8 +57,8 @@ public class UpdateItemActivity extends AppCompatActivity {
     Mylist_Fragment myFrag = new Mylist_Fragment();
 
 
-    ImageView mPhoto;
-    Bitmap checkImg;
+    ImageView productPhoto;
+    Bitmap bitmap;
     EditText inputName, inputAddr_detail, inputURL, inputPhoneNum;
     TextView selectFirst, selectLast, aboutItem1, txtAddr;
     EditText inputPrice, inputNewPrice, inputAboutItem;
@@ -127,15 +128,16 @@ public class UpdateItemActivity extends AppCompatActivity {
         Log.d("메인->상품등록 personpid", ""+personpid);
         */
 
-        inputName = (EditText)findViewById(R.id.inputName_up);
-        txtAddr = (TextView)findViewById(R.id.txtAddr_up);
+        productPhoto = (ImageView)findViewById(R.id.productPhoto_up);
+        inputName = (EditText)findViewById(R.id.editText_productName_up);
+        txtAddr = (TextView)findViewById(R.id.textViewProductAddr_up);
         //inputAddr = (EditText)findViewById(R.id.inputAddr_up);
-        inputAddr_detail = (EditText)findViewById(R.id.inputAddr_detail_up);
-        inputURL = (EditText)findViewById(R.id.inputURL_up);
-        inputPrice = (EditText)findViewById(R.id.inputPrice_up);
-        inputNewPrice = (EditText)findViewById(R.id.inputNewPrice_up);
-        inputPhoneNum = (EditText)findViewById(R.id.inputPhoneNum_up);
-        inputAboutItem = (EditText)findViewById(R.id.inputAboutItem_up);
+        inputAddr_detail = (EditText)findViewById(R.id.editTextAddrDetail_up);
+        inputURL = (EditText)findViewById(R.id.editTextProductUrl_up);
+        inputPrice = (EditText)findViewById(R.id.editTextFormerPrice_up);
+        inputNewPrice = (EditText)findViewById(R.id.editTextNewPrice_up);
+        inputPhoneNum = (EditText)findViewById(R.id.editTextPhoneNum_up);
+        inputAboutItem = (EditText)findViewById(R.id.editTextAboutProduct_up);
 
         //productpid 넘겨 받기
         Intent intent = getIntent();
@@ -148,8 +150,8 @@ public class UpdateItemActivity extends AppCompatActivity {
 
 
         //사진추가를 누를 경우
-        mPhoto = (ImageView)findViewById(R.id.mPhoto_up);
-        mPhoto.setOnClickListener(new View.OnClickListener() {
+        productPhoto = (ImageView)findViewById(R.id.productPhoto_up);
+        productPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 takePictureFromGallery();
@@ -157,7 +159,7 @@ public class UpdateItemActivity extends AppCompatActivity {
         });
 
         //주소찾기 버튼
-        btn_searchAddr = (Button)findViewById(R.id.btn_searchAddr_up);
+        btn_searchAddr = (Button)findViewById(R.id.searchAddrButton_up);
         btn_searchAddr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +173,7 @@ public class UpdateItemActivity extends AppCompatActivity {
         initDate();
 
         //수정버튼을 누를 경우
-        btn_updateRe = (Button)findViewById(R.id.btn_update_Re);
+        btn_updateRe = (Button)findViewById(R.id.productUpdateButton);
         btn_updateRe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -387,13 +389,13 @@ public class UpdateItemActivity extends AppCompatActivity {
                         Log.d("여기까지", "ㅇ4");
                         path = getPathFromURI(data.getData());
                         Log.d("사진 경로", path);
-                        mPhoto.setImageURI(data.getData());
+                        productPhoto.setImageURI(data.getData());
 //                    Log.d("이미지", img.toString());
 //                    upload.setVisibility(View.VISIBLE);
                     }
                     break;
 
-                    //주소받아오기
+                //주소받아오기
                 case BasicInfo.SEARCH_ADDRESS_FROM_UPDATE:
                     Log.d("주소받아오기 REQUEST>>", "여기까지 인정1");
 
@@ -499,8 +501,8 @@ public class UpdateItemActivity extends AppCompatActivity {
     //진권 코드
     private void initDate() {
         final Calendar cal = Calendar.getInstance();
-        selectFirst = (TextView)findViewById(R.id.selectFirst_up);
-        selectLast = (TextView)findViewById(R.id.selectLast_up);
+        selectFirst = (TextView)findViewById(R.id.textViewStartDate_up);
+        selectLast = (TextView)findViewById(R.id.textViewEndDate_up);
         //예약 시작 날짜 선택
         selectFirst.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -640,6 +642,181 @@ public class UpdateItemActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SearchAddrActivity.class);
         intent.putExtra("whereFrom", 2);
         startActivityForResult(intent, BasicInfo.SEARCH_ADDRESS_FROM_UPDATE);
+    }
+
+
+
+    public void setProductimage(final String productimage){
+
+        Thread mThread = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(productimage);
+
+                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+
+                    InputStream is = conn.getInputStream();//InputStream값 가져오기
+                    bitmap = BitmapFactory.decodeStream(is);//Bitmap으로 변ㅇ환
+                }catch (MalformedURLException e){
+                    e.printStackTrace();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                //super.run();
+            }
+        };
+        mThread.start();
+
+        try{
+            mThread.join();
+            productPhoto.setImageBitmap(bitmap);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public class JSONTask_getItemData extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+
+                Log.d("doInBackground 확인", "doIn");
+                //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("productpid", productpid);
+                jsonObject.put("personpid", personpid);
+
+                Log.d("json put 다음", "");
+
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+
+                try {
+                    URL url = new URL(urls[0]);
+                    //연결을 함
+                    con = (HttpURLConnection) url.openConnection();
+
+                    con.setRequestMethod("POST");//POST방식으로 보냄
+                    con.setRequestProperty("Cache-Control", "no-cache");//캐시 설정
+                    con.setRequestProperty("Content-Type", "application/json");//application JSON 형식으로 전송
+                    con.setRequestProperty("Accept", "text/html");//서버에 response 데이터를 html로 받음
+                    con.setDoOutput(true);//Outstream으로 post 데이터를 넘겨주겠다는 의미
+                    con.setDoInput(true);//Inputstream으로 서버로부터 응답을 받겠다는 의미
+                    con.connect();
+
+                    //서버로 보내기위해서 스트림 만듬
+                    OutputStream outStream = con.getOutputStream();
+                    //버퍼를 생성하고 넣음
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+                    writer.write(jsonObject.toString());
+                    writer.flush();
+                    writer.close();//버퍼를 받아줌
+
+                    //서버로 부터 데이터를 받음
+                    InputStream stream = con.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(stream));
+                    StringBuffer buffer = new StringBuffer();
+                    String line = "";
+
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    return buffer.toString();
+                    //서버로 부터 받은 값을 리턴해줌 아마 OK!!가 들어올것임
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (con != null) {
+                        con.disconnect();
+                    }
+                    try {
+                        if (reader != null) {
+                            reader.close();//버퍼를 닫아줌
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
+
+//            final Mylist_Fragment.HotelAdapter adapter = new Mylist_Fragment.HotelAdapter();
+            if(result==null) {
+                Toast.makeText(getApplicationContext(), "삭제할 상품이 없습니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+
+                JSONObject jsonObject = new JSONObject(result);
+
+                int propid = jsonObject.getInt("productpid");
+                String productimg = jsonObject.getString("productimage");
+                String productname = jsonObject.getString("productname");
+                double addr_x = jsonObject.getDouble("productaddress_x");
+                double addr_y = jsonObject.getDouble("productaddress_y");
+                String productURL = jsonObject.getString("productUrl");
+                String date_s = jsonObject.get("productdate_s").toString().substring(0, 10);
+                String date_e = jsonObject.get("productdate_e").toString().substring(0, 10);
+                String productaddr = jsonObject.getString("productaddress");
+                int forprice = jsonObject.getInt("formerprice");
+                int productprice = jsonObject.getInt("productprice");
+                String productText = jsonObject.getString("text");
+                int choice = jsonObject.getInt("choicechecker");
+
+                Log.d("파싱확인1", "상품pid>"+propid+", 이미지"+productimg+", 이름"+productname);
+                Log.d("파싱확인2", "x좌표"+addr_x+", y좌표"+addr_y+", 홈주소"+productURL);
+                Log.d("파싱확인3", "시작"+date_s+", 마지막"+date_e+", 주소"+productaddr);
+                Log.d("파싱확인4", "정가"+forprice+", 판매가"+productprice+", 설명"+productText);
+                Log.d("파싱확인5", "찜여부"+choice);
+
+
+
+                inputName = (EditText)findViewById(R.id.editText_productName_up);
+                txtAddr = (TextView)findViewById(R.id.textViewProductAddr_up);
+                //inputAddr = (EditText)findViewById(R.id.inputAddr_up);
+                inputAddr_detail = (EditText)findViewById(R.id.editTextAddrDetail_up);
+                inputURL = (EditText)findViewById(R.id.editTextProductUrl_up);
+                inputPrice = (EditText)findViewById(R.id.editTextFormerPrice_up);
+                inputNewPrice = (EditText)findViewById(R.id.editTextNewPrice_up);
+                inputPhoneNum = (EditText)findViewById(R.id.editTextPhoneNum_up);
+                inputAboutItem = (EditText)findViewById(R.id.editTextAboutProduct_up);
+
+
+                //화면에 뿌리기
+                setProductimage(productimg);
+                inputName.setText(productname);
+                txtAddr.setText(productaddr);
+                inputURL.setText(productURL);
+                selectFirst.setText(date_s);
+                selectLast.setText(date_e);
+                inputPrice.setText(forprice+"");
+                inputNewPrice.setText(productprice+"");
+                inputAboutItem.setText(productText);
+
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 
 }

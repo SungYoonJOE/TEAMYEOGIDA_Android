@@ -13,10 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
+        android:background="@color/whiteColor"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs_sub"
+            app:tabTextColor="@color/mainColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

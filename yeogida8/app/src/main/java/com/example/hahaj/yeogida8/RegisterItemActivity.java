@@ -33,7 +33,7 @@ import java.util.Date;
 
 public class RegisterItemActivity extends AppCompatActivity {
 
-//    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
+    //    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
     private static final int PICK_IMAGE_REQUEST = 1;
     private String TAG = "RegisterItemActivity";
 
@@ -52,8 +52,6 @@ public class RegisterItemActivity extends AppCompatActivity {
     String path;
 
     int personpid;
-
-
     private String strfirstDate, strlastDate; //예약 시작 날짜, 예약 마지막 날짜 2018-02-14
     int intFirstday, intLastday, intFirstmon, intLastmon;
 
@@ -96,6 +94,7 @@ public class RegisterItemActivity extends AppCompatActivity {
         */
 
 
+        /*
         inputName = (EditText)findViewById(R.id.inputName);
         txtAddr = (TextView)findViewById(R.id.txtAddr);
         //inputAddr = (EditText)findViewById(R.id.inputAddr);
@@ -106,12 +105,23 @@ public class RegisterItemActivity extends AppCompatActivity {
         inputPhoneNum = (EditText)findViewById(R.id.inputPhoneNum);
         inputAboutItem = (EditText)findViewById(R.id.inputAboutItem);
 
+        */
+
+        inputName = (EditText)findViewById(R.id.editText_productName);
+        txtAddr = (TextView)findViewById(R.id.textViewProductAddr);
+        //inputAddr = (EditText)findViewById(R.id.inputAddr);
+        inputAddr_detail = (EditText)findViewById(R.id.editTextAddrDetail);
+        inputURL = (EditText)findViewById(R.id.editTextProductUrl);
+        inputPrice = (EditText)findViewById(R.id.editTextFormerPrice);
+        inputNewPrice = (EditText)findViewById(R.id.editTextNewPrice);
+        inputPhoneNum = (EditText)findViewById(R.id.editTextPhoneNum);
+        inputAboutItem = (EditText)findViewById(R.id.editTextAboutProduct);
         Intent intentAddr = getIntent();
         String res_addr = intentAddr.getStringExtra("address_register");
         txtAddr.setText(res_addr);
 
         //사진추가를 누를 경우
-        mPhoto = (ImageView)findViewById(R.id.mPhoto);
+        mPhoto = (ImageView)findViewById(R.id.productPhoto);
         mPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +130,7 @@ public class RegisterItemActivity extends AppCompatActivity {
         });
 
         //주소찾기 버튼
-        btn_searchAddr = (Button)findViewById(R.id.btn_searchAddr);
+        btn_searchAddr = (Button)findViewById(R.id.searchAddrButton);
         btn_searchAddr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +145,7 @@ public class RegisterItemActivity extends AppCompatActivity {
         initDate();
 
         //등록버튼을 누를 경우
-        btn_reg = (Button)findViewById(R.id.btn_reg);
+        btn_reg = (Button)findViewById(R.id.productRegisterButton);
         btn_reg.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -424,8 +434,8 @@ public class RegisterItemActivity extends AppCompatActivity {
     //진권 코드
     private void initDate() {
         final Calendar cal = Calendar.getInstance();
-        selectFirst = (TextView)findViewById(R.id.selectFirst);
-        selectLast = (TextView)findViewById(R.id.selectLast);
+        selectFirst = (TextView)findViewById(R.id.textViewStartDate);
+        selectLast = (TextView)findViewById(R.id.textViewEndDate);
         //예약 시작 날짜 선택
         selectFirst.setOnClickListener(new View.OnClickListener() {
             @Override
