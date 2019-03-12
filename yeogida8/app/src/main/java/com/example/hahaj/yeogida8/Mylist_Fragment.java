@@ -85,15 +85,6 @@ public class Mylist_Fragment extends Fragment {
         listView = (ListView) rootView.findViewById(R.id.listView);
 
 
-        //dummy data
-        /*
-        final HotelAdapter adapter=new HotelAdapter();
-        adapter.addItem(new HotelItem(productpid, null, "연어 펜션", "2019-01-10", "2019-01-11", "서울시 합정동", 2000, 1000));
-        adapter.addItem(new HotelItem(productpid, null, "08 펜션", "2019-02-10", "2019-02-11", "고양시 마두동", 5000, 1000));
-        listView.setAdapter(adapter);
-        */
-
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) //position은 몇번째 아이템인지 인덱스값

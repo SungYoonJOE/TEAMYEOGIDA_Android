@@ -68,9 +68,8 @@ public class Likedlist_Fragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) //position은 몇번째 아이템인지 인덱스값
             {
-                //HotelItem item = (HotelItem) adapter.getItem(position);
-                //Toast.makeText(getContext(),"선택 : "+item.getPname(), Toast.LENGTH_LONG).show();
 
+                //HotelItem item = (HotelItem) adapter.getItem(position);
                 //인텐트 사용하여 상품조회(구매)화면으로 이동 & productpid 서버에 넘김
                 redirectLikedToBuyActivity(ppid);
             }
