@@ -42,7 +42,7 @@ public class Likedlist_Fragment extends Fragment {
 
     EditText editText;
     EditText editText2;
-    int productpid = 1;
+    int productpid;
     int ppid;
     ListView listView;
 
@@ -69,7 +69,7 @@ public class Likedlist_Fragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) //position은 몇번째 아이템인지 인덱스값
             {
 
-                //HotelItem item = (HotelItem) adapter.getItem(position);
+                HotelItem item = (HotelItem) adapter.getItem(position);
                 //인텐트 사용하여 상품조회(구매)화면으로 이동 & productpid 서버에 넘김
                 redirectLikedToBuyActivity(ppid);
             }
