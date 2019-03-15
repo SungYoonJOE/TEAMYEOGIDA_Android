@@ -66,7 +66,7 @@ public class buy_Fragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) //position은 몇번째 아이템인지 인덱스값
             {
                 HotelItem item = (HotelItem) adapter.getItem(position);
-                Toast.makeText(getContext(),"선택 : "+item.getPname(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "선택 : " + item.getPname(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -100,16 +100,14 @@ public class buy_Fragment extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            HotelItemView view=null;
-            if(convertView==null) {
-                view= new HotelItemView(getContext());
+        public View getView(int position, View convertView, ViewGroup parent) {
+            HotelItemView view = null;
+            if (convertView == null) {
+                view = new HotelItemView(getContext());
+            } else {
+                view = (HotelItemView) convertView;
             }
-            else{
-                view= (HotelItemView) convertView;
-            }
-            HotelItem item=items.get(position);
+            HotelItem item = items.get(position);
             view.setProductname(item.getPname());
             view.setProductpid(item.getProductpid());
             view.setProductAddress(item.getPaddr());
@@ -121,6 +119,7 @@ public class buy_Fragment extends Fragment {
             return view;
         }
     }
+
     public class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -199,8 +198,8 @@ public class buy_Fragment extends Fragment {
             super.onPostExecute(result);
             //Log.d("들어오는 pid", result);//서버로 부터 받은 값을 출력해주는 부분
 
-            final HotelAdapter adapter=new HotelAdapter();
-            if(result==null) return;
+            final HotelAdapter adapter = new HotelAdapter();
+            if (result == null) return;
 
             try {
                 JSONArray jsonArray = new JSONArray(result);
