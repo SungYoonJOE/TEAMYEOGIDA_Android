@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     EditText searchtxt;
     //스피너에 들어갈 선택지
     String[] items = {"전체","서울","경기","부산"};
-
+    TextView nicknameline;
 
     Toolbar t1;
     DrawerLayout mDrawerLayout;
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int personpid;
     String area;
     String resSearch;
+    String nickname;
 
     /* (고)
     RightDrawer에서 해당 메뉴화면 클릭 시 조건에 따라
@@ -172,6 +173,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //font
         Typeface customfont=Typeface.createFromAsset(getAssets(),"fonts/H2PORL.TTF");
 
+        //닉네임 받아오기
+        Intent intent=getIntent();
+        nickname=intent.getStringExtra("nickname");
+
+        Log.d("메인으로온 kakaonick", nickname);
+
+
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
@@ -200,6 +208,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_id);
         //네비게이션뷰 앞으로 가져와 눌리게함(가려지지않게)
         navigationView.bringToFront();
+
+        //헤더 닉네임에 kakaonickname
+        View headerview = navigationView.getHeaderView(0);
+        nicknameline=(TextView) headerview.findViewById(R.id.nickname_text);
+        nicknameline.setText(nickname);
 
         //네비게이션 아이템 리스너
         if(navigationView != null) {
