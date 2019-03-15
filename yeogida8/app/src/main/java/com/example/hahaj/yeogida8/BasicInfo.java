@@ -15,7 +15,7 @@ public class BasicInfo {
     public static final int REQUEST_CODE_MYLIST = 31875668;
 
     public static final int SEARCH_ADDRESS_FROM_UPDATE = 20000;
-    public static final int SEARCH_ADDRESS_FROM_REGISTER= 20001;
+    public static final int SEARCH_ADDRESS_FROM_REGISTER = 20001;
 
     public static final int REDIRECT_UPDATE = 70000;
     public static final int REDIRECT_REGISTER = 80000;
@@ -24,7 +24,6 @@ public class BasicInfo {
     public static final int REQUEST_FROMSELLCHAT = 10101;
     public static final int REQUEST_FROMCHAT = 10102;
     public static final int SEARCH_BUY = 4000;
-
 
 
     //SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);

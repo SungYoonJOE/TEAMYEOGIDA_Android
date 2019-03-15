@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -168,6 +169,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //font
+        Typeface customfont=Typeface.createFromAsset(getAssets(),"fonts/H2PORL.TTF");
+
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
@@ -219,7 +223,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         searchtxt =(EditText) findViewById(R.id.searchtext);
-        //resSearch = searchtxt.getText().toString();
+        searchtxt.setTextColor(getResources().getColor(R.color.colorblack));
+        resSearch = searchtxt.getText().toString();
         //통신으로 resSearch를 주고 해당 화면을 검색 후 해당상품 정보 화면 search_mainactivity에 있는 search_fragment에 띄워야함
        // Log.d("검색한 단어",resSearch);
 
