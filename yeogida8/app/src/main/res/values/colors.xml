@@ -10,5 +10,6 @@
     <color name="colorSpinner">#E2E2BB</color>
     <color name="colorselectedTabtext">#000000</color>
     <color name="chattingbg">#F0FFFF</color>
+    <color name="colorblack">#000000</color>
 
 </resources>

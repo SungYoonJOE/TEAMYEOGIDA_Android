@@ -11,6 +11,8 @@
     <!-- tmap -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+
+
     <application
         android:name=".GlobalApplication"
         android:allowBackup="true"
@@ -26,6 +28,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--티 맵 키-->
+        <meta-data
+            android:name="mapkey"
+            android:value="@string/mapkey"
+            />
+
+        <!--도로명주소 키-->
+        <meta-data
+            android:name="addresskey"
+            android:value="@string/addresskey"
+            />
 
         <!-- 카카오 로그인 -->
         <meta-data

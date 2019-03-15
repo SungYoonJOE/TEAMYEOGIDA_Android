@@ -24,4 +24,4 @@ public class ChatData implements Serializable {
         this.msg = msg;
     }
 
-  }
+}
