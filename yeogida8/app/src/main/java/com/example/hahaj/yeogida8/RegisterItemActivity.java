@@ -1,5 +1,6 @@
 package com.example.hahaj.yeogida8;
 
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -10,7 +11,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,46 +27,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.Response;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class RegisterItemActivity extends AppCompatActivity {
 
-    //    private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
+
     private static final int PICK_IMAGE_REQUEST = 1;
     private String TAG = "RegisterItemActivity";
 
     NetworkUrl url = new NetworkUrl();
 
     ImageView mPhoto;
-    Bitmap checkImg;
     EditText inputName, inputAddr_detail, inputURL, inputPhoneNum;
     TextView selectFirst, selectLast, aboutItem1, txtAddr;
     EditText inputPrice, inputNewPrice, inputAboutItem;
@@ -87,7 +62,6 @@ public class RegisterItemActivity extends AppCompatActivity {
     String itemAddr_detail;
     String itemURL;
     String price;
-    //int price = Integer.parseInt(inputPrice.getText().toString());
     String newPrice;
     String itemPhoneNum;
     String regAboutItem;
@@ -109,32 +83,9 @@ public class RegisterItemActivity extends AppCompatActivity {
 
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
-        //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
         personpid = pref.getInt("personpid", 0);
-        //PreferenceClass pre = new PreferenceClass(getApplicationContext());
-        //int i= pref.getInt("personpid", 0);
-        //int i = pre.getCount();
         Log.d("메인->상품등록 personpid", ""+personpid);
 
-
-        /*
-        //메인에서 전달받은 personpid
-        Intent intent = getIntent();
-        personpid = intent.getIntExtra("personpid", 0);
-        Log.d("메인->상품등록 personpid", ""+personpid);
-        */
-
-        /*
-        inputName = (EditText)findViewById(R.id.inputName);
-        txtAddr = (TextView)findViewById(R.id.txtAddr);
-        //inputAddr = (EditText)findViewById(R.id.inputAddr);
-        inputAddr_detail = (EditText)findViewById(R.id.inputAddr_detail);
-        inputURL = (EditText)findViewById(R.id.inputURL);
-        inputPrice = (EditText)findViewById(R.id.inputPrice);
-        inputNewPrice = (EditText)findViewById(R.id.inputNewPrice);
-        inputPhoneNum = (EditText)findViewById(R.id.inputPhoneNum);
-        inputAboutItem = (EditText)findViewById(R.id.inputAboutItem);
-        */
 
         inputName = (EditText)findViewById(R.id.editText_productName);
         txtAddr = (TextView)findViewById(R.id.textViewProductAddr);
@@ -306,26 +257,8 @@ public class RegisterItemActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    //갤러리에서 사진 선택
-    private void takePictureFromGallery(){
-
-        Intent intents = new Intent(Intent.ACTION_GET_CONTENT);
-        intents.setType("image/*");
-        startActivityForResult(Intent.createChooser(intents, "Select Picture"), PICK_IMAGE_REQUEST);
-
-    }
-    */
-
 
     private void takePictureFromGallery(){
-        /* 성윤코드 (갤러리에서 사진 선택하는 화면으로 넘어가기)
-        Intent intents = new Intent(Intent.ACTION_GET_CONTENT);
-        intents.setType("image/jpg");
-        startActivityForResult(Intent.createChooser(intents, "Select Picture"), 101);
-        */
-
-//        Log.d("여기까지", "ㅇ0");
 
         //진권 코드(갤러리에서 사진 선택하는 화면으로 넘어가기)
         Intent fintent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -363,30 +296,6 @@ public class RegisterItemActivity extends AppCompatActivity {
         try {
             switch (requestCode) {
                 //사진등록
-                /*성윤코드
-                case PICK_IMAGE_REQUEST:
-                    if (resultCode == RESULT_OK && null != data) {
-                        //data에서 절대경로로 이미지를 가져옴
-                        Uri uri = data.getData();
-                        //checkImg = data.getData();
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                        checkImg = bitmap;
-
-                        //이미지 사이즈를 줄인다.
-                        int imgSize = (int) (bitmap.getHeight() * (1024.0 / bitmap.getWidth()));
-                        Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 1024, imgSize, true);
-                        //checkScaled = Bitmap.createScaledBitmap(bitmap, 1024, imgSize, true);
-
-                        mPhoto = (ImageView) findViewById(R.id.mPhoto);
-                        mPhoto.setImageBitmap(scaled);
-
-                    } else {
-                        Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_LONG).show();
-                    }
-                    */
-
-
-                //진권 코드
                 case PICK_IMAGE_REQUEST:
                     Log.d("여기까지", "ㅇ3");
                     if (resultCode == RESULT_OK) {
@@ -394,8 +303,6 @@ public class RegisterItemActivity extends AppCompatActivity {
                         path = getPathFromURI(data.getData());
                         Log.d("사진 경로", path);
                         mPhoto.setImageURI(data.getData());
-//                    Log.d("이미지", img.toString());
-//                    upload.setVisibility(View.VISIBLE);
                     }
 
                     //주소받아오기
@@ -411,15 +318,6 @@ public class RegisterItemActivity extends AppCompatActivity {
                         }
                     }
 
-                    /*
-                    if (resultCode == RESULT_OK) {
-                        String addr = data.getExtras().getString("address");
-                        if (addr != null) {
-                            txtAddr.setText(addr);
-                            Toast.makeText(this, "찾은 주소 : " + addr, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    */
                     break;
                 case BasicInfo.REQUEST_CODE_MAINTOREGISTERITEM:
                     if(resultCode == RESULT_OK){
@@ -434,79 +332,6 @@ public class RegisterItemActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    // 성윤 코드 // 달력으로 예약한 날짜 선택하는 기능
-    private void initDate(){
-        final Calendar cal = Calendar.getInstance();
-        selectFirst = (TextView)findViewById(R.id.selectFirst);
-        selectLast = (TextView)findViewById(R.id.selectLast);
-        //예약 시작 날짜 선택
-        selectFirst.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(RegisterItemActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String txtmsg = String.format("%d년 %d월 %d일", year, month+1, dayOfMonth);
-                        strfirstDate = String.format("%d-%d-%d", year, month+1, dayOfMonth);
-                        selectFirst.setText(txtmsg);
-                        intFirstmon = month;
-                        intFirstday = dayOfMonth;
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());//입력한 날짜 이후로 클릭 안되게 옵션
-                dialog.show();
-            }
-        });
-
-        //예약 마지막 날짜 선택
-        selectLast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(RegisterItemActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        intLastmon = month;
-                        intLastday = dayOfMonth;
-                        checkDate(intFirstmon, intLastmon, intFirstday, intLastday, year);
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());//입력한 날짜 이후로 클릭 안되게 옵션
-                dialog.show();
-
-            }
-        });
-        System.out.println("예약 시작 날짜 " + strfirstDate + "예약 마지막 날짜 " + strlastDate);
-    }
-
-
-    //예약 마지막 날짜 선택시 점검하는 기능
-    private void checkDate(int firstMon, int lastMon, int firstDay, int lastDay, int lastYear){
-        if(firstMon<lastMon) {
-            String txtmsg = String.format("%d년 %d월 %d일", lastYear, lastMon + 1, lastDay);
-            strlastDate  = String.format("%d-%d-%d", lastYear, lastMon + 1, lastDay);
-            selectLast.setText(txtmsg);
-            //Toast.makeText(RegisterItemActivity.this, strlastDate, Toast.LENGTH_LONG).show();
-            System.out.println("예약날짜"+strfirstDate+"~"+strlastDate);
-        }
-        else if(firstMon>lastMon){
-            Toast.makeText(RegisterItemActivity.this, "다시 입력해주세요.", Toast.LENGTH_LONG).show();
-        }
-        else{
-            if(firstDay>lastDay){
-                Toast.makeText(RegisterItemActivity.this, "다시 입력해주세요.", Toast.LENGTH_LONG).show();
-            }
-            else {
-                String txtmsg = String.format("%d년 %d월 %d일", lastYear, lastMon + 1, lastDay);
-                strlastDate = String.format("%d-%d-%d", lastYear, lastMon + 1, lastDay);
-                selectLast.setText(txtmsg);
-                //Toast.makeText(RegisterItemActivity.this, strlastDate, Toast.LENGTH_LONG).show();
-                System.out.println("예약날짜"+strfirstDate+"~"+strlastDate);
-            }
-        }
-    }
-
-    */
     //진권 코드
     private void initDate() {
         final Calendar cal = Calendar.getInstance();
@@ -575,6 +400,7 @@ public class RegisterItemActivity extends AppCompatActivity {
             }
         }
     }
+
     /*
       flag값에 따라
       selectFirst에 setText할지
@@ -647,7 +473,7 @@ public class RegisterItemActivity extends AppCompatActivity {
     public void show1(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("메시지");
-        builder.setMessage("등록이 완료되었습니다!");
+        builder.setMessage("잠시만 기다려 주세요! Success메세지가 보이면 '확인' 를 눌러주세요");
         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

@@ -30,6 +30,8 @@ public class ChatroomItemView extends LinearLayout {
 
     }
 
-    public void setProduct_name(String product_name) {chatroomname.setText(product_name);}
+    public void setProduct_name(String product_name) {
+        chatroomname.setText(product_name);
+    }
 
 }

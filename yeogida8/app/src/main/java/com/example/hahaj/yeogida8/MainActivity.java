@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     EditText searchtxt;
     //스피너에 들어갈 선택지
     String[] items = {"전체","서울","경기","부산"};
-
+    TextView nicknameline;
 
     Toolbar t1;
     DrawerLayout mDrawerLayout;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int personpid;
     String area;
     String resSearch;
+    String nickname;
 
     /* (고)
     RightDrawer에서 해당 메뉴화면 클릭 시 조건에 따라
@@ -168,6 +170,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //font
+        Typeface customfont=Typeface.createFromAsset(getAssets(),"fonts/H2PORL.TTF");
+
+        //닉네임 받아오기
+        Intent intent=getIntent();
+        nickname=intent.getStringExtra("nickname");
+
+//        Log.d("메인으로온 kakaonick", nickname);
+
+
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
         //pref_PERSONPID파일의 personpid 키에 있는 데이터를 가져옴. 없으면 0을 리턴
@@ -197,6 +209,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //네비게이션뷰 앞으로 가져와 눌리게함(가려지지않게)
         navigationView.bringToFront();
 
+        //헤더 닉네임에 kakaonickname
+        View headerview = navigationView.getHeaderView(0);
+        nicknameline=(TextView) headerview.findViewById(R.id.nickname_text);
+        nicknameline.setText(nickname);
+
         //네비게이션 아이템 리스너
         if(navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
@@ -219,7 +236,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         searchtxt =(EditText) findViewById(R.id.searchtext);
-        //resSearch = searchtxt.getText().toString();
+        searchtxt.setTextColor(getResources().getColor(R.color.colorblack));
+        resSearch = searchtxt.getText().toString();
         //통신으로 resSearch를 주고 해당 화면을 검색 후 해당상품 정보 화면 search_mainactivity에 있는 search_fragment에 띄워야함
        // Log.d("검색한 단어",resSearch);
 

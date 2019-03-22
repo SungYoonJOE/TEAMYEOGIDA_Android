@@ -77,7 +77,7 @@ public class Chatbuy_fragment extends Fragment {
                 //Toast.makeText(getContext(), "선택된 것:"+item.getProduct_name(),Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), ChattingActivity.class);
                 intent.putExtra("roompid", item.roompid);
-                intent.putExtra("request",BasicInfo.REQUEST_FROMCHAT);
+                intent.putExtra("request", BasicInfo.REQUEST_FROMCHAT);
                 startActivity(intent);
             }
         });
@@ -87,7 +87,7 @@ public class Chatbuy_fragment extends Fragment {
 
     class ChatroomAdapter extends BaseAdapter {
 
-        ArrayList<ChatroomItem> items= new ArrayList<ChatroomItem>();
+        ArrayList<ChatroomItem> items = new ArrayList<ChatroomItem>();
 
         public void addItem(ChatroomItem item) {
             items.add(item);
@@ -111,10 +111,9 @@ public class Chatbuy_fragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ChatroomItemView view = null;
-            if(convertView == null) {
+            if (convertView == null) {
                 view = new ChatroomItemView(getContext());
-            }
-            else {
+            } else {
                 view = (ChatroomItemView) convertView;
             }
 
@@ -210,15 +209,15 @@ public class Chatbuy_fragment extends Fragment {
             try {
                 JSONArray jsonArray = new JSONArray(result);
 
-                Log.d("jsonArray개수>","hijson"+jsonArray.length());
+                Log.d("jsonArray개수>", "hijson" + jsonArray.length());
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    Log.d("here","여기까지");
+                    Log.d("here", "여기까지");
                     roompid = jsonObject.getInt("roompid");
                     String productname = jsonObject.getString("productname");
 
-                    Log.d(productname, "pname"+productname);
+                    Log.d(productname, "pname" + productname);
 
 
                     adapter.addItem(new ChatroomItem(productname, roompid));

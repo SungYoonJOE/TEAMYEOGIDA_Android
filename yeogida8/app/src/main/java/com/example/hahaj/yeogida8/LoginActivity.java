@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     Button kakaologinbtn;
     int personpid;
     String strpid;
-    String nickname, decnick;
+    String nickname, decnick, ennickname;
     String email;
 
     /*
@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public class JSONTask extends AsyncTask<String, String, String> {
+     public class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... urls) {
@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("doInBackground 확인", "doIn");
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
 
-                nickname=URLEncoder.encode(nickname, "UTF-8");
+                nickname = URLEncoder.encode(nickname, "UTF-8");
                 decnick = URLDecoder.decode(nickname, "UTF-8");
 
                 JSONObject jsonObject = new JSONObject();
@@ -245,7 +245,9 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
 
                 personpid = Integer.parseInt(jsonObject.get("personpid").toString());
+                nickname = jsonObject.get("kakaonickname").toString();
 
+                Log.d("파싱한 kakaonick", nickname+"");
                 Log.d("파싱한 personpid", personpid+"");
 
                 //서버에서 받은 personpid를 pref_PERSONPID라는 파일 안 personpid라는 변수에 저장
@@ -295,6 +297,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void redirectMainActivity(int personpid){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("personpid", personpid);
+        intent.putExtra("nickname", decnick);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         Log.d("카카오 pid : ", ""+intent.getLongExtra("pid", 0));
         Log.d("카카오 nickname : ", ""+intent.getStringExtra("nickname"));

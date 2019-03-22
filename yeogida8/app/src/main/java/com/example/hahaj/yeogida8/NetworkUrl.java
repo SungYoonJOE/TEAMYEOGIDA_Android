@@ -1,11 +1,12 @@
 package com.example.hahaj.yeogida8;
 
+
 public class NetworkUrl {
 
     //main URL
     //Url 바뀌면 여기만 바꾸면 됨.
 
-    private String main = new String("http://505f6e1b.ngrok.io");
+    private String main = new String("");
     public String getMainUrl() {
         return this.main;
     }
@@ -13,11 +14,14 @@ public class NetworkUrl {
     /*
     public StringBuilder login = main.append("/login");
 
+
     //login 통신
     public static String login;
 
+
     //상품등록 통신
     public static String product_register;
+
 
     //상품 수정 통신
     public static String product_update;

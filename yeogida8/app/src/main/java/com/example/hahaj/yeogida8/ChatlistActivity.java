@@ -37,7 +37,7 @@ public class ChatlistActivity extends AppCompatActivity {
 
         //툴바
 //        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-  //      setSupportActionBar(toolbar);
+        //      setSupportActionBar(toolbar);
 
         //프래그먼트
         fragment_buy = new Chatbuy_fragment();
@@ -56,16 +56,15 @@ public class ChatlistActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
 
-                Fragment selected=null;
+                Fragment selected = null;
                 if (position == 0) {
                     //
                     selected = fragment_buy;
-                }
-                else if(position==1){
+                } else if (position == 1) {
                     selected = fragment_sell;
                 }
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.container,selected).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, selected).commit();
             }
 
             @Override
