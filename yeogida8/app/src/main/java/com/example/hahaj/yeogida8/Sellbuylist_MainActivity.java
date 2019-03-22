@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
-public class Sellbuylist_MainActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
+public class Sellbuylist_MainActivity extends AppCompatActivity /*implements  NavigationView.OnNavigationItemSelectedListener*/{
 
     //화면 전환시 요청 코드//
     public static final int REQUEST_CODE_NOTIFY_QNA = 101;
@@ -64,10 +64,11 @@ public class Sellbuylist_MainActivity extends AppCompatActivity implements  Navi
         t1 = findViewById(R.id.toolbar);
         setSupportActionBar(t1);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        mDrawerLayout = findViewById(R.id.activity_main);
+//        mDrawerLayout = findViewById(R.id.activity_main);
         imgright = findViewById(R.id.imgright);
-        nav_id = findViewById(R.id.nav_id);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+//        nav_id = findViewById(R.id.nav_id);
+//        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        /*
         imgright.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,13 +79,17 @@ public class Sellbuylist_MainActivity extends AppCompatActivity implements  Navi
                 }
             }
         });
+        */
 
 
+        /*
         nav_id.bringToFront();
         if(nav_id != null) {
             nav_id.setNavigationItemSelectedListener(this);
         }
+        */
 
+        /*
         ImageButton searchB = (ImageButton) findViewById(R.id.search_button);
         searchB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,16 +101,16 @@ public class Sellbuylist_MainActivity extends AppCompatActivity implements  Navi
                 startActivity(intent_search);
             }
         });
-
+        */
 
 
         fragment1=new sell_Fragment();
         fragment2=new buy_Fragment();
-
         textView = (TextView) findViewById(R.id.textView);
 
 
         getSupportFragmentManager().beginTransaction().add(R.id.container, fragment1).commit();
+
 
         TabLayout tabs=(TabLayout) findViewById(R.id.tabs);
         tabs.addTab(tabs.newTab().setText("판매내역"));
@@ -173,6 +178,7 @@ public class Sellbuylist_MainActivity extends AppCompatActivity implements  Navi
         }
     }
 
+    /*
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -218,7 +224,9 @@ public class Sellbuylist_MainActivity extends AppCompatActivity implements  Navi
 
         return false;
     }
+    */
 
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -226,6 +234,7 @@ public class Sellbuylist_MainActivity extends AppCompatActivity implements  Navi
         }
         return super.onOptionsItemSelected(item);
     }
+    */
 
 
     //로그아웃 재확인 메시지
@@ -261,6 +270,8 @@ public class Sellbuylist_MainActivity extends AppCompatActivity implements  Navi
         });
         builder.show();
     }
+
+
     //로그인으로 돌아가는 메소드(로그아웃 시 필요)
     public void redirectLoginActivity(){
         Intent intent = new Intent(this, LoginActivity.class);

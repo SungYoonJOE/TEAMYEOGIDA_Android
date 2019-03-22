@@ -1,5 +1,6 @@
 package com.example.hahaj.yeogida8;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
@@ -7,11 +8,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,14 +27,35 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class RegisterItemActivity extends AppCompatActivity {
 
@@ -45,7 +71,6 @@ public class RegisterItemActivity extends AppCompatActivity {
     TextView selectFirst, selectLast, aboutItem1, txtAddr;
     EditText inputPrice, inputNewPrice, inputAboutItem;
     Button btn_reg, btn_searchAddr;
-
 
 
     //핸드폰 내 갤러리에서 사진 경로.
@@ -70,11 +95,17 @@ public class RegisterItemActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_item);
 
+       if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+           checkPermissions();
+       }
+
+
         Ion.getDefault(this).configure().setLogging("ion-sample", Log.DEBUG);
-//        Ion.getDefault(this).configure().getResponseCache().setCaching(false);
+//        Ion.getDefault(this).configure().getResponseCache().setCaching(true);
 
         //personpid 불러오기
         SharedPreferences pref = getSharedPreferences("pref_PERSONPID", Context.MODE_PRIVATE);
@@ -93,7 +124,6 @@ public class RegisterItemActivity extends AppCompatActivity {
         Log.d("메인->상품등록 personpid", ""+personpid);
         */
 
-
         /*
         inputName = (EditText)findViewById(R.id.inputName);
         txtAddr = (TextView)findViewById(R.id.txtAddr);
@@ -104,7 +134,6 @@ public class RegisterItemActivity extends AppCompatActivity {
         inputNewPrice = (EditText)findViewById(R.id.inputNewPrice);
         inputPhoneNum = (EditText)findViewById(R.id.inputPhoneNum);
         inputAboutItem = (EditText)findViewById(R.id.inputAboutItem);
-
         */
 
         inputName = (EditText)findViewById(R.id.editText_productName);
@@ -139,7 +168,6 @@ public class RegisterItemActivity extends AppCompatActivity {
                 //startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
             }
         });
-
 
         //날짜 선택
         initDate();
@@ -184,17 +212,21 @@ public class RegisterItemActivity extends AppCompatActivity {
 
                         //통신은 network() 로 못뺌 무조건 통신하고자하는 곳에 아래 코드를 써야한다.
 //                        netWork();
-                        final Future uploading = Ion.with(RegisterItemActivity.this)
-                                .load("POST", url.getMainUrl() + "/product/register")
+                        File f = new File(path);
+                        Log.d("사진 주소: ", path);
+
+                        Ion.with(getApplicationContext())
+                                .load("POST",url.getMainUrl() + "/product/register")
                                 //String 추가
                                 .setLogging("MyLogs", Log.DEBUG)
+
                                 //타임아웃 설정
-                                .setTimeout(150000)
+//                                .setTimeout(150000)
+                                //이미지 파일 추가
+                                .setMultipartFile("productimage", f)
                                 .setMultipartParameter("personpid", Integer.toString(personpid))
                                 .setMultipartParameter("productname", itemName)
                                 .setMultipartParameter("text", regAboutItem)
-                                //이미지 파일 추가
-//                        .setMultipartFile("productimage", f)
                                 //String 추가
                                 .setMultipartParameter("productdate_s",strfirstDate)
                                 .setMultipartParameter("productdate_e", strlastDate)
@@ -204,32 +236,74 @@ public class RegisterItemActivity extends AppCompatActivity {
                                 .setMultipartParameter("productprice", newPrice)
                                 .setMultipartParameter("productphone",itemPhoneNum)
                                 //형식 지정
-                                .asString()
+                                .asJsonObject()
                                 //응답방식???
-                                .withResponse()
-                                .setCallback(new FutureCallback<Response<String>>() {
+//                                .withResponse()
+                                .setCallback(new FutureCallback<JsonObject>() {
                                     @Override
-                                    public void onCompleted(Exception e, Response<String> result) {
-                                        try{
-                                            JSONObject jobj = new JSONObject(result.getResult());
-                                            Log.d("여기까지 55555", "이");
-                                            Toast.makeText(getApplicationContext(), jobj.getString("message"), Toast.LENGTH_SHORT).show();
+                                    public void onCompleted(Exception e, JsonObject result) {
 
-//
-                                        } catch (JSONException e1) {
-                                            e1.printStackTrace();
+                                        if( e != null) {
+                                            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                                            e.printStackTrace();
+                                        }
+
+                                        else {
+                                            Toast.makeText(getApplicationContext(), result.get("message").getAsString(), Toast.LENGTH_LONG).show();
+
                                         }
                                     }
                                 });
-                        show();
                         //메인화면으로 이동
+                        show1();
 //                        redirectMainActivity(1);
 //                        redirectMainActivity(personpid);
                     }
-
                 }
             }
         });
+//        show();
+    }
+
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    },
+                    1052);
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case 1052: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted.
+
+                } else {
+
+
+                    // Permission denied - Show a message to inform the user that this app only works
+                    // with these permissions granted
+
+                }
+                return;
+            }
+        }
     }
 
     /*
@@ -279,6 +353,8 @@ public class RegisterItemActivity extends AppCompatActivity {
 
         return cursor.getString(column_index);
     }
+
+
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -568,7 +644,7 @@ public class RegisterItemActivity extends AppCompatActivity {
     }
 
     //등록완료 메시지
-    public void show(){
+    public void show1(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("메시지");
         builder.setMessage("등록이 완료되었습니다!");
@@ -601,4 +677,8 @@ public class RegisterItemActivity extends AppCompatActivity {
         intent.putExtra("whereFrom", 1);
         startActivityForResult(intent, BasicInfo.SEARCH_ADDRESS_FROM_REGISTER);
     }
+
+
+
+
 }

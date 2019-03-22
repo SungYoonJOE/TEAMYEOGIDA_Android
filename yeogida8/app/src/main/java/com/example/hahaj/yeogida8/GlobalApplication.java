@@ -11,6 +11,7 @@ import com.kakao.auth.KakaoAdapter;
 import com.kakao.auth.KakaoSDK;
 
 public class GlobalApplication extends Application {
+
     private static GlobalApplication instance;
 
     public static GlobalApplication getGlobalApplicationContext(){
@@ -19,6 +20,7 @@ public class GlobalApplication extends Application {
         }
         return instance;
     }
+
 
     private class KakaoSDKAdapter extends KakaoAdapter {
 
@@ -66,6 +68,7 @@ public class GlobalApplication extends Application {
             };
         }
 
+
         // Application이 가지고 있는 정보를 얻기 위한 인터페이스
         @Override
         public IApplicationConfig getApplicationConfig() {
@@ -77,6 +80,8 @@ public class GlobalApplication extends Application {
             };
         }
     }
+
+
 
     @Override
     public void onCreate() {

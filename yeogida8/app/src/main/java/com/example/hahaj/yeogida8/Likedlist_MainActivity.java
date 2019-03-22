@@ -55,5 +55,4 @@ public class Likedlist_MainActivity extends AppCompatActivity{
         getSupportFragmentManager().beginTransaction().add(R.id.container, likedFragment).commit();
 
     }
-
 }
